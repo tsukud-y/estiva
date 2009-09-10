@@ -1,0 +1,37 @@
+MX(3)              ESTIVA ライブラリ関数マニュアル                MX(3)
+
+名称
+     mx - 疎行列アクセスマクロ
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include <estiva/mx.h>
+
+     void
+     mx(void *v, long m, long n);
+
+解説
+     mx()は疎行列の要素にアクセスするマクロである。
+     疎行列ハンドル vと、行数 m, 列数 n を引数として渡す必要がある。
+
+     以下の例のように static 宣言が必要である。
+     これは関数を一度抜けても、値が保存されていることが、
+     initmx() で利用されているからである。
+
+
+例
+#include <estiva/mx.h>
+
+     main(){
+            static MX *A;
+            initmx(A,1000+1);
+	    mx(A,1,1) = 0.1;
+     }
+
+戻り値
+     指定した疎行列の要素へのポインタを返す。
+
+関連項目
+     dim1(3), solver(3), esolver(3), initmx(3)

@@ -1,0 +1,19 @@
+<h2>estiva のインストール方法</h2>
+
+<pre>
+estiva0.9.tar.gz をダウンロードする
+
+(展開)
+% gzip -cd estiva0.9.tar.gz | tar xvpf -
+
+(インストール時オプションの指定)
+% cd estiva/src
+% ./configure -prefix /usr/local
+
+(/usr/local はインストール先ディレクトリ)
+
+% make
+
+% su
+# make install
+</pre>

@@ -1,0 +1,36 @@
+TMPOPEN(3)           ESTIVA ライブラリ関数マニュアル                TMPOPEN(3)
+
+名称
+     tmpopen  - 一時ファイルをオープンする
+     tmpname  - 一時ファイルの名前を返す
+     tmpclose - 一時ファイルをクローズする
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式	
+     #include <estiva/tmp.h>
+
+     FILE *
+     tmpopen(void);
+
+     char *
+     tmpname(FILE *fp);
+
+     int
+     tmpclose(FILE *fp);
+
+解説
+     tmpopen()関数は一時ファイルをオープンします。
+     オープンしたファイルのファイル名を得たい場合、tmpname() を
+     用いれば良いでしょう。
+     開いた一時ファイルは tmpclose() によりクローズする必要が
+     あります。
+
+戻り値
+     tmpopen() の戻り値は一時ファイルのファイルポインタです。
+     tmpname() の戻り値は一時ファイルのファイル名です。
+     tmpcolse() の戻り値は成功した場合 0、失敗した場合 0以外です。
+
+関連項目
+     tmpopen(3), tmpname(3), tmpclose(3)

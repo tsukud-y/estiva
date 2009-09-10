@@ -1,0 +1,44 @@
+DIM0(3)              ESTIVA ライブラリ関数マニュアル                DIM0(3)
+
+名称
+     dim0, dim1, dim2 - 配列変数から各種情報を取り出す関数
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include <estiva/ary.h>
+
+     size_t
+     dim0(void *v);
+
+     long
+     dim1(void *v);
+
+     long
+     dim2(void *v);
+
+解説
+     dim0()関数は、配列変数1要素のサイズを返します。
+     dim1()関数は、配列の列数を返します。
+     dim2()関数は、2次元配列の行数を返します。
+
+     以下の例では、100と表示されます。
+     dim?() 関数が便利なのは、呼び出したサブ関数の中でも
+     用いることが出来ることです。
+例
+#include <estiva/ary.h>
+
+     main(){
+            static double *u;
+            ary1(u,100+1);
+	    printf("%d\n", dim1(u));
+     }
+
+戻り値
+     dim0()関数は、配列変数1要素のサイズを返します。
+     dim1()関数は、配列の列数を返します。
+     dim2()関数は、2次元配列の行数を返します。
+
+関連項目
+     ary1(3), ary2(3), dim0(3), dim1(3), dim2(3)

@@ -1,0 +1,29 @@
+INITOP(3)              ESTIVA ライブラリ関数マニュアル                INITOP(3)
+
+名称
+     initop - コマンドライン引数処理関数群の初期設定
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include <estiva/op.h>
+
+     void
+     initop(int argc, char **argv);
+
+解説
+     initop()ルーチンはコマンドライン引数処理関数群、具体的には defop(), 
+     getop()を呼び出す前に一度呼び出す必要があります。
+     もしinitop()ルーチンを呼び出すことなくdefop(), getop()を呼び出した場合
+     には、コマンドライン引数がなにもないままmain()関数を呼び出したと同じ
+     動作をdefop(), getop()は行います。
+     initopの引数は main()関数から引き継ぐ引数、argc, argvです。
+     実際には main(int argc, char **argv) とmain()関数の引数の定義をした場合、
+     initop()を initop(argc,argv); と呼び出すことになります。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     defop(3), getop(3)
