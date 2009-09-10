@@ -19,9 +19,9 @@ static const int Itr=100;     //反復の最大値
 //typedef double Vector[N+1];
 #define Vector double *
 
-double power(Matrix ,Vector ,int,int *);
-void mvsub(Matrix ,Vector,Vector,int);
-void normarize(Vector x,int n);
+static double power(Matrix ,Vector ,int,int *);
+static void mvsub(Matrix ,Vector,Vector,int);
+static void normarize(Vector x,int n);
 extern double estiva_maxesolver(double **A, double *x);
 
 double estiva_maxesolver(double **A, double *x)
@@ -31,7 +31,7 @@ double estiva_maxesolver(double **A, double *x)
 }
 
 /* function power */
-double power(Matrix A,Vector x,int n,int *itr)
+static double power(Matrix A,Vector x,int n,int *itr)
 {
   int i=0, m=0;
   double c=0.0, s=0.0, lambda=0.0, xmax=0.0;
@@ -59,7 +59,7 @@ double power(Matrix A,Vector x,int n,int *itr)
 }
 
 // multmv , 
-void mvsub(Matrix A,Vector b,Vector c,int n)
+static void mvsub(Matrix A,Vector b,Vector c,int n)
 {
   int i, j;
   // c = A・bを計算する部分
@@ -72,7 +72,7 @@ void mvsub(Matrix A,Vector b,Vector c,int n)
 }
 
 //大きさを１にする変換
-void normarize(Vector x, int n)
+static void normarize(Vector x, int n)
 {
   double c=0.0;
   int i;
