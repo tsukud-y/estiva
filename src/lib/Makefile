@@ -8,6 +8,7 @@ all: ;
 	cc -I../include -c solver/pcgs.c
 	cc -I../include -c esolver/esolver.c
 	cc -I../include -c esolver/maxesolver.c
+	cc -I../include -c esolver/minesolver.c
 	ar cr libestiva.a *.o
 
 
