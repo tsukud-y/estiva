@@ -10,8 +10,8 @@ void estiva_initmx(MX **Ap, long i, long j){
   MX *T;
   if(*Ap == NULL) *Ap = malloc(sizeof(MX));
   T = *Ap;
-  T->m = i;
-  T->n = j;
+  T->m = i-1;
+  T->n = j-1;
   T->I = 1;
   T->J = 1;
   ary2(T->A, T->m, T->n);

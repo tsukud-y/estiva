@@ -10,13 +10,12 @@ INITMX(3)              ESTIVA ライブラリ関数マニュアル                INITMX(3)
      #include <estiva/mx.h>
 
      void
-     initmx(void *v, long n);
+     initmx(void *v, long n, long k);
 
 解説
      initmx()マクロは疎行列を動的に確保する。
-     疎行列ハンドル vと、行数 n を引数として渡す必要がある。
-
-     dim1()関数によって、確保した配列の要素の数が得られる。
+     疎行列ハンドル vと、次元 n および 一行あたりの
+     非ゼロ成分の個数 k を引数として渡す必要がある。
 
      以下の例のように static 宣言が必要である。
      これは関数を一度抜けても、値が保存されていることが、
@@ -28,7 +27,7 @@ INITMX(3)              ESTIVA ライブラリ関数マニュアル                INITMX(3)
 
      main(){
             static MX *A;
-            initmx(A,1000+1);
+            initmx(A,1000+1,8);
      }
 
 戻り値
