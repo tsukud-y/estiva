@@ -7,28 +7,6 @@
 #include <estiva/esolver.h>
 
 
-void estiva_plt(FILE *fp, xyc *Z, nde *N, double *u)
-{
-  if ( fp == NULL ) {
-    fp = fopen("/tmp/plt.tmp","w");
-    {
-      long e, a, b, c;
-      for(e=1;e<=dim1(N);e++){
-	a = N[e].a, b = N[e].b, c = N[e].c;
-	fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,u[a]);
-	fprintf(fp,"%f %f %f\n",Z[b].x,Z[b].y,u[b]);
-	fprintf(fp,"%f %f %f\n",Z[c].x,Z[c].y,u[c]);
-	fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,u[a]);
-	fprintf(fp,"\n\n");
-      }
-      fclose(fp);
-      fp = popen("gnuplot","w");
-      fprintf(fp,"splot '/tmp/plt.tmp' w l\n");
-      fflush(fp);
-      sleep(1000);
-    }
-  }
-}
 
 static void
 set_A(xyc *Z, nde *N, double **A)
@@ -70,6 +48,8 @@ set_A(xyc *Z, nde *N, double **A)
   }
 }
 
+
+
 static void
 set_u(xyc *Z, double *u)
 {
@@ -78,10 +58,11 @@ set_u(xyc *Z, double *u)
 }
 
 
+
 main(int argc, char **argv){
   static xyc *Z;
   static nde *N;
-  static double **A, *u, lambda;
+  static double **A, *u;
 
   initop(argc, argv);
   fp2mesh(stdfp(),&Z, &N);
@@ -89,9 +70,8 @@ main(int argc, char **argv){
   ary2(A,dim1(Z)+1, dim1(Z)+1); ary1(u,dim1(Z)+1);
 
   set_A(Z,N,A); set_u(Z,u);
-  
-  lambda = esolver(A,u);
-  fprintf(stderr,"labmda=%f\n",lambda);
 
-  estiva_plt(NULL,Z,N,u); 
+  esolver(A,u);
+
+  plt(NULL,Z,N,u); sleep(1000);
 }
