@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <estiva/ary.h>
 #include <estiva/mx.h>
 
