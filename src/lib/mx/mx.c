@@ -47,7 +47,7 @@ static void estiva_wmx(MX *T, long i, long j, double a){
       return;
     }
   } 
-  fprintf(stderr,"init_matrix(m,n)'s n is too short\n");
+  fprintf(stderr,"initmx(m,n)'s n is too short\n");
   exit(1);
 }
 
