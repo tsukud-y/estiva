@@ -2,6 +2,9 @@
 #include <estiva/ary.h>
 #include <estiva/mx.h>
 
+#define rmx(A,i,j)            estiva_rmx(A,i,j)
+#define wmx(A,i,j,a)          estiva_wmx(A,i,j,a)
+
 void estiva_initmx(MX **Ap, long i, long j){
   MX *T;
   if(*Ap == NULL) *Ap = malloc(sizeof(MX));
@@ -14,7 +17,7 @@ void estiva_initmx(MX **Ap, long i, long j){
   ary2(T->IA,T->m, T->n);
 }
 
-double estiva_rmx(MX *T, long i, long j){
+static double estiva_rmx(MX *T, long i, long j){
   register double **A;
   register long   J,  *IAi, **IA, n;
   A  = T->A;
@@ -28,7 +31,7 @@ double estiva_rmx(MX *T, long i, long j){
   return 0.0;
 }
 
-void estiva_write_matrix(MX *T, long i, long j, double a){
+static void estiva_wmx(MX *T, long i, long j, double a){
   register double **A;
   register long  J, **IA, *IAi, IAiJ, n;
   A  = T->A;
@@ -55,8 +58,4 @@ double *estiva_mx(MX *T, long i, long j){
   T->J = j;
   T->a = rmx(T,i,j);
   return &(T->a);
-}
-
-void estiva_fmx(MX *T){
-  mx(T,1,1);
 }

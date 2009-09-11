@@ -46,7 +46,6 @@ int estiva_pcgssolver(void* pA, double* x, double* b)
   
   long   i, j, k      ;
   
-  fmx(pA)    ;
   N   = dim1(b)       ;
   NL  = count_NL(pA,N);
   
