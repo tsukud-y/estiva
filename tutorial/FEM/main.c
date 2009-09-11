@@ -88,7 +88,8 @@ main(int argc, char **argv){
   FILE *fp;
 
   initop(argc, argv);
-  fp = argf(argc, argv);
+  //fp = argf(argc,argv);
+  fp = stdfp();
 
   fp2mesh(fp,&Z, &N);
 

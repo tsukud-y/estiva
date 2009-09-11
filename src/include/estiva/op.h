@@ -4,9 +4,11 @@
 #define initop(pargc,pargv) estiva_initop(pargc,pargv)
 #define defop(str)          estiva_defop(str) 
 #define getop(str)          estiva_getop(str) 
+#define stdfp()             estiva_stdfp()
 
 extern void  estiva_initop(int pargc, char **pargv);
 extern int   estiva_defop(char *str);
 extern char *estiva_getop(char *str);
+extern FILE *estiva_stdfp(void);
 
 #endif

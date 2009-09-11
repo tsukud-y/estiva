@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <estiva/op.h>
 
@@ -24,4 +26,30 @@ char *estiva_getop(char *str)
   if(!strcmp(str,"") && 1<argc) return argv[i+1];
 
   return nullstr;
+}
+
+
+
+static void cp_fp(FILE* in, FILE* out)
+{
+  int c;
+
+  while(EOF !=(c = getc(in))) putc(c,out);
+  fflush(out);
+  rewind(out);
+}
+
+
+FILE *estiva_stdfp(void)
+{
+  FILE *fp;
+
+  for(; argc != 1; argc--)
+    if(NULL != (fp=fopen(argv[argc-1],"r")) )
+      return fp;
+
+  fp = tmpfile();
+  cp_fp(stdin, fp);
+
+  return fp;
 }
