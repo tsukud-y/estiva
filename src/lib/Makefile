@@ -9,6 +9,7 @@ all: ;
 	cc -I../include -c esolver/esolver.c
 	cc -I../include -c esolver/maxesolver.c
 	cc -I../include -c esolver/minesolver.c
+	cc -I../include -c mesh/fp2mesh.c
 	ar cr libestiva.a *.o
 
 
