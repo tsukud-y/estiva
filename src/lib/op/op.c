@@ -43,9 +43,13 @@ static void cp_fp(FILE* in, FILE* out)
 FILE *estiva_stdfp(void)
 {
   FILE *fp;
+  int i = argc;
 
-  for(; argc != 1; argc--)
-    if(NULL != (fp=fopen(argv[argc-1],"r")) )
+  if (NULL != (fp=fopen(getop("-f"),"r")) )
+    return fp;
+
+  for(; i != 1; i--)
+    if(NULL != (fp=fopen(argv[i-1],"r")) )
       return fp;
 
   fp = tmpfile();
