@@ -1,46 +1,38 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <estiva/op.h>
+#include <estiva/ary.h>
 #include <estiva/mesh.h>
 #include <estiva/esolver.h>
-#include <estiva/ary.h>
-#include <estiva/op.h>
 
 
-void *argf(int argc,char **argv);
-
-
-static void pltmsh(FILE *fp, xyc *Z, nde *N, double *u)
+void estiva_plt(FILE *fp, xyc *Z, nde *N, double *u)
 {
-  long e, a, b, c;
-  for(e=1;e<=dim1(N);e++){
-    a = N[e].a, b = N[e].b, c = N[e].c;
-    fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,u[a]);
-    fprintf(fp,"%f %f %f\n",Z[b].x,Z[b].y,u[b]);
-    fprintf(fp,"%f %f %f\n",Z[c].x,Z[c].y,u[c]);
-    fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,u[a]);
-    fprintf(fp,"\n\n");
+  if ( fp == NULL ) {
+    fp = fopen("/tmp/plt.tmp","w");
+    {
+      long e, a, b, c;
+      for(e=1;e<=dim1(N);e++){
+	a = N[e].a, b = N[e].b, c = N[e].c;
+	fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,u[a]);
+	fprintf(fp,"%f %f %f\n",Z[b].x,Z[b].y,u[b]);
+	fprintf(fp,"%f %f %f\n",Z[c].x,Z[c].y,u[c]);
+	fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,u[a]);
+	fprintf(fp,"\n\n");
+      }
+      fclose(fp);
+      fp = popen("gnuplot","w");
+      fprintf(fp,"splot '/tmp/plt.tmp' w l\n");
+      fflush(fp);
+      sleep(1000);
+    }
   }
 }
 
-void pltp1(FILE *fp, xyc *Z, nde *N, double *u)
+static void
+set_A(xyc *Z, nde *N, double **A)
 {
-  
-}
-
-
-set_u(xyc *Z, double *u){
-  int i;
-  
-  for(i=1; i<=dim1(Z); i++){
-    if(!strcmp(Z[i].label,"boundary")) u[i] = 0.0;
-    else                               u[i] = 1.0;
-  }
-}
-
-
-set_A(xyc *Z, nde *N, double **A){
-
   int n, i, j, k;
   double S, D, x1, y1, x2, y2, x3, y3;
 
@@ -78,30 +70,28 @@ set_A(xyc *Z, nde *N, double **A){
   }
 }
 
+static void
+set_u(xyc *Z, double *u)
+{
+  int i;
+  for(i=1; i<=dim1(Z); i++) u[i] = 1.0;
+}
 
 
 main(int argc, char **argv){
   static xyc *Z;
   static nde *N;
-  static double **A, *u;
-  double lambda;
-  FILE *fp;
+  static double **A, *u, lambda;
 
   initop(argc, argv);
-  //fp = argf(argc,argv);
-  fp = stdfp();
+  fp2mesh(stdfp(),&Z, &N);
 
-  fp2mesh(fp,&Z, &N);
+  ary2(A,dim1(Z)+1, dim1(Z)+1); ary1(u,dim1(Z)+1);
 
-  ary2(A,dim1(Z)+1, dim1(Z)+1);
-  ary1(u,dim1(Z)+1);
-  
-  set_u(Z,u);
-  set_A(Z,N,A);
+  set_A(Z,N,A); set_u(Z,u);
   
   lambda = esolver(A,u);
   fprintf(stderr,"labmda=%f\n",lambda);
 
-  pltmsh(stdout,Z,N,u); 
-  pltp1(NULL,Z,N,u);
+  estiva_plt(NULL,Z,N,u); 
 }
