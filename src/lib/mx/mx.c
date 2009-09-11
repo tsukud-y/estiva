@@ -14,7 +14,7 @@ void estiva_initmx(MX **Ap, long i, long j){
   ary2(T->IA,T->m, T->n);
 }
 
-double estiva_read_matrix(MX *T, long i, long j){
+double estiva_rmx(MX *T, long i, long j){
   register double **A;
   register long   J,  *IAi, **IA, n;
   A  = T->A;
@@ -34,7 +34,7 @@ void estiva_write_matrix(MX *T, long i, long j, double a){
   A  = T->A;
   IA = T->IA;
   n  = T->n;
-  if ( a == read_matrix(T,i,j) ) return;
+  if ( a == rmx(T,i,j) ) return;
   IAi = IA[i-1];
   for(J=0; J<n; J++){
     IAiJ = IAi[J];
@@ -50,13 +50,13 @@ void estiva_write_matrix(MX *T, long i, long j, double a){
 
 double *estiva_mx(MX *T, long i, long j){
 
-  write_matrix(T,T->I,T->J,T->a);
+  wmx(T,T->I,T->J,T->a);
   T->I = i; 
   T->J = j;
-  T->a = read_matrix(T,i,j);
+  T->a = rmx(T,i,j);
   return &(T->a);
 }
 
-void estiva_flush_matrix(MX *T){
+void estiva_fmx(MX *T){
   mx(T,1,1);
 }

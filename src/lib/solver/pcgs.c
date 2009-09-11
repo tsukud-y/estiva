@@ -18,7 +18,7 @@ static int count_NL(void *pA, long N)
   long i, j, k, NL ;
 
   for(NL=0, i=1; i<=N; i++){
-    for(k=0, j=1; j<=N; j++) if(read_matrix(pA,i,j) != 0.0) k++;
+    for(k=0, j=1; j<=N; j++) if(mx(pA,i,j) != 0.0) k++;
     if(NL<k) NL = k;
   }
   return NL;
@@ -46,7 +46,7 @@ int estiva_pcgssolver(void* pA, double* x, double* b)
   
   long   i, j, k      ;
   
-  flush_matrix(pA)    ;
+  fmx(pA)    ;
   N   = dim1(b)       ;
   NL  = count_NL(pA,N);
   
@@ -80,16 +80,16 @@ int estiva_pcgssolver(void* pA, double* x, double* b)
   /* IA   : 配列Aに入れた要素の列番号を, 対応する位置に入れておく.      */
   /*  S   : LUCGS法のとき 0., MLUCG法のときσ(>0)を入れておく.          */  
 
-  for(i=1; i<=N; i++) D[i-1] = read_matrix(pA,i,i); 
+  for(i=1; i<=N; i++) D[i-1] = mx(pA,i,i); 
 
-  for(i=1; i<=N; i++)for(k=0, j=1; j<i; j++)if(read_matrix(pA,i,j) != 0.0){
-    A[k][i-1]  = read_matrix(pA,i,j)  ;
+  for(i=1; i<=N; i++)for(k=0, j=1; j<i; j++)if(mx(pA,i,j) != 0.0){
+    A[k][i-1]  = mx(pA,i,j)  ;
     IA[k][i-1] = j       ;
     k++                  ;
   }
 
-  for(i=1; i<=N; i++)for(k=NL, j=i+1; j<=N; j++)if(read_matrix(pA,i,j) != 0.0){
-    A[k][i-1]  = read_matrix(pA,i,j) ;
+  for(i=1; i<=N; i++)for(k=NL, j=i+1; j<=N; j++)if(mx(pA,i,j) != 0.0){
+    A[k][i-1]  = mx(pA,i,j) ;
     IA[k][i-1] = j       ;
     k++                  ;
   }
