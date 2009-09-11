@@ -5,6 +5,8 @@
 #include <estiva/esolver.h>
 #include <estiva/ary.h>
 #include <estiva/op.h>
+
+
 void *argf(int argc,char **argv);
 
 
@@ -21,22 +23,21 @@ static void pltmsh(FILE *fp, xyc *Z, nde *N, double *u)
   }
 }
 
+void pltp1(FILE *fp, xyc *Z, nde *N, double *u)
+{
+  
+}
+
+
 set_u(xyc *Z, double *u){
   int i;
-  u[5] = 1.0;
   
   for(i=1; i<=dim1(Z); i++){
     if(!strcmp(Z[i].label,"boundary")) u[i] = 0.0;
-    else{
-      u[i] = (1-Z[i].x*Z[i].x)+(1-Z[i].y*Z[i].y)-1;
-      u[i] = 1.0;
-    }
+    else                               u[i] = 1.0;
   }
-
-
 }
 
-#define A(i,j) A[i][j]
 
 set_A(xyc *Z, nde *N, double **A){
 
@@ -67,16 +68,16 @@ set_A(xyc *Z, nde *N, double **A){
     
     i=N[n].a; j=N[n].b; k=N[n].c;
 
-    A(i,i)+=Aii; A(i,j)+=Aij; A(i,k)+=Aik;
-    A(j,i)+=Aji; A(j,j)+=Ajj; A(j,k)+=Ajk;
-    A(k,i)+=Aki; A(k,j)+=Akj; A(k,k)+=Akk;
+    A[i][i]+=Aii; A[i][j]+=Aij; A[i][k]+=Aik;
+    A[j][i]+=Aji; A[j][j]+=Ajj; A[j][k]+=Ajk;
+    A[k][i]+=Aki; A[k][j]+=Akj; A[k][k]+=Akk;
   }
 
   for(i=1;i<=dim1(Z);i++){
-    if(!strcmp("boundary",Z[i].label)) A(i,i) = 1000000000000000000000000000.0;
+    if(!strcmp("boundary",Z[i].label)) A[i][i]= 1000000000000000000000000000.0;
   }
 }
-#undef A
+
 
 
 main(int argc, char **argv){
@@ -101,4 +102,5 @@ main(int argc, char **argv){
   fprintf(stderr,"labmda=%f\n",lambda);
 
   pltmsh(stdout,Z,N,u); 
+  pltp1(NULL,Z,N,u);
 }
