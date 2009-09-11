@@ -2,9 +2,9 @@
 #include <estiva/ary.h>
 #include <estiva/mx.h>
 
-void estiva_init_matrix(MATRIX **Ap, long i, long j){
-  MATRIX *T;
-  if(*Ap == NULL) *Ap = malloc(sizeof(MATRIX));
+void estiva_initmx(MX **Ap, long i, long j){
+  MX *T;
+  if(*Ap == NULL) *Ap = malloc(sizeof(MX));
   T = *Ap;
   T->m = i;
   T->n = j;
@@ -14,7 +14,7 @@ void estiva_init_matrix(MATRIX **Ap, long i, long j){
   ary2(T->IA,T->m, T->n);
 }
 
-double estiva_read_matrix(MATRIX *T, long i, long j){
+double estiva_read_matrix(MX *T, long i, long j){
   register double **A;
   register long   J,  *IAi, **IA, n;
   A  = T->A;
@@ -28,7 +28,7 @@ double estiva_read_matrix(MATRIX *T, long i, long j){
   return 0.0;
 }
 
-void estiva_write_matrix(MATRIX *T, long i, long j, double a){
+void estiva_write_matrix(MX *T, long i, long j, double a){
   register double **A;
   register long  J, **IA, *IAi, IAiJ, n;
   A  = T->A;
@@ -48,7 +48,7 @@ void estiva_write_matrix(MATRIX *T, long i, long j, double a){
   exit(1);
 }
 
-double *estiva_matrix(MATRIX *T, long i, long j){
+double *estiva_mx(MX *T, long i, long j){
 
   write_matrix(T,T->I,T->J,T->a);
   T->I = i; 
@@ -57,6 +57,6 @@ double *estiva_matrix(MATRIX *T, long i, long j){
   return &(T->a);
 }
 
-void estiva_flush_matrix(MATRIX *T){
-  matrix(T,1,1);
+void estiva_flush_matrix(MX *T){
+  mx(T,1,1);
 }
