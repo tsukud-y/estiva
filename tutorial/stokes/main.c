@@ -395,15 +395,11 @@ int main(int argc, char** argv)
 
     {
       static double *x;
-      static MX *AMX;
-      int n, i, j;
-      n = dim1(b);
-      ary1(x,n+1);
-      initmx(AMX,n+1,80);
-      for ( i=1; i<=n; i++) for (j=1; j<=n; j++) mx(AMX,i,j) = A(i,j);
+      int i;
+      ary1(x,dim1(b)+1);
 
-      solver(AMX,x,b);
-      for ( i=1; i<=n; i++ ) b[i] = x[i];
+      solver(A,x,b);
+      for ( i=1; i<=dim1(b); i++ ) b[i] = x[i];
     }
 
 
