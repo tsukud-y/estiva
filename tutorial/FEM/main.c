@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <unistd.h>
 #include <estiva/op.h>
 #include <estiva/ary.h>
 #include <estiva/mesh.h>
@@ -47,7 +48,7 @@ set_u(xyc *Z, double *u)
 }
 
 
-
+int
 main(int argc, char **argv)
 {
   static xyc *Z; static nde *N;
@@ -63,4 +64,5 @@ main(int argc, char **argv)
   esolver(A,u);
 
   plt(NULL,Z,N,u); sleep(1000);
+  return 0;
 }
