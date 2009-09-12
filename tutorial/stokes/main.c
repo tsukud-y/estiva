@@ -348,18 +348,6 @@ static void conta(FILE *fp,double *P, xyc *Z, nde *N, double k)
 
 
 
-static void p1plot(FILE *fp, xyc *Z, nde *N, double *P)
-{
-  long e, a, b, c;
-  for(e=1;e<=dim1(N);e++){
-    a = N[e].a, b = N[e].b, c = N[e].c;
-    fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,P[a]);
-    fprintf(fp,"%f %f %f\n",Z[b].x,Z[b].y,P[b]);
-    fprintf(fp,"%f %f %f\n",Z[c].x,Z[c].y,P[c]);
-    fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,P[a]);
-    fprintf(fp,"\n\n");
-  }
-}
 static void pltmsh(FILE *fp, xyc *Z, nde *N)
 {
   long e, a, b, c;
@@ -401,12 +389,7 @@ static double *p0top1(xyc *Z, nde *N,double *p0)
 }
 
 
-static void p0top1plot(FILE *fp, xyc *Z, nde *N, double *p)
-{
-  static double *P;
-  P = p0top1(Z,N,p);
-  p1plot(fp,Z,N,P);
-}
+
 
 static void pplot(FILE *fp, xyc *Z, nde *N, double *p)
 {
@@ -566,7 +549,12 @@ int main(int argc, char** argv)
       fprintf(ppp,"plot \"pressure\" with lines\n");
     }
     else{
-      p0top1plot(pfp,Z,N,&b[2*m]);
+      int i;
+      static double *p;
+      n = dim1(S);
+      ary1(p,n+1);
+      for ( i = 0; i<=n; i++ ) p[i] = b[2*m+i];
+      plt(pfp,Z,N,p);
       fclose(pfp);
       fprintf(ppp,"splot \"pressure\" with lines\n");
     }

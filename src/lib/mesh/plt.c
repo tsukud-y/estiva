@@ -4,6 +4,34 @@
 #include <estiva/ary.h>
 #include <estiva/mesh.h>
 
+static double *p0top1(xyc *Z, nde *N,double *p0)
+{
+  static double *p1;
+  static long   *pi;
+  long i, a, b, c;
+
+  ary1(p1, dim1(Z)+1);
+  ary1(pi, dim1(Z)+1);
+
+  for(i=1;i<=dim1(p1);i++){ p1[i] = 0.0; pi[i] = 0;}
+
+  for(i=1;i<=dim1(N);i++){
+    a = N[i].a; b = N[i].b; c = N[i].c;
+
+    p1[a] += p0[i];  pi[a]++;
+    p1[b] += p0[i];  pi[b]++;
+    p1[c] += p0[i];  pi[c]++;
+  }
+
+  for(i=1;i<=dim1(p1);i++) if(pi[i]==0){
+    fprintf(stderr,"mesh data error\n");
+    exit(1);
+  }
+  for(i=1;i<=dim1(p1);i++) p1[i]/= (double)pi[i];
+  return p1;
+}
+
+
 static void estiva_p1pltinternal(FILE *fp, xyc *Z, nde *N, double *u)
 {
   long e, a, b, c;
@@ -107,6 +135,10 @@ void estiva_plt(FILE *fp, xyc *Z, nde *N, double *u)
     estiva_contaplt(fp, Z, N, u);
     return ;
   }
-  estiva_p1plt(fp, Z, N, u);
+  
+  if ( dim1(N) == dim1(u) )
+    estiva_p1plt(fp,Z,N,p0top1(Z,N,u));
+  else
+    estiva_p1plt(fp,Z,N,u);
 }
 
