@@ -122,15 +122,15 @@ static spm* A__(spm *M, double t, spm *K, spm *Hx, spm *Hy)
   NUM = m*2+n;
   ary1(A, NUM+1);
 
-  for(i=1;i<=m;i++) fornonzero(K[i],j){
+  for(i=1;i<=m;i++) for(j=1; j<=m; j++){
     A(  i,   j) = M(i,j) + t*K(i,j);
     A(m+i, m+j) = M(i,j) + t*K(i,j);
   }
-  for(i=1;i<=m;i++) fornonzero(Hx[i],j){
+  for(i=1;i<=m;i++) for(j=1; j<=n; j++){
     A(i,2*m+j) = -t*Hx(i,j);
     A(2*m+j,i) = -t*Hx(i,j);
   }
-  for(i=1;i<=m;i++) fornonzero(Hy[i],j){
+  for(i=1;i<=m;i++) for(j=1; j<=n; j++){
     A(m+i,2*m+j) = -t*Hy(i,j);
     A(2*m+j,m+i) = -t*Hy(i,j);
   }
@@ -195,43 +195,44 @@ static void boundary_condition(spm *A, double *b)
   NUM = 2*m+n;
 
   forgamma(Mid,i,"j1"){
-    fornonzero(A[i],j) A(i,j) = 0.0;
+    for(j=1;j<=NUM;j++) A(i,j) = 0.0;
     A(i,i) = 1.0;
     b[i] = 0.0;
   }
 
   forgamma(Mid,i,"j2"){
-    fornonzero(A[i],j) A(i,j) = 0.0;
+    for(j=1;j<=NUM;j++) A(i,j) = 0.0;
     A(i,i) = 1.0;
     b[i]   = 0.1;
 
-    fornonzero(A[i+m],j) A(i+m,j) = 0.0;
+    for(j=1;j<=NUM;j++) A(i+m,j) = 0.0;
     A(i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
 
   forgamma(Mid,i,"j3"){
-    fornonzero(A[i],j) A(i,j) = 0.0;
+    for(j=1;j<=NUM;j++) A(i,j) = 0.0;
     A(i,i) = 1.0;
     b[i]   = 0.0;
   }
   forgamma(Mid,i,"j4"){
-    fornonzero(A[i+m],j) A(i+m,j) = 0.0;
+    for(j=1;j<=NUM;j++) A(i+m,j) = 0.0;
     A(i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
 
   forgamma(Mid,i,"ki"){
-    fornonzero(A[i],j) A(i,j) = 0.0;
+    for(j=1;j<=NUM;j++) A(i,j) = 0.0;
     A(i,i) = 1.0;
     b[i] = 0.0;
 
-    fornonzero(A[i+m],j) A(i+m,j) = 0.0;
+    for(j=1;j<=NUM;j++) A(i+m,j) = 0.0;
     A(i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
 
-  fornonzero(A[NUM],j) A(NUM,j) = 0.0;
+  
+  for(j=1;j<=NUM;j++) A(NUM,j) = 0.0;
   A(NUM,NUM) = 1.0;
   b[NUM] = 0.0;
 /*  ritz(A,b); */
