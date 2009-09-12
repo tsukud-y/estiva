@@ -240,6 +240,30 @@ static void boundary_condition(MX *A, double *b)
 xyc *G_(xyc *Z, nde *N);
 
 
+static int tmpcounter = 0;
+static char filename[1000][100];
+static FILE *tmpfp[1000];
+
+FILE *tmpopen(void)
+{
+  sprintf(filename[tmpcounter],"%d",tmpcounter);
+  tmpfp[tmpcounter] = fopen(filename[tmpcounter],"w");
+  tmpcounter++;
+  return tmpfp[tmpcounter -1];
+}
+
+char *tmpname(FILE *fp)
+{
+  int i;
+  for ( i = 1000; i>=0; i--) if ( fp == tmpfp[i]) break;
+  return filename[i];
+}
+
+void tmpclose(FILE *fp)
+{
+  fclose(fp);
+}
+
 int main(int argc, char** argv)
 {
   static MX  *M, *K, *Hx, *Hy, *A;
@@ -299,13 +323,14 @@ int main(int argc, char** argv)
     }
 
 
-    tfp = fopen("flow","w");
+    tfp = tmpopen();
     pltuv(tfp, Mid, b,&b[m]);
-    fclose(tfp);
-    fprintf(pp,"plot \"flow\" with lines\n");
+    fflush(tfp);
+    fprintf(pp,"plot \"%s\" with lines\n",tmpname(tfp));
     fflush(pp);
+    tmpclose(tfp);
 
-    pfp = fopen("pressure","w");
+    pfp = tmpopen();
     {
       int i;
       static double *p;
@@ -313,11 +338,12 @@ int main(int argc, char** argv)
       ary1(p,n+1);
       for ( i = 0; i<=n; i++ ) p[i] = b[2*m+i];
       plt(pfp,Z,N,p);
-      fclose(pfp);
-      fprintf(ppp,"splot \"pressure\" with lines\n");
+      fflush(pfp);
+      fprintf(ppp,"splot \"%s\" with lines\n",tmpname(pfp));
+
     }
     fflush(ppp);
-
+    tmpclose(pfp);
 
     fprintf(stderr,"k = %d",k);
     for(i=1;i<=m;i++){ Ux[i] = b[i]; Uy[i] = b[i+m];}
