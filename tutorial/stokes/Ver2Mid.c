@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <estiva/ary.h>
 #include <estiva/foreach.h>
 #include <estiva/mesh.h>
@@ -37,7 +38,7 @@ static char *bound(char *s1, char *s2)
 static xyc *makeMV(xyc *Z, nde *N)
 {
   static xyc *MV;
-  int i, e, m, k, v;
+  int i, e, m, k;
   e = dim1(N);
   
   m = 1;

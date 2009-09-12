@@ -6,7 +6,7 @@ xyc *G_(xyc *Z, nde *N)
 {
   static xyc *G;
   double ax,ay,bx,by,cx,cy;
-  long i, j, n;
+  long i, n;
   n = dim1(N);
   ary1(G,n+1);
   
