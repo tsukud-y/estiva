@@ -49,8 +49,7 @@ set_u(xyc *Z, double *u)
 
 
 main(int argc, char **argv){
-  static xyc *Z;
-  static nde *N;
+  static xyc *Z; static nde *N;
   static double **A, *u;
 
   initop(argc, argv);
