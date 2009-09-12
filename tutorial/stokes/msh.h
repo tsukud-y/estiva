@@ -16,7 +16,6 @@ extern void numgrid_initgamma(void);
 extern int numgrid_gamma(xyc* Z,int *p,char *str);
 #define forgamma(Z,i,str) for(numgrid_initgamma();numgrid_gamma(Z,&(i),str);)
 
-extern void fp2msh(FILE* fp, xyc** Zp, nde** Np);
 extern void *Ver2Mid(xyc *Z, nde *N);
 extern double *S_(xyc *Z, nde *N);
 #endif
