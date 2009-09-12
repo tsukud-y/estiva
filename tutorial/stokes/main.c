@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <estiva/op.h>
-#include "ary.h"
+#include <estiva/ary.h>
 #include "msh.h"
 #include "spm.h"
 #include "date.h"
