@@ -15,6 +15,6 @@ main(){
   x[2] = 1.0;  
   x[3] = 1.0;
 
-  printf("minimum eigenvalue = %f\n",esolver(A,x));
+  printf("eigenvalue = %f\n",esolver(A,x));
   printf("%f %f %f\n",x[1],x[2],x[3]);
 }
