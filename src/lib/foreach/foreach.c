@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include "foreach.h"
+#include <estiva/foreach.h>
 
 #define  forall(m,i,n) for(i=m;i<=n;i++) 
 

@@ -6,7 +6,8 @@
 #include <estiva/ary.h>
 #include <estiva/mx.h>
 #include <estiva/solver.h>
-#include "msh.h"
+#include <estiva/mesh.h>
+#include "forgamma.h"
 typedef MX spm;
 
 
@@ -20,6 +21,9 @@ static xyc     *Z, *Mid;
 static nde     *N;
 static double *S;
 static long m, n;
+
+extern double *S_(xyc *Z, nde *N);
+extern void *Ver2Mid(xyc *Z, nde *N);
 
 static double length(int a, int b)
 {

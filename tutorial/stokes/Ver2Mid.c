@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <estiva/ary.h>
-#include "msh.h"
-#include "foreach.h"
+#include <estiva/foreach.h>
+#include <estiva/mesh.h>
+
+
 
 static void makeMid(nde *N)
 {
