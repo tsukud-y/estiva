@@ -8,9 +8,6 @@
 #include <estiva/solver.h>
 #include "msh.h"
 #include "spm.h"
-#include "date.h"
-
-int incircle(double x, double y, xyc *Z, nde *N,int e2);
 
 
 #define M( i,j) mx(M, i,j)
