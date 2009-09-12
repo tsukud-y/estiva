@@ -32,9 +32,9 @@ set_A(xyc *Z, nde *N, double **A)
     A[k][i]+=S*(b1*b3+c1*c3);A[k][j]+=S*(b2*b3+c2*c3);A[k][k]+=S*(b3*b3+c3*c3);
   }
 
-  for(i=1;i<=dim1(Z);i++){
-    if(!strcmp("boundary",Z[i].label)) A[i][i]= 1000000000000000000000000000.0;
-  }
+  for(n=1;n<=dim1(Z);n++) if(!strcmp("boundary",Z[n].label)) 
+    A[n][n]= 1000000000000000000000000000.0;
+
 }
 
 
@@ -42,8 +42,8 @@ set_A(xyc *Z, nde *N, double **A)
 static void
 set_u(xyc *Z, double *u)
 {
-  int i;
-  for(i=1; i<=dim1(Z); i++) u[i] = 1.0;
+  int n;
+  for(n=1; n<=dim1(Z); n++) u[n] = 1.0;
 }
 
 
