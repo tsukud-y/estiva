@@ -1,6 +1,4 @@
-default: stokes
-
-stokes: ;
+all: ;
 	cc *.c -lestiva -lm -o stokes
 
 clean: ;
