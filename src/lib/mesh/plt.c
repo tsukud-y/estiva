@@ -125,6 +125,22 @@ static void estiva_contaplt(FILE *fp, xyc *Z, nde *N, double *u)
       fprintf(fp,"splot '/tmp/plt.tmp' w l\n");
       fflush(fp);
     }
+  } else {
+      double x, h, umax = u[1], umin = u[1];
+      int i;
+
+      for (i=2; i<=dim1(Z); i++) {
+	if(umax < u[i]) umax = u[i];
+	if(umin > u[i]) umin = u[i];
+      }
+      h = (umax-umin)/20.0;
+
+      if( 0.0 != atof(getop("-conta")) ) 
+	h = (umax-umin)/(1.0+atof(getop("-conta")));
+      
+      for (x = umin; x<=umax; x+=h) conta(fp,u,Z,N,x);
+
+      fflush(fp);
   }
 }
 
@@ -132,7 +148,11 @@ static void estiva_contaplt(FILE *fp, xyc *Z, nde *N, double *u)
 void estiva_plt(FILE *fp, xyc *Z, nde *N, double *u)
 {
   if (defop("-conta")) {
-    estiva_contaplt(fp, Z, N, u);
+  
+    if ( dim1(N) == dim1(u) )
+      estiva_contaplt(fp,Z,N,p0top1(Z,N,u));
+    else
+      estiva_contaplt(fp,Z,N,u);
     return ;
   }
   
