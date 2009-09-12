@@ -1,5 +1,7 @@
-#include "msh.h"
-#include "ary.h"
+#include <stdio.h>
+#include <estiva/ary.h>
+#include <estiva/mesh.h>
+
 
 double *S_(xyc *Z, nde *N)
 {

@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "ary.h"
-#include "msh.h"
+#include <estiva/ary.h>
+#include <estiva/mesh.h>
 
 xyc *G_(xyc *Z, nde *N)
 {

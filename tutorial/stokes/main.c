@@ -569,9 +569,9 @@ int main(int argc, char** argv)
 
   initop(argc,argv);
 
-  fp = (FILE *)argf(argc,argv);
+  fp = (FILE *)stdfp();
 
-  fp2msh(fp, &Z, &N);
+  estiva_fp2mesh(fp, &Z, &N);
   fclose(fp);
   pltdot(fopen("pltdot","w"),Z,N);
   pltbound(fopen("pltbound","w"),Z,N);
