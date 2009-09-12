@@ -280,73 +280,6 @@ static void uvplot(FILE *fp,double *u, double *v)
 }
 
 
-static void bplot(FILE *fp, xyc *Z, nde *N,double *P)
-{
-  long i,a,b,c;
-  for(i=1;i<=dim1(N);i++){
-    a = N[i].a; b = N[i].b; c = N[i].c;
-    if(strcmp(Z[a].label,"inner")&&strcmp(Z[b].label,"inner")){
-      fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,P[a]);
-      fprintf(fp,"%f %f %f\n",Z[b].x,Z[b].y,P[b]);
-      fprintf(fp,"\n\n");
-    }
-    if(strcmp(Z[b].label,"inner")&&strcmp(Z[c].label,"inner")){
-      fprintf(fp,"%f %f %f\n",Z[b].x,Z[b].y,P[b]);
-      fprintf(fp,"%f %f %f\n",Z[c].x,Z[c].y,P[c]);
-      fprintf(fp,"\n\n");
-    }
-    if(strcmp(Z[c].label,"inner")&&strcmp(Z[a].label,"inner")){
-      fprintf(fp,"%f %f %f\n",Z[c].x,Z[c].y,P[c]);
-      fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,P[a]);
-      fprintf(fp,"\n\n");
-    }
-  }
-}  
-
-static void conta(FILE *fp,double *P, xyc *Z, nde *N, double k)
-{
-  long e, a, b, c;
-  double ax,ay,az, bx,by,bz, cx,cy,cz, x0,y0, x1,y1;
-
-  for(e=1;e<=dim1(N);e++){
-    a = N[e].a, b = N[e].b, c = N[e].c;
-
-    ax = Z[a].x, ay = Z[a].y, az = P[a];
-    bx = Z[b].x, by = Z[b].y, bz = P[b];
-    cx = Z[c].x, cy = Z[c].y, cz = P[c];
-
-
-    if((az>k&&bz<k&&cz<k)||(az<k&&bz>k&&cz>k)){
-      x0 = (k-az)*(bx-ax)/(bz-az) + ax;
-      y0 = (k-az)*(by-ay)/(bz-az) + ay;
-      x1 = (k-az)*(cx-ax)/(cz-az) + ax;
-      y1 = (k-az)*(cy-ay)/(cz-az) + ay;
-      fprintf(fp,"%f %f %f \n",x0,y0,k);
-      fprintf(fp,"%f %f %f \n",x1,y1,k);
-      fprintf(fp,"\n\n");
-    }
-    if((bz>k&&cz<k&&az<k)||(bz<k&&cz>k&&az>k)){
-      x0 = (k-bz)*(cx-bx)/(cz-bz) + bx;
-      y0 = (k-bz)*(cy-by)/(cz-bz) + by;
-      x1 = (k-bz)*(ax-bx)/(az-bz) + bx;
-      y1 = (k-bz)*(ay-by)/(az-bz) + by;
-      fprintf(fp,"%f %f %f \n",x0,y0,k);
-      fprintf(fp,"%f %f %f \n",x1,y1,k);
-      fprintf(fp,"\n\n");
-    }
-    if((cz>k&&az<k&&bz<k)||(cz<k&&az>k&&bz>k)){
-      x0 = (k-cz)*(ax-cx)/(az-cz)+cx;
-      y0 = (k-cz)*(ay-cy)/(az-cz)+cy;
-      x1 = (k-cz)*(bx-cx)/(bz-cz)+cx;
-      y1 = (k-cz)*(by-cy)/(bz-cz)+cy;
-      fprintf(fp,"%f %f %f\n",x0,y0,k);
-      fprintf(fp,"%f %f %f\n",x1,y1,k);
-      fprintf(fp,"\n\n");
-    }
-  }
-}
-
-
 
 static void pltmsh(FILE *fp, xyc *Z, nde *N)
 {
@@ -361,68 +294,7 @@ static void pltmsh(FILE *fp, xyc *Z, nde *N)
   }
 }
 
-static double *p0top1(xyc *Z, nde *N,double *p0)
-{
-  static double *p1;
-  static long   *pi;
-  long i, a, b, c;
 
-  ary1(p1, dim1(Z)+1);
-  ary1(pi, dim1(Z)+1);
-
-  for(i=1;i<=dim1(p1);i++){ p1[i] = 0.0; pi[i] = 0;}
-
-  for(i=1;i<=dim1(N);i++){
-    a = N[i].a; b = N[i].b; c = N[i].c;
-    
-    p1[a] += p0[i];  pi[a]++; 
-    p1[b] += p0[i];  pi[b]++; 
-    p1[c] += p0[i];  pi[c]++;
-  }
-
-  for(i=1;i<=dim1(p1);i++) if(pi[i]==0){
-    fprintf(stderr,"mesh data error\n");
-    exit(1);
-  }
-  for(i=1;i<=dim1(p1);i++) p1[i]/= (double)pi[i];
-  return p1;
-}
-
-
-
-
-static void pplot(FILE *fp, xyc *Z, nde *N, double *p)
-{
-  static double *P;
-  double pmax, pmin, med, k, h;
-  long i;
-
-
-  P = p0top1(Z,N,p);
-  
-  pmax = p[1];
-  pmin = p[1];
-  for(i=2;i<=dim1(N);i++){
-    if(pmax < p[i]) pmax = p[i];
-    if(pmin > p[i]) pmin = p[i];
-  }
-  h = 1.0;
-  if(defop("-conta"))
-    h = atof(getop("-conta"));
-  
-  med = (pmax + pmin)/2.0;
-  fprintf(stderr,"\n(pmax,pmin) = (%f, %f)\n",pmax,pmin);
-  conta(fp,P,Z,N,med);
-  for(k = med+h; k < pmax; k += h) conta(fp,P,Z,N,k);
-  for(k = med-h; k > pmin; k -= h) conta(fp,P,Z,N,k);
-
-
-  bplot(fp,Z,N,P);
-  
-  
-
-  fflush(fp);
-}
 
 static void pltbound(FILE *fp, xyc *Z, nde *N)
 {
@@ -543,12 +415,7 @@ int main(int argc, char** argv)
     fflush(pp);
 
     pfp = fopen("pressure","w");
-    if(defop("-conta")){
-      pplot(pfp,Z,N,&b[2*m]);
-      fclose(pfp);
-      fprintf(ppp,"plot \"pressure\" with lines\n");
-    }
-    else{
+    {
       int i;
       static double *p;
       n = dim1(S);
