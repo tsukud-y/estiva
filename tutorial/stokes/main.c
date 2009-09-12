@@ -8,8 +8,6 @@
 #include <estiva/solver.h>
 #include <estiva/mesh.h>
 
-typedef MX spm;
-
 
 #define M( i,j) mx(M, i,j)
 #define K( i,j) mx(K, i,j)
@@ -42,9 +40,9 @@ static double inner(int a, int b, int c)
   return (cx-ax)*(bx-cx)+(cy-ay)*(by-cy);
 }
 
-static spm* M__(void)
+static MX* M__(void)
 {
-  static spm *M;
+  static MX *M;
   long  e, a, b, c, A, B, C;
 
   initmx(M,m+1,20);
@@ -60,9 +58,9 @@ static spm* M__(void)
   return M;
 }
 
-static spm* K__(void)
+static MX* K__(void)
 {
-  static spm *K;
+  static MX *K;
   long e, a, b, c, A, B, C;
   double s;  
 
@@ -81,9 +79,9 @@ static spm* K__(void)
   return K;
 }
 
-static spm* Hx__(void)
+static MX* Hx__(void)
 {
-  static spm *Hx;
+  static MX *Hx;
   long e, a, b, c, A, B, C;
   
   initmx(Hx,m+1,20);
@@ -99,9 +97,9 @@ static spm* Hx__(void)
   return Hx;
 }
 
-static spm* Hy__(void)
+static MX* Hy__(void)
 {
-  static spm *Hy;
+  static MX *Hy;
   long e, a, b, c, A, B, C;
   
   initmx(Hy,m+1,20);
@@ -118,10 +116,10 @@ static spm* Hy__(void)
   return Hy;
 }
 
-static spm* A__(spm *M, double t, spm *K, spm *Hx, spm *Hy)
+static MX* A__(MX *M, double t, MX *K, MX *Hx, MX *Hy)
 {
-  static spm *A;
-  long   i, j, k, NUM;
+  static MX *A;
+  long   i, j, NUM;
   NUM = m*2+n;
   initmx(A, NUM+1,50);
 
@@ -150,11 +148,7 @@ static double* Fx_(void)
 static double* Fy_(void)
 {
   static double *Fy;
-  long i;
   ary1(Fy,m+1);
-/*
-  for(i=1;i<=m;i++) Fy[i] = -9.8; 
-*/
   return Fy;
 }
 
@@ -174,10 +168,10 @@ static double* Uy_(void)
 }
 
 
-static double* b_(spm *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
+static double* b_(MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
 {
-  static double *b, Mjj;
-  long   i, j, k, NUM;
+  static double *b;
+  long   i, NUM;
   NUM = m*2+n;
   ary1(b,NUM+1);
   
@@ -191,7 +185,7 @@ static double* b_(spm *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
   return b;
 }
 
-static void boundary_condition(spm *A, double *b)
+static void boundary_condition(MX *A, double *b)
 {
   long NUM;
   int i, j;
@@ -241,23 +235,6 @@ static void boundary_condition(spm *A, double *b)
 
 }
 
-static void job(double *p)
-{
-  FILE *pp;
-  long e, a, b, c, i, j;
-  pp = stdout;
-
-  
-  for(e=1;e<=n;e++){
-    a = N[e].a; b = N[e].b; c = N[e].c;
-    
-    fprintf(pp,"%f %f %f\n",Z[a].x,Z[a].y,p[e]);
-    fprintf(pp,"%f %f %f\n",Z[b].x,Z[b].y,p[e]);
-    fprintf(pp,"%f %f %f\n",Z[c].x,Z[c].y,p[e]);
-    fprintf(pp,"%f %f %f\n",Z[a].x,Z[a].y,p[e]);
-    fprintf(pp,"\n\n");
-  }
-}
 
 void arrow(FILE *fp,double x0,double y0,double x, double y)
 {
@@ -283,7 +260,7 @@ void arrow(FILE *fp,double x0,double y0,double x, double y)
 
 static void uvplot(FILE *fp,double *u, double *v)
 {
-  double t, h, x0,y0,x,y,xl,yl,xr,yr;
+  double t, h, x0,y0,x,y;
   long i;
   t = 0.5;
   h = 0.5;
@@ -369,18 +346,7 @@ static void conta(FILE *fp,double *P, xyc *Z, nde *N, double k)
   }
 }
 
-static void p0plot(FILE *fp, xyc *Z, nde *N, double *P)
-{
-  long e, a, b, c;
-  for(e=1;e<=dim1(N);e++){
-    a = N[e].a, b = N[e].b, c = N[e].c;
-    fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,P[e]);
-    fprintf(fp,"%f %f %f\n",Z[b].x,Z[b].y,P[e]);
-    fprintf(fp,"%f %f %f\n",Z[c].x,Z[c].y,P[e]);
-    fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y,P[e]);
-    fprintf(fp,"\n\n");
-  }
-}
+
 
 static void p1plot(FILE *fp, xyc *Z, nde *N, double *P)
 {
@@ -399,10 +365,10 @@ static void pltmsh(FILE *fp, xyc *Z, nde *N)
   long e, a, b, c;
   for(e=1;e<=dim1(N);e++){
     a = N[e].a, b = N[e].b, c = N[e].c;
-    fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y);
-    fprintf(fp,"%f %f %f\n",Z[b].x,Z[b].y);
-    fprintf(fp,"%f %f %f\n",Z[c].x,Z[c].y);
-    fprintf(fp,"%f %f %f\n",Z[a].x,Z[a].y);
+    fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
+    fprintf(fp,"%f %f\n",Z[b].x,Z[b].y);
+    fprintf(fp,"%f %f\n",Z[c].x,Z[c].y);
+    fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
     fprintf(fp,"\n\n");
   }
 }
@@ -434,41 +400,6 @@ static double *p0top1(xyc *Z, nde *N,double *p0)
   return p1;
 }
 
-static void frplot(FILE *fp, xyc *Z, nde *N, double scale)
-{
-  long i, a, b, c;
-  double xmax, ymax, xmin, ymin, xmed, ymed, t;
-  xmax = Z[1].x, ymax = Z[1].y;
-  xmin = Z[1].x, ymin = Z[1].y;
-  for(i=1;i<=dim1(N);i++){
-    a = N[i].a, b = N[i].b, c = N[i].c;
-    
-    if(xmax < Z[a].x) xmax = Z[a].x;
-    if(xmax < Z[b].x) xmax = Z[b].x;
-    if(xmax < Z[c].x) xmax = Z[c].x;
-    
-    if(xmin > Z[a].x) xmin = Z[a].x;
-    if(xmin > Z[b].x) xmin = Z[b].x;
-    if(xmin > Z[c].x) xmin = Z[c].x;
-    
-    if(ymax < Z[a].y) ymax = Z[a].y;
-    if(ymax < Z[b].y) ymax = Z[b].y;
-    if(ymax < Z[c].y) ymax = Z[c].y;
-    
-    if(ymin > Z[a].y) ymin = Z[a].y;
-    if(ymin > Z[b].y) ymin = Z[b].y;
-    if(ymin > Z[c].y) ymin = Z[c].y;
-  }
-  xmed = ( xmax + xmin )/2.0;
-  ymed = ( ymax + ymin )/2.0;
-  t = scale;
-
-  fprintf(fp,"%f %f %f\n",xmed-(t*1.3),ymed-t,0.0);
-  fprintf(fp,"%f %f %f\n",xmed+(t*1.3),ymed-t,0.0);
-  fprintf(fp,"%f %f %f\n",xmed+(t*1.3),ymed+t,0.0);
-  fprintf(fp,"%f %f %f\n",xmed-(t*1.3),ymed+t,0.0);
-  fprintf(fp,"%f %f %f\n",xmed-(t*1.3),ymed+t,0.0);
-}
 
 static void p0top1plot(FILE *fp, xyc *Z, nde *N, double *p)
 {
@@ -480,9 +411,8 @@ static void p0top1plot(FILE *fp, xyc *Z, nde *N, double *p)
 static void pplot(FILE *fp, xyc *Z, nde *N, double *p)
 {
   static double *P;
-  static long  *Pi;
   double pmax, pmin, med, k, h;
-  long i, n, a, b, c;
+  long i;
 
 
   P = p0top1(Z,N,p);
@@ -543,8 +473,8 @@ static void pltbound(FILE *fp, xyc *Z, nde *N)
 
 static void pltdot(FILE *fp, xyc *Z, nde *N)
 {
-  double xo,yo,x,y, h;
-  long e,a,b,c;
+  double h;
+  long a;
   
   h = 0.05;
   for(a=1;a<=dim1(Z);a++)
@@ -558,15 +488,14 @@ static void pltdot(FILE *fp, xyc *Z, nde *N)
 xyc *G_(xyc *Z, nde *N);
 int main(int argc, char** argv)
 {
-  static spm  *M, *K, *Hx, *Hy, *A;
+  static MX  *M, *K, *Hx, *Hy, *A;
   static double *Fx, *Fy, *Ux, *Uy, *b;
   static xyc * G;
   
   double t=0.1;
-  int             i, j, k, e, NUM;
+  int             i,  k, NUM;
   FILE *fp, *tfp, *pp, *pfp, *ppp;
 
-  static char name[100];
 
   initop(argc,argv);
 
@@ -618,10 +547,10 @@ int main(int argc, char** argv)
       initmx(AMX,n+1,80);
       for ( i=1; i<=n; i++) for (j=1; j<=n; j++) mx(AMX,i,j) = A(i,j);
 
-      estiva_solver(AMX,x,b);
+      solver(AMX,x,b);
       for ( i=1; i<=n; i++ ) b[i] = x[i];
     }
-    //solver(A,b);
+
 
 
     tfp = fopen("flow","w");
@@ -648,5 +577,3 @@ int main(int argc, char** argv)
     for(i=1;i<=m;i++){ Ux[i] = b[i]; Uy[i] = b[i+m];}
   }
 }
-
-
