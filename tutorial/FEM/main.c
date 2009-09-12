@@ -12,20 +12,20 @@ static void
 set_A(xyc *Z, nde *N, double **A)
 {
   int n, i, j, k;
-  double S, D, x1, y1, x2, y2, x3, y3, b1, b2, b3, c1, c2, c3;
+  double S, D, xi, yi, xj, yj, xk, yk, b1, b2, b3, c1, c2, c3;
 
   for(n=1;n<=dim1(N);n++){
-    x1 = Z[N[n].a].x; y1 = Z[N[n].a].y;
-    x2 = Z[N[n].b].x; y2 = Z[N[n].b].y;
-    x3 = Z[N[n].c].x; y3 = Z[N[n].c].y;
+    i=N[n].a; j=N[n].b; k=N[n].c;
 
-    D = x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2);
+    xi = Z[i].x; yi = Z[i].y;
+    xj = Z[j].x; yj = Z[j].y;
+    xk = Z[k].x; yk = Z[k].y;
+
+    D = xi*(yj-yk)+xj*(yk-yi)+xk*(yi-yj);
     S = fabs(D)/2.0;
 
-    b1=(y2-y3)/D; b2=(y3-y1)/D; b3=(y1-y2)/D;
-    c1=(x3-x2)/D; c2=(x1-x3)/D; c3=(x2-x1)/D;
-    
-    i=N[n].a; j=N[n].b; k=N[n].c;
+    b1=(yj-yk)/D; b2=(yk-yi)/D; b3=(yi-yj)/D;
+    c1=(xk-xj)/D; c2=(xi-xk)/D; c3=(xj-xi)/D;
 
     A[i][i]+=S*(b1*b1+c1*c1);A[i][j]+=S*(b2*b1+c2*c1);A[i][k]+=S*(b3*b1+c3*c1);
     A[j][i]+=S*(b1*b2+c1*c2);A[j][j]+=S*(b2*b2+c2*c2);A[j][k]+=S*(b3*b2+c3*c2);
