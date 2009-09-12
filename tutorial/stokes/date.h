@@ -1,0 +1,1 @@
+void date(char *str);
