@@ -12,14 +12,7 @@ static void
 set_A(xyc *Z, nde *N, double **A)
 {
   int n, i, j, k;
-  double S, D, x1, y1, x2, y2, x3, y3;
-
-  double Aii, Aij, Aik;
-  double Aji, Ajj, Ajk;
-  double Aki, Akj, Akk;
-
-  double b1, b2, b3;
-  double c1, c2, c3;
+  double S, D, x1, y1, x2, y2, x3, y3, b1, b2, b3, c1, c2, c3;
 
   for(n=1;n<=dim1(N);n++){
     x1 = Z[N[n].a].x; y1 = Z[N[n].a].y;
@@ -32,15 +25,11 @@ set_A(xyc *Z, nde *N, double **A)
     b1=(y2-y3)/D; b2=(y3-y1)/D; b3=(y1-y2)/D;
     c1=(x3-x2)/D; c2=(x1-x3)/D; c3=(x2-x1)/D;
     
-    Aii=S*(b1*b1+c1*c1); Aij=S*(b2*b1+c2*c1); Aik=S*(b3*b1+c3*c1);
-    Aji=S*(b1*b2+c1*c2); Ajj=S*(b2*b2+c2*c2); Ajk=S*(b3*b2+c3*c2); 
-    Aki=S*(b1*b3+c1*c3); Akj=S*(b2*b3+c2*c3); Akk=S*(b3*b3+c3*c3);
-    
     i=N[n].a; j=N[n].b; k=N[n].c;
 
-    A[i][i]+=Aii; A[i][j]+=Aij; A[i][k]+=Aik;
-    A[j][i]+=Aji; A[j][j]+=Ajj; A[j][k]+=Ajk;
-    A[k][i]+=Aki; A[k][j]+=Akj; A[k][k]+=Akk;
+    A[i][i]+=S*(b1*b1+c1*c1);A[i][j]+=S*(b2*b1+c2*c1);A[i][k]+=S*(b3*b1+c3*c1);
+    A[j][i]+=S*(b1*b2+c1*c2);A[j][j]+=S*(b2*b2+c2*c2);A[j][k]+=S*(b3*b2+c3*c2);
+    A[k][i]+=S*(b1*b3+c1*c3);A[k][j]+=S*(b2*b3+c2*c3);A[k][k]+=S*(b3*b3+c3*c3);
   }
 
   for(i=1;i<=dim1(Z);i++){
