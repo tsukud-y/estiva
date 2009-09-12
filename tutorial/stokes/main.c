@@ -7,7 +7,7 @@
 #include <estiva/mx.h>
 #include <estiva/solver.h>
 #include "msh.h"
-#include "spm.h"
+typedef MX spm;
 
 
 #define M( i,j) mx(M, i,j)
@@ -234,7 +234,7 @@ static void boundary_condition(spm *A, double *b)
   for(j=1;j<=NUM;j++) A(NUM,j) = 0.0;
   A(NUM,NUM) = 1.0;
   b[NUM] = 0.0;
-/*  ritz(A,b); */
+
 }
 
 static void job(double *p)
@@ -604,7 +604,7 @@ int main(int argc, char** argv)
     b = b_(M,t,Fx,Fy,Ux,Uy);
     boundary_condition(A,b);
 
-    ritz(A,b);
+
     {
       static double *x;
       static MX *AMX;

@@ -4,4 +4,4 @@ stokes: ;
 	cc *.c -L/usr/local/lib/ -lm -lf2c -o stokes -lestiva
 
 clean: ;
-	/bin/rm -f *.o plot/*.o stokes
+	/bin/rm -f *.o plot/*.o stokes plt* flow pressure
