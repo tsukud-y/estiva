@@ -4,6 +4,7 @@
 #include <string.h>
 #include <estiva/op.h>
 #include <estiva/ary.h>
+#include <estiva/mx.h>
 #include "msh.h"
 #include "spm.h"
 #include "date.h"
@@ -606,7 +607,19 @@ int main(int argc, char** argv)
     boundary_condition(A,b);
 
     ritz(A,b);
-    solver(A,b);
+    {
+      static double *x;
+      static MX *AMX;
+      int n, i, j;
+      n = dim1(b);
+      ary1(x,n+1);
+      initmx(AMX,n+1,80);
+      for ( i=1; i<=n; i++) for (j=1; j<=n; j++) mx(AMX,i,j) = A(i,j);
+
+      estiva_solver(AMX,x,b);
+      for ( i=1; i<=n; i++ ) b[i] = x[i];
+    }
+    //solver(A,b);
 
 
     tfp = fopen("flow","w");
