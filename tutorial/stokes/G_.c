@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "ary.h"
 #include "msh.h"
 

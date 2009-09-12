@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <estiva/ary.h>
 #include "msh.h"
 
 void mshplot(xyc *Z, nde *N)
