@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <estiva/op.h>
 #include <estiva/ary.h>
 #include <estiva/mesh.h>
@@ -74,9 +75,19 @@ static void estiva_contaplt(FILE *fp, xyc *Z, nde *N, double *u)
   if ( fp == NULL ) {
     fp = fopen("/tmp/plt.tmp","w");
     {
-      double x;
-      for ( x = 0.0; x<=10.0; x+=0.01)
-	conta(fp,u,Z,N,x);
+      double x, h, umax = u[1], umin = u[1];
+      int i;
+
+      for (i=2; i<=dim1(Z); i++) {
+	if(umax < u[i]) umax = u[i];
+	if(umin > u[i]) umin = u[i];
+      }
+      h = (umax-umin)/20.0;
+
+      if( 0.0 != atof(getop("-conta")) ) 
+	h = (umax-umin)/(1.0+atof(getop("-conta")));
+      
+      for (x = umin; x<=umax; x+=h) conta(fp,u,Z,N,x);
 
       fclose(fp);
       fp = popen("gnuplot","w");
