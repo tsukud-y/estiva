@@ -5,6 +5,7 @@
 #include <estiva/op.h>
 #include <estiva/ary.h>
 #include <estiva/mx.h>
+#include <estiva/solver.h>
 #include "msh.h"
 #include "spm.h"
 #include "date.h"
@@ -12,11 +13,11 @@
 int incircle(double x, double y, xyc *Z, nde *N,int e2);
 
 
-#define M( i,j) (*spm_double(M, i,j))
-#define K( i,j) (*spm_double(K, i,j))
-#define Hx(i,j) (*spm_double(Hx,i,j))
-#define Hy(i,j) (*spm_double(Hy,i,j))
-#define A( i,j) (*spm_double(A, i,j))
+#define M( i,j) mx(M, i,j)
+#define K( i,j) mx(K, i,j)
+#define Hx(i,j) mx(Hx,i,j)
+#define Hy(i,j) mx(Hy,i,j)
+#define A( i,j) mx(A, i,j)
 
 static xyc     *Z, *Mid;
 static nde     *N;
@@ -45,7 +46,7 @@ static spm* M__(void)
   static spm *M;
   long  e, a, b, c, A, B, C;
 
-  ary1(M,m+1);
+  initmx(M,m+1,20);
 
   for(e=1;e<=n;e++){
     a = N[e].a, b = N[e].b, c = N[e].c;
@@ -64,7 +65,7 @@ static spm* K__(void)
   long e, a, b, c, A, B, C;
   double s;  
 
-  ary1(K,m+1);
+  initmx(K,m+1,20);
 
   for(e=1;e<=n;e++){
     a = N[e].a, b = N[e].b, c = N[e].c;
@@ -84,7 +85,7 @@ static spm* Hx__(void)
   static spm *Hx;
   long e, a, b, c, A, B, C;
   
-  ary1(Hx,m+1);
+  initmx(Hx,m+1,20);
 
   for(e=1;e<=n;e++){
     a = N[e].a, b = N[e].b, c = N[e].c;
@@ -102,7 +103,7 @@ static spm* Hy__(void)
   static spm *Hy;
   long e, a, b, c, A, B, C;
   
-  ary1(Hy,m+1);
+  initmx(Hy,m+1,20);
 
   for(e=1;e<=n;e++){
     a = N[e].a, b = N[e].b, c = N[e].c;
@@ -121,7 +122,7 @@ static spm* A__(spm *M, double t, spm *K, spm *Hx, spm *Hy)
   static spm *A;
   long   i, j, k, NUM;
   NUM = m*2+n;
-  ary1(A, NUM+1);
+  initmx(A, NUM+1,50);
 
   for(i=1;i<=m;i++) for(j=1; j<=m; j++){
     A(  i,   j) = M(i,j) + t*K(i,j);

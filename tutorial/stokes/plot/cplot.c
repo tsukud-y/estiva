@@ -3,7 +3,7 @@
 #include "spm.h"
 
 #define max(x,y) (x>y?x:y)
-#define A(i,j) (*spm_double(A,i,j))
+#define A(i,j) mx(A,i,j)
 
 
 static long count_m(void *A)

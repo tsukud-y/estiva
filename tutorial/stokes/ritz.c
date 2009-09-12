@@ -3,7 +3,7 @@
 #include "spm.h"
 #include "date.h"
 
-#define A(i,j) (*spm_double(A,i,j))
+#define A(i,j) mx(A,i,j)
 
 
 static int this_is_boundary(spm *A, long j)
@@ -15,7 +15,7 @@ static int this_is_boundary(spm *A, long j)
 
   if(A(j,j) != 1.0) return 0;
 
-  fornonzero(A[j],i) if(A(j,i) != 0.0 && j != i) return 0;
+  for(i=1;i<=n;i++) if(A(j,i) != 0.0 && j != i) return 0;
   return 1;
 }
 

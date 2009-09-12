@@ -4,7 +4,7 @@
 #include "ary.h"
 #include "spm.h"
 
-#define A(i,j) (*spm_double(A,i,j))
+#define A(i,j) mx(A,i,j)
 
 static void cplot(xyc *Z,nde *N,void* A)
 {
