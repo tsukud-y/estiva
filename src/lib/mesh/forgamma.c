@@ -1,12 +1,12 @@
 #include <stdio.h>
+#include <string.h>
 #include <estiva/ary.h>
 #include <estiva/mesh.h>
-#include "forgamma.h"
 
 
 static int count=0;
 
-void numgrid_initgamma(void)
+void estiva_initgamma(void)
 { count = 0;}
 
 static int neq(char *str1, char *str2)
@@ -16,7 +16,7 @@ static int neq(char *str1, char *str2)
   return strcmp(str1,str2);
 }
 
-int numgrid_gamma(xyc* Z,int *p,char *str)
+int estiva_gamma(xyc* Z,int *p,char *str)
 { 
   if(dim1(Z) < ++count) return 0;
   

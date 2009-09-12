@@ -7,7 +7,7 @@
 #include <estiva/mx.h>
 #include <estiva/solver.h>
 #include <estiva/mesh.h>
-#include "forgamma.h"
+
 typedef MX spm;
 
 
