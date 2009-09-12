@@ -280,67 +280,9 @@ static void uvplot(FILE *fp,double *u, double *v)
 }
 
 
-
-static void pltmsh(FILE *fp, xyc *Z, nde *N)
-{
-  long e, a, b, c;
-  for(e=1;e<=dim1(N);e++){
-    a = N[e].a, b = N[e].b, c = N[e].c;
-    fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
-    fprintf(fp,"%f %f\n",Z[b].x,Z[b].y);
-    fprintf(fp,"%f %f\n",Z[c].x,Z[c].y);
-    fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
-    fprintf(fp,"\n\n");
-  }
-}
-
-
-
-static void pltbound(FILE *fp, xyc *Z, nde *N)
-{
-  double xo,yo,x,y;
-  long e,a,b,c;
-
-
-  for(e=1;e<=dim1(N);e++){
-    a = N[e].a, b = N[e].b, c = N[e].c;
-
-    if(Z[a].label!=NULL)if(Z[b].label!=NULL)if(strcmp(Z[a].label,"inner")&&strcmp(Z[b].label,"inner")){
-      xo = Z[a].x; yo = Z[a].y;
-      x  = Z[b].x; y  = Z[b].y;
-      fprintf(fp,"%f %f\n%f %f\n\n",xo,yo,x,y);
-    }
-    if(Z[b].label!=NULL)if(Z[c].label!=NULL)if(strcmp(Z[b].label,"inner")&&strcmp(Z[c].label,"inner")){
-      xo = Z[b].x; yo = Z[b].y;
-      x  = Z[c].x; y  = Z[c].y;
-      fprintf(fp,"%f %f\n%f %f\n\n",xo,yo,x,y);
-    }
-    if(Z[c].label!=NULL)if(Z[a].label!=NULL)if(strcmp(Z[c].label,"inner")&&strcmp(Z[a].label,"inner")){
-      xo = Z[c].x; yo = Z[c].y;
-      x  = Z[a].x; y  = Z[a].y;
-      fprintf(fp,"%f %f\n%f %f\n\n",xo,yo,x,y);
-    }
-  }
-   
-
-  fflush(fp);
-}
-
-static void pltdot(FILE *fp, xyc *Z, nde *N)
-{
-  double h;
-  long a;
-  
-  h = 0.05;
-  for(a=1;a<=dim1(Z);a++)
-    fprintf(fp,"%f %f\n%f %f\n\n",
-	    Z[a].x,Z[a].y,Z[a].x,Z[a].y);
-
-
-  fflush(fp);
-}
-
 xyc *G_(xyc *Z, nde *N);
+
+
 int main(int argc, char** argv)
 {
   static MX  *M, *K, *Hx, *Hy, *A;
@@ -351,20 +293,15 @@ int main(int argc, char** argv)
   int             i,  k, NUM;
   FILE *fp, *tfp, *pp, *pfp, *ppp;
 
-
   initop(argc,argv);
 
-  fp = (FILE *)stdfp();
-
-  estiva_fp2mesh(fp, &Z, &N);
+  fp = stdfp();
+  fp2mesh(fp, &Z, &N);
   fclose(fp);
-  pltdot(fopen("pltdot","w"),Z,N);
-  pltbound(fopen("pltbound","w"),Z,N);
-  pltmsh(fopen("pltmsh","w"),Z,N);
-  if(defop("-bound")) exit(1);
 
   if(defop("-t")) t=atof(getop("-t"));
   fprintf(stderr,"t= %f\n",t);
+
   Mid = Ver2Mid(Z,N);
   S   = S_(Z,N);
   G   = G_(Z,N);
@@ -386,6 +323,8 @@ int main(int argc, char** argv)
   
   pp = popen("gnuplot","w");
   ppp= popen("gnuplot","w");
+
+
   for(k=1;;k++){
     
     A  = A__(M,t,K,Hx,Hy);
@@ -427,4 +366,6 @@ int main(int argc, char** argv)
     fprintf(stderr,"k = %d",k);
     for(i=1;i<=m;i++){ Ux[i] = b[i]; Uy[i] = b[i+m];}
   }
+
+
 }
