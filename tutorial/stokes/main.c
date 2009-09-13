@@ -10,23 +10,13 @@
 #include <estiva/tmpfile.h>
 
 
-#define M( i,j) mx(M, i,j)
-#define K( i,j) mx(K, i,j)
-#define Hx(i,j) mx(Hx,i,j)
-#define Hy(i,j) mx(Hy,i,j)
-#define A( i,j) mx(A, i,j)
-
-
-static double *S;
-
-
 #define length(a,b) \
 ((Z[b].x-Z[a].x)*(Z[b].x-Z[a].x)+(Z[b].y-Z[a].y)*(Z[b].y-Z[a].y))
 
 #define inner(a,b,c) \
 ((Z[c].x-Z[a].x)*(Z[b].x-Z[c].x)+(Z[c].y-Z[a].y)*(Z[b].y-Z[c].y))
 
-double *S_(xyc *Z, nde *N)
+static double *S_(xyc *Z, nde *N)
 {
   static double *S;
   long i, e;
@@ -48,7 +38,7 @@ double *S_(xyc *Z, nde *N)
   return S;
 }
 
-static MX* M__(xyc *Mid,nde *N)
+static MX* M__(xyc *Mid,nde *N, double *S)
 {
   static MX *M;
   long  e, a, b, c, A, B, C, m, n;
@@ -61,14 +51,14 @@ static MX* M__(xyc *Mid,nde *N)
     a = N[e].a, b = N[e].b, c = N[e].c;
     A = N[e].A, B = N[e].B, C = N[e].C;
     
-    M(A,A) += S[e]/3.0;
-    M(B,B) += S[e]/3.0;
-    M(C,C) += S[e]/3.0;
+    mx(M,A,A) += S[e]/3.0;
+    mx(M,B,B) += S[e]/3.0;
+    mx(M,C,C) += S[e]/3.0;
   }
   return M;
 }
 
-static MX* K__(xyc *Mid, xyc *Z, nde *N)
+static MX* K__(xyc *Mid, xyc *Z, nde *N, double *S)
 {
   static MX *K;
   long e, a, b, c, A, B, C, m, n;
@@ -83,9 +73,9 @@ static MX* K__(xyc *Mid, xyc *Z, nde *N)
     A = N[e].A, B = N[e].B, C = N[e].C;
     s = S[e];
 
-    K(A,A) += length(b,c)/s; K(A,B) +=inner(a,b,c)/s; K(A,C) +=inner(a,c,b)/s;
-    K(B,A) +=inner(b,a,c)/s; K(B,B) += length(c,a)/s; K(B,C) +=inner(b,c,a)/s;
-    K(C,A) +=inner(c,a,b)/s; K(C,B) +=inner(c,b,a)/s; K(C,C) += length(a,b)/s;
+    mx(K,A,A) += length(b,c)/s; mx(K,A,B) +=inner(a,b,c)/s; mx(K,A,C) +=inner(a,c,b)/s;
+    mx(K,B,A) +=inner(b,a,c)/s; mx(K,B,B) += length(c,a)/s; mx(K,B,C) +=inner(b,c,a)/s;
+    mx(K,C,A) +=inner(c,a,b)/s; mx(K,C,B) +=inner(c,b,a)/s; mx(K,C,C) += length(a,b)/s;
 
   }
   return K;
@@ -104,9 +94,9 @@ static MX* Hx__(xyc *Mid, xyc *Z, nde *N)
     a = N[e].a, b = N[e].b, c = N[e].c;
     A = N[e].A, B = N[e].B, C = N[e].C;
 
-    Hx(A,e) += -(Z[c].y-Z[b].y);
-    Hx(B,e) += -(Z[a].y-Z[c].y);
-    Hx(C,e) += -(Z[b].y-Z[a].y);
+    mx(Hx,A,e) += -(Z[c].y-Z[b].y);
+    mx(Hx,B,e) += -(Z[a].y-Z[c].y);
+    mx(Hx,C,e) += -(Z[b].y-Z[a].y);
   }
   return Hx;
 }
@@ -124,9 +114,9 @@ static MX* Hy__(xyc *Mid, xyc *Z, nde *N)
     a = N[e].a, b = N[e].b, c = N[e].c;
     A = N[e].A, B = N[e].B, C = N[e].C;
 
-    Hy(A,e) += (Z[c].x-Z[b].x);
-    Hy(B,e) += (Z[a].x-Z[c].x);
-    Hy(C,e) += (Z[b].x-Z[a].x);
+    mx(Hy,A,e) += (Z[c].x-Z[b].x);
+    mx(Hy,B,e) += (Z[a].x-Z[c].x);
+    mx(Hy,C,e) += (Z[b].x-Z[a].x);
 
   }
   return Hy;
@@ -142,16 +132,16 @@ static MX* A__(xyc *Mid, nde *N, MX *M, double t, MX *K, MX *Hx, MX *Hy)
   initmx(A, NUM+1,50);
 
   for(i=1;i<=m;i++) for(j=1; j<=m; j++){
-    A(  i,   j) = M(i,j) + t*K(i,j);
-    A(m+i, m+j) = M(i,j) + t*K(i,j);
+    mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j);
+    mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j);
   }
   for(i=1;i<=m;i++) for(j=1; j<=n; j++){
-    A(i,2*m+j) = -t*Hx(i,j);
-    A(2*m+j,i) = -t*Hx(i,j);
+    mx(A,i,2*m+j) = -t*mx(Hx,i,j);
+    mx(A,2*m+j,i) = -t*mx(Hx,i,j);
   }
   for(i=1;i<=m;i++) for(j=1; j<=n; j++){
-    A(m+i,2*m+j) = -t*Hy(i,j);
-    A(2*m+j,m+i) = -t*Hy(i,j);
+    mx(A,m+i,2*m+j) = -t*mx(Hy,i,j);
+    mx(A,2*m+j,m+i) = -t*mx(Hy,i,j);
   }
   return A;
 }
@@ -170,8 +160,8 @@ static double* b_(xyc *Mid, nde *N,MX *M,double t,double *Fx,double *Fy,double *
   
 
   for(i=1;i<=m;i++){
-    b[i]   = t*M(i,i)*Fx[i] + M(i,i)*Ux[i];
-    b[m+i] = t*M(i,i)*Fy[i] + M(i,i)*Uy[i];
+    b[i]   = t*mx(M,i,i)*Fx[i] + mx(M,i,i)*Ux[i];
+    b[m+i] = t*mx(M,i,i)*Fy[i] + mx(M,i,i)*Uy[i];
   }
 
   for(i=1;i<=n;i++) b[i+2*m] = 0.0;
@@ -187,45 +177,45 @@ static void boundary_condition(nde *N, xyc *Mid, MX *A, double *b)
   NUM = 2*m+n;
 
   forgamma(Mid,i,"j1"){
-    for(j=1;j<=NUM;j++) A(i,j) = 0.0;
-    A(i,i) = 1.0;
+    for(j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+    mx(A,i,i) = 1.0;
     b[i] = 0.0;
   }
 
   forgamma(Mid,i,"j2"){
-    for(j=1;j<=NUM;j++) A(i,j) = 0.0;
-    A(i,i) = 1.0;
+    for(j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+    mx(A,i,i) = 1.0;
     b[i]   = 0.1;
 
-    for(j=1;j<=NUM;j++) A(i+m,j) = 0.0;
-    A(i+m,i+m) = 1.0;
+    for(j=1;j<=NUM;j++) mx(A,i+m,j) = 0.0;
+    mx(A,i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
 
   forgamma(Mid,i,"j3"){
-    for(j=1;j<=NUM;j++) A(i,j) = 0.0;
-    A(i,i) = 1.0;
+    for(j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+    mx(A,i,i) = 1.0;
     b[i]   = 0.0;
   }
   forgamma(Mid,i,"j4"){
-    for(j=1;j<=NUM;j++) A(i+m,j) = 0.0;
-    A(i+m,i+m) = 1.0;
+    for(j=1;j<=NUM;j++) mx(A,i+m,j) = 0.0;
+    mx(A,i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
 
   forgamma(Mid,i,"ki"){
-    for(j=1;j<=NUM;j++) A(i,j) = 0.0;
-    A(i,i) = 1.0;
+    for(j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+    mx(A,i,i) = 1.0;
     b[i] = 0.0;
 
-    for(j=1;j<=NUM;j++) A(i+m,j) = 0.0;
-    A(i+m,i+m) = 1.0;
+    for(j=1;j<=NUM;j++) mx(A,i+m,j) = 0.0;
+    mx(A,i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
 
   
-  for(j=1;j<=NUM;j++) A(NUM,j) = 0.0;
-  A(NUM,NUM) = 1.0;
+  for(j=1;j<=NUM;j++) mx(A,NUM,j) = 0.0;
+  mx(A,NUM,NUM) = 1.0;
   b[NUM] = 0.0;
 
 }
@@ -234,7 +224,7 @@ static void boundary_condition(nde *N, xyc *Mid, MX *A, double *b)
 int main(int argc, char** argv)
 {
   static MX  *M, *K, *Hx, *Hy, *A;
-  static double *Fx, *Fy, *Ux, *Uy, *b, *x, *p;
+  static double *Fx, *Fy, *Ux, *Uy, *b, *x, *p, *S;
   static xyc *Z, *Mid; static nde *N;
   
   double t=0.1;
@@ -257,8 +247,8 @@ int main(int argc, char** argv)
   n = dim1(S);
   NUM = 2*m+n;
 
-  M  = M__(Mid,N);
-  K  = K__(Mid,Z,N);
+  M  = M__(Mid,N,S);
+  K  = K__(Mid,Z,N,S);
   Hx = Hx__(Mid,Z,N);
   Hy = Hy__(Mid,Z,N);
 
