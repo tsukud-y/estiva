@@ -16,27 +16,15 @@
 #define Hy(i,j) mx(Hy,i,j)
 #define A( i,j) mx(A, i,j)
 
-static xyc     *Z, *Mid;
-static nde     *N;
+
 static double *S;
 static long m, n;
 
-static double length(int a, int b)
-{
-  double ax, ay, bx, by;
-  ax = Z[a].x; ay = Z[a].y;
-  bx = Z[b].x; by = Z[b].y;
-  return (bx-ax)*(bx-ax)+(by-ay)*(by-ay);
-}
+#define length(a,b) \
+((Z[b].x-Z[a].x)*(Z[b].x-Z[a].x)+(Z[b].y-Z[a].y)*(Z[b].y-Z[a].y))
 
-static double inner(int a, int b, int c)
-{
-  double ax, ay, bx, by, cx, cy;
-  ax = Z[a].x; ay = Z[a].y;
-  bx = Z[b].x; by = Z[b].y;
-  cx = Z[c].x; cy = Z[c].y;
-  return (cx-ax)*(bx-cx)+(cy-ay)*(by-cy);
-}
+#define inner(a,b,c) \
+((Z[c].x-Z[a].x)*(Z[b].x-Z[c].x)+(Z[c].y-Z[a].y)*(Z[b].y-Z[c].y))
 
 double *S_(xyc *Z, nde *N)
 {
@@ -60,8 +48,7 @@ double *S_(xyc *Z, nde *N)
   return S;
 }
 
-
-static MX* M__(void)
+static MX* M__(nde *N)
 {
   static MX *M;
   long  e, a, b, c, A, B, C;
@@ -79,7 +66,7 @@ static MX* M__(void)
   return M;
 }
 
-static MX* K__(void)
+static MX* K__(xyc *Z, nde *N)
 {
   static MX *K;
   long e, a, b, c, A, B, C;
@@ -100,7 +87,7 @@ static MX* K__(void)
   return K;
 }
 
-static MX* Hx__(void)
+static MX* Hx__(xyc *Z, nde *N)
 {
   static MX *Hx;
   long e, a, b, c, A, B, C;
@@ -118,7 +105,7 @@ static MX* Hx__(void)
   return Hx;
 }
 
-static MX* Hy__(void)
+static MX* Hy__(xyc *Z, nde *N)
 {
   static MX *Hy;
   long e, a, b, c, A, B, C;
@@ -177,7 +164,7 @@ static double* b_(MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
   return b;
 }
 
-static void boundary_condition(MX *A, double *b)
+static void boundary_condition(xyc *Mid, MX *A, double *b)
 {
   long NUM;
   int i, j;
@@ -232,6 +219,7 @@ int main(int argc, char** argv)
 {
   static MX  *M, *K, *Hx, *Hy, *A;
   static double *Fx, *Fy, *Ux, *Uy, *b, *x, *p;
+  static xyc *Z, *Mid; static nde *N;
   
   double t=0.1;
   int             i,  k, NUM;
@@ -253,10 +241,10 @@ int main(int argc, char** argv)
   n = dim1(S);
   NUM = 2*m+n;
 
-  M  = M__();
-  K  = K__();
-  Hx = Hx__();
-  Hy = Hy__();
+  M  = M__(N);
+  K  = K__(Z,N);
+  Hx = Hx__(Z,N);
+  Hy = Hy__(Z,N);
 
   ary1(Fx,m+1);  ary1(Fy,m+1);  ary1(Ux,m+1);  ary1(Uy,m+1);
   ary1(x,NUM+1); ary1(p,n+1);
@@ -270,7 +258,7 @@ int main(int argc, char** argv)
     A = A__(M,t,K,Hx,Hy);
     b = b_(M,t,Fx,Fy,Ux,Uy);
 
-    boundary_condition(A,b);
+    boundary_condition(Mid,A,b);
 
     solver(A,x,b);
     for (i=1; i<=dim1(p); i++) p[i] = x[2*m+i];
