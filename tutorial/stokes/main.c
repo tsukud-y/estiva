@@ -281,15 +281,15 @@ int main(int argc, char** argv)
 
 
   for(k=1;;k++){
-    
+    int i;    
+    static double *x, *p;
     A  = A__(M,t,K,Hx,Hy);
     b = b_(M,t,Fx,Fy,Ux,Uy);
     boundary_condition(A,b);
 
 
     {
-      static double *x;
-      int i;
+
       ary1(x,dim1(b)+1);
 
       solver(A,x,b);
@@ -299,20 +299,16 @@ int main(int argc, char** argv)
 
     tfp = tmpopen();
     pltuv(tfp, Mid, b,&b[m]);
-    fflush(tfp);
     fprintf(pp,"plot \"%s\" with lines\n",tmpname(tfp));
     fflush(pp);
     tmpclose(tfp);
 
     pfp = tmpopen();
     {
-      int i;
-      static double *p;
       n = dim1(S);
       ary1(p,n+1);
       for ( i = 0; i<=n; i++ ) p[i] = b[2*m+i];
       plt(pfp,Z,N,p);
-      fflush(pfp);
       fprintf(ppp,"splot \"%s\" with lines\n",tmpname(pfp));
 
     }
