@@ -13,6 +13,7 @@ all: ;
 	cc -I../include -c mesh/plt.c
 	cc -I../include -c mesh/pltuv.c
 	cc -I../include -c mesh/forgamma.c
+	cc -I../include -c mesh/np1.c
 	cc -I../include -c foreach/foreach.c
 	cc -I../include -c tmpfile/tmpfile.c
 	ar cr libestiva.a *.o

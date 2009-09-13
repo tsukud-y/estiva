@@ -72,7 +72,7 @@ static xyc *makeM(xyc *Z,nde *N)
   return makeMV(Z,N);
 }
 
-void* Ver2Mid(xyc* Z, nde * N)
+void* np1(xyc* Z, nde * N)
 {
   static xyc *Mid;
   Mid = makeM(Z,N);

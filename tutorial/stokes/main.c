@@ -22,7 +22,7 @@ static double *S;
 static long m, n;
 
 extern double *S_(xyc *Z, nde *N);
-extern void *Ver2Mid(xyc *Z, nde *N);
+extern void *np1(xyc *Z, nde *N);
 
 static double length(int a, int b)
 {
@@ -257,7 +257,7 @@ int main(int argc, char** argv)
   if(defop("-t")) t=atof(getop("-t"));
   fprintf(stderr,"t= %f\n",t);
 
-  Mid = Ver2Mid(Z,N);
+  Mid = np1(Z,N);
   S   = S_(Z,N);
   G   = G_(Z,N);
 
@@ -281,8 +281,8 @@ int main(int argc, char** argv)
 
 
   for(k=1;;k++){
-    int i;    
     static double *x, *p;
+
     A  = A__(M,t,K,Hx,Hy);
     b = b_(M,t,Fx,Fy,Ux,Uy);
     boundary_condition(A,b);
@@ -291,24 +291,21 @@ int main(int argc, char** argv)
     ary1(p,dim1(S)+1);
 
     solver(A,x,b);
-    for (i=1; i<=dim1(b); i++ ) b[i] = x[i];
-    for (i=1; i<=dim1(S); i++ ) p[i] = x[2*m+i];
+    for (i=1; i<=dim1(p); i++ ) p[i] = x[2*m+i];
 
     tfp = tmpopen();
-    pltuv(tfp, Mid, b,&b[m]);
-    fprintf(pp,"plot \"%s\" with lines\n",tmpname(tfp));
+    pltuv(tfp, Mid, x,&x[m]);
+    fprintf(pp,"plot \"%s\" w l\n",tmpname(tfp));
     fflush(pp);
     tmpclose(tfp);
 
     pfp = tmpopen();
     plt(pfp,Z,N,p);
-    fprintf(ppp,"splot \"%s\" with lines\n",tmpname(pfp));
+    fprintf(ppp,"splot \"%s\" w l\n",tmpname(pfp));
     fflush(ppp);
     tmpclose(pfp);
 
     fprintf(stderr,"k = %d",k);
-    for(i=1;i<=m;i++){ Ux[i] = b[i]; Uy[i] = b[i+m];}
+    for(i=1;i<=m;i++){ Ux[i] = x[i]; Uy[i] = x[i+m];}
   }
-
-
 }
