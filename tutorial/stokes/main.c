@@ -18,7 +18,7 @@
 
 
 static double *S;
-static long m;
+
 
 #define length(a,b) \
 ((Z[b].x-Z[a].x)*(Z[b].x-Z[a].x)+(Z[b].y-Z[a].y)*(Z[b].y-Z[a].y))
@@ -91,11 +91,12 @@ static MX* K__(xyc *Mid, xyc *Z, nde *N)
   return K;
 }
 
-static MX* Hx__(xyc *Z, nde *N)
+static MX* Hx__(xyc *Mid, xyc *Z, nde *N)
 {
   static MX *Hx;
-  long e, a, b, c, A, B, C, n;
-  
+  long e, a, b, c, A, B, C, m, n;
+
+  m = dim1(Mid);
   n = dim1(N);
   initmx(Hx,m+1,20);
 
@@ -110,11 +111,12 @@ static MX* Hx__(xyc *Z, nde *N)
   return Hx;
 }
 
-static MX* Hy__(xyc *Z, nde *N)
+static MX* Hy__(xyc *Mid, xyc *Z, nde *N)
 {
   static MX *Hy;
-  long e, a, b, c, A, B, C, n;
+  long e, a, b, c, A, B, C, m, n;
 
+  m = dim1(Mid);
   n = dim1(N);
   initmx(Hy,m+1,20);
 
@@ -130,10 +132,11 @@ static MX* Hy__(xyc *Z, nde *N)
   return Hy;
 }
 
-static MX* A__(nde *N, MX *M, double t, MX *K, MX *Hx, MX *Hy)
+static MX* A__(xyc *Mid, nde *N, MX *M, double t, MX *K, MX *Hx, MX *Hy)
 {
   static MX *A;
-  long   i, j, NUM, n;
+  long   i, j, NUM, m, n;
+  m = dim1(Mid);
   n = dim1(N);
   NUM = m*2+n;
   initmx(A, NUM+1,50);
@@ -154,12 +157,15 @@ static MX* A__(nde *N, MX *M, double t, MX *K, MX *Hx, MX *Hy)
 }
 
 
-static double* b_(nde *N,MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
+static double* b_(xyc *Mid, nde *N,MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
 {
   static double *b;
-  long   i, NUM,n;
-  NUM = m*2+n;
+  long   i, NUM, m, n;
+
+  m = dim1(Mid);
   n = dim1(N);
+
+  NUM = m*2+n;
   ary1(b,NUM+1);
   
 
@@ -175,7 +181,8 @@ static double* b_(nde *N,MX *M,double t,double *Fx,double *Fy,double *Ux, double
 static void boundary_condition(nde *N, xyc *Mid, MX *A, double *b)
 {
   long NUM;
-  int i, j, n;
+  int i, j, m, n;
+  m = dim1(Mid);
   n = dim1(N);
   NUM = 2*m+n;
 
@@ -231,7 +238,7 @@ int main(int argc, char** argv)
   static xyc *Z, *Mid; static nde *N;
   
   double t=0.1;
-  int             i,  k, NUM, n;
+  int             i,  k, NUM, m, n;
   FILE *fp, *tfp, *pp, *pfp, *ppp;
 
   initop(argc,argv);
@@ -252,8 +259,8 @@ int main(int argc, char** argv)
 
   M  = M__(Mid,N);
   K  = K__(Mid,Z,N);
-  Hx = Hx__(Z,N);
-  Hy = Hy__(Z,N);
+  Hx = Hx__(Mid,Z,N);
+  Hy = Hy__(Mid,Z,N);
 
   ary1(Fx,m+1);  ary1(Fy,m+1);  ary1(Ux,m+1);  ary1(Uy,m+1);
   ary1(x,NUM+1); ary1(p,n+1);
@@ -264,8 +271,8 @@ int main(int argc, char** argv)
 
   for(k=1;;k++){
 
-    A = A__(N, M,t,K,Hx,Hy);
-    b = b_(N,M,t,Fx,Fy,Ux,Uy);
+    A = A__(Mid, N, M,t,K,Hx,Hy);
+    b = b_(Mid,N,M,t,Fx,Fy,Ux,Uy);
 
     boundary_condition(N,Mid,A,b);
 
