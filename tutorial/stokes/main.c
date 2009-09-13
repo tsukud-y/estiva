@@ -287,15 +287,12 @@ int main(int argc, char** argv)
     b = b_(M,t,Fx,Fy,Ux,Uy);
     boundary_condition(A,b);
 
+    ary1(x,dim1(b)+1);
+    ary1(p,dim1(S)+1);
 
-    {
-
-      ary1(x,dim1(b)+1);
-
-      solver(A,x,b);
-      for ( i=1; i<=dim1(b); i++ ) b[i] = x[i];
-    }
-
+    solver(A,x,b);
+    for (i=1; i<=dim1(b); i++ ) b[i] = x[i];
+    for (i=1; i<=dim1(S); i++ ) p[i] = x[2*m+i];
 
     tfp = tmpopen();
     pltuv(tfp, Mid, b,&b[m]);
@@ -304,14 +301,8 @@ int main(int argc, char** argv)
     tmpclose(tfp);
 
     pfp = tmpopen();
-    {
-      n = dim1(S);
-      ary1(p,n+1);
-      for ( i = 0; i<=n; i++ ) p[i] = b[2*m+i];
-      plt(pfp,Z,N,p);
-      fprintf(ppp,"splot \"%s\" with lines\n",tmpname(pfp));
-
-    }
+    plt(pfp,Z,N,p);
+    fprintf(ppp,"splot \"%s\" with lines\n",tmpname(pfp));
     fflush(ppp);
     tmpclose(pfp);
 
