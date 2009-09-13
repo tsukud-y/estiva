@@ -18,7 +18,7 @@
 
 
 static double *S;
-static long m, n;
+static long m;
 
 #define length(a,b) \
 ((Z[b].x-Z[a].x)*(Z[b].x-Z[a].x)+(Z[b].y-Z[a].y)*(Z[b].y-Z[a].y))
@@ -48,11 +48,13 @@ double *S_(xyc *Z, nde *N)
   return S;
 }
 
-static MX* M__(nde *N)
+static MX* M__(xyc *Mid,nde *N)
 {
   static MX *M;
-  long  e, a, b, c, A, B, C;
+  long  e, a, b, c, A, B, C, m, n;
 
+  m = dim1(Mid);
+  n = dim1(N);
   initmx(M,m+1,20);
 
   for(e=1;e<=n;e++){
@@ -66,12 +68,14 @@ static MX* M__(nde *N)
   return M;
 }
 
-static MX* K__(xyc *Z, nde *N)
+static MX* K__(xyc *Mid, xyc *Z, nde *N)
 {
   static MX *K;
-  long e, a, b, c, A, B, C;
+  long e, a, b, c, A, B, C, m, n;
   double s;  
 
+  m = dim1(Mid);
+  n = dim1(N);
   initmx(K,m+1,20);
 
   for(e=1;e<=n;e++){
@@ -90,8 +94,9 @@ static MX* K__(xyc *Z, nde *N)
 static MX* Hx__(xyc *Z, nde *N)
 {
   static MX *Hx;
-  long e, a, b, c, A, B, C;
+  long e, a, b, c, A, B, C, n;
   
+  n = dim1(N);
   initmx(Hx,m+1,20);
 
   for(e=1;e<=n;e++){
@@ -108,8 +113,9 @@ static MX* Hx__(xyc *Z, nde *N)
 static MX* Hy__(xyc *Z, nde *N)
 {
   static MX *Hy;
-  long e, a, b, c, A, B, C;
-  
+  long e, a, b, c, A, B, C, n;
+
+  n = dim1(N);
   initmx(Hy,m+1,20);
 
   for(e=1;e<=n;e++){
@@ -124,10 +130,11 @@ static MX* Hy__(xyc *Z, nde *N)
   return Hy;
 }
 
-static MX* A__(MX *M, double t, MX *K, MX *Hx, MX *Hy)
+static MX* A__(nde *N, MX *M, double t, MX *K, MX *Hx, MX *Hy)
 {
   static MX *A;
-  long   i, j, NUM;
+  long   i, j, NUM, n;
+  n = dim1(N);
   NUM = m*2+n;
   initmx(A, NUM+1,50);
 
@@ -147,11 +154,12 @@ static MX* A__(MX *M, double t, MX *K, MX *Hx, MX *Hy)
 }
 
 
-static double* b_(MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
+static double* b_(nde *N,MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
 {
   static double *b;
-  long   i, NUM;
+  long   i, NUM,n;
   NUM = m*2+n;
+  n = dim1(N);
   ary1(b,NUM+1);
   
 
@@ -164,10 +172,11 @@ static double* b_(MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
   return b;
 }
 
-static void boundary_condition(xyc *Mid, MX *A, double *b)
+static void boundary_condition(nde *N, xyc *Mid, MX *A, double *b)
 {
   long NUM;
-  int i, j;
+  int i, j, n;
+  n = dim1(N);
   NUM = 2*m+n;
 
   forgamma(Mid,i,"j1"){
@@ -222,7 +231,7 @@ int main(int argc, char** argv)
   static xyc *Z, *Mid; static nde *N;
   
   double t=0.1;
-  int             i,  k, NUM;
+  int             i,  k, NUM, n;
   FILE *fp, *tfp, *pp, *pfp, *ppp;
 
   initop(argc,argv);
@@ -241,8 +250,8 @@ int main(int argc, char** argv)
   n = dim1(S);
   NUM = 2*m+n;
 
-  M  = M__(N);
-  K  = K__(Z,N);
+  M  = M__(Mid,N);
+  K  = K__(Mid,Z,N);
   Hx = Hx__(Z,N);
   Hy = Hy__(Z,N);
 
@@ -255,10 +264,10 @@ int main(int argc, char** argv)
 
   for(k=1;;k++){
 
-    A = A__(M,t,K,Hx,Hy);
-    b = b_(M,t,Fx,Fy,Ux,Uy);
+    A = A__(N, M,t,K,Hx,Hy);
+    b = b_(N,M,t,Fx,Fy,Ux,Uy);
 
-    boundary_condition(Mid,A,b);
+    boundary_condition(N,Mid,A,b);
 
     solver(A,x,b);
     for (i=1; i<=dim1(p); i++) p[i] = x[2*m+i];
