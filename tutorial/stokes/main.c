@@ -21,7 +21,6 @@ static nde     *N;
 static double *S;
 static long m, n;
 
-extern double *S_(xyc *Z, nde *N);
 extern void *np1(xyc *Z, nde *N);
 
 static double length(int a, int b)
@@ -40,6 +39,29 @@ static double inner(int a, int b, int c)
   cx = Z[c].x; cy = Z[c].y;
   return (cx-ax)*(bx-cx)+(cy-ay)*(by-cy);
 }
+
+double *S_(xyc *Z, nde *N)
+{
+  static double *S;
+  long i, e;
+  double xi,xj,xk,yi,yj,yk;
+
+  e = dim1(N);
+  ary1(S,e+1);
+
+  for(i=1;i<=e;i++){
+    xi = Z[N[i].a].x;
+    xj = Z[N[i].b].x;
+    xk = Z[N[i].c].x;
+    yi = Z[N[i].a].y;
+    yj = Z[N[i].b].y;
+    yk = Z[N[i].c].y;
+    S[i] = xi*yj+xj*yk+xk*yi-yi*xj-yj*xk-yk*xi;
+    S[i] /= 2.0;
+  }
+  return S;
+}
+
 
 static MX* M__(void)
 {
@@ -139,35 +161,6 @@ static MX* A__(MX *M, double t, MX *K, MX *Hx, MX *Hy)
   return A;
 }
 
-static double* Fx_(void)
-{
-  static double *Fx;
-  ary1(Fx,m+1);
-  return Fx;
-}
-
-static double* Fy_(void)
-{
-  static double *Fy;
-  ary1(Fy,m+1);
-  return Fy;
-}
-
-
-static double* Ux_(void)
-{
-  static double *Ux;
-  ary1(Ux,m+1);
-  return Ux;
-}
-
-static double* Uy_(void)
-{
-  static double *Uy;
-  ary1(Uy,m+1);
-  return Uy;
-}
-
 
 static double* b_(MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
 {
@@ -236,13 +229,11 @@ static void boundary_condition(MX *A, double *b)
 
 }
 
-xyc *G_(xyc *Z, nde *N);
 
 int main(int argc, char** argv)
 {
   static MX  *M, *K, *Hx, *Hy, *A;
-  static double *Fx, *Fy, *Ux, *Uy, *b;
-  static xyc * G;
+  static double *Fx, *Fy, *Ux, *Uy, *b, *x, *p;
   
   double t=0.1;
   int             i,  k, NUM;
@@ -259,37 +250,29 @@ int main(int argc, char** argv)
 
   Mid = np1(Z,N);
   S   = S_(Z,N);
-  G   = G_(Z,N);
 
   m = dim1(Mid);
   n = dim1(S);
+  NUM = 2*m+n;
 
   M  = M__();
   K  = K__();
   Hx = Hx__();
   Hy = Hy__();
 
-  Fx = Fx_();
-  Fy = Fy_();
-  Ux = Ux_();
-  Uy = Uy_();
-
-  NUM = 2*m+n;
+  ary1(Fx,m+1);  ary1(Fy,m+1);  ary1(Ux,m+1);  ary1(Uy,m+1);
+  ary1(x,NUM+1); ary1(p,n+1);
   
   pp = popen("gnuplot","w");
   ppp= popen("gnuplot","w");
 
 
   for(k=1;;k++){
-    static double *x, *p;
 
-    A  = A__(M,t,K,Hx,Hy);
+    A = A__(M,t,K,Hx,Hy);
     b = b_(M,t,Fx,Fy,Ux,Uy);
 
     boundary_condition(A,b);
-
-    ary1(x,dim1(b)+1);
-    ary1(p,dim1(S)+1);
 
     solver(A,x,b);
     for (i=1; i<=dim1(p); i++) p[i] = x[2*m+i];
