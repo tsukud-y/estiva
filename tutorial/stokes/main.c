@@ -7,6 +7,7 @@
 #include <estiva/mx.h>
 #include <estiva/solver.h>
 #include <estiva/mesh.h>
+#include <estiva/tmpfile.h>
 
 
 #define M( i,j) mx(M, i,j)
@@ -235,34 +236,7 @@ static void boundary_condition(MX *A, double *b)
 
 }
 
-
-
 xyc *G_(xyc *Z, nde *N);
-
-
-static int tmpcounter = 0;
-static char filename[1000][100];
-static FILE *tmpfp[1000];
-
-FILE *tmpopen(void)
-{
-  sprintf(filename[tmpcounter],"%d",tmpcounter);
-  tmpfp[tmpcounter] = fopen(filename[tmpcounter],"w");
-  tmpcounter++;
-  return tmpfp[tmpcounter -1];
-}
-
-char *tmpname(FILE *fp)
-{
-  int i;
-  for ( i = 1000; i>=0; i--) if ( fp == tmpfp[i]) break;
-  return filename[i];
-}
-
-void tmpclose(FILE *fp)
-{
-  fclose(fp);
-}
 
 int main(int argc, char** argv)
 {
