@@ -285,13 +285,14 @@ int main(int argc, char** argv)
 
     A  = A__(M,t,K,Hx,Hy);
     b = b_(M,t,Fx,Fy,Ux,Uy);
+
     boundary_condition(A,b);
 
     ary1(x,dim1(b)+1);
     ary1(p,dim1(S)+1);
 
     solver(A,x,b);
-    for (i=1; i<=dim1(p); i++ ) p[i] = x[2*m+i];
+    for (i=1; i<=dim1(p); i++) p[i] = x[2*m+i];
 
     tfp = tmpopen();
     pltuv(tfp, Mid, x,&x[m]);
@@ -305,7 +306,7 @@ int main(int argc, char** argv)
     fflush(ppp);
     tmpclose(pfp);
 
-    fprintf(stderr,"k = %d",k);
     for(i=1;i<=m;i++){ Ux[i] = x[i]; Uy[i] = x[i+m];}
+    fprintf(stderr,"k = %d\n",k);
   }
 }
