@@ -21,8 +21,6 @@ static nde     *N;
 static double *S;
 static long m, n;
 
-extern void *np1(xyc *Z, nde *N);
-
 static double length(int a, int b)
 {
   double ax, ay, bx, by;

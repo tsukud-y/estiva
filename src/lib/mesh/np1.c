@@ -72,7 +72,7 @@ static xyc *makeM(xyc *Z,nde *N)
   return makeMV(Z,N);
 }
 
-void* np1(xyc* Z, nde * N)
+void* estiva_np1(xyc* Z, nde * N)
 {
   static xyc *Mid;
   Mid = makeM(Z,N);
