@@ -1,0 +1,25 @@
+NDE(3)              ESTIVA ライブラリ関数マニュアル                NDE(3)
+
+名称
+     nde - 節点-座標対応表型
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include <estiva/mesh.h>
+
+     nde *N;
+
+解説
+     nde型の配列は 要素-節点対応表とみなすことができます。
+     fp2mesh() 関数を用いることで、ストリームの mesh 型データ
+     から nde 型の配列として、要素-節点対応表を利用することが
+     できます。
+     
+
+戻り値
+     nde 型は構造体を typedef したものなので、戻り値はありません。
+
+関連項目
+     fp2mesh(3), forgamma(3), xyc(3)
