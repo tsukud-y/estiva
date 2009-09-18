@@ -1,0 +1,28 @@
+FOREACH(3)           ESTIVA ライブラリ関数マニュアル                FOREACH(3)
+
+名称
+    forgamma()  - 境界接点用 forマクロ
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式	
+     #include <estiva/mesh.h>
+
+     forgamma(xyc *Mid, long i, char *label) { ; ... ; }
+
+解説
+     forgamma()マクロは 境界識別用のラベル(= label) のついた
+     境界節点を渡り、変数 i に逐次代入して、後に続く文のブロック
+     を実行します。
+     ここに Mid は節点-座標対応表です。中点節点対応表でも
+     構いません。
+     
+     forgamma() マクロを用いることによって、境界条件の設定を
+     行うことが容易になります。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     xyc(3)
