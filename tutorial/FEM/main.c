@@ -63,6 +63,6 @@ main(int argc, char **argv)
 
   esolver(A,u);
 
-  plt(NULL,Z,N,u); sleep(1000);
+  plt(NULL,NULL,Z,N,u); sleep(1000);
   return 0;
 }

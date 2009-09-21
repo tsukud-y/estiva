@@ -270,13 +270,13 @@ int main(int argc, char** argv)
     for (i=1; i<=dim1(p); i++) p[i] = x[2*m+i];
 
     tfp = tmpopen();
-    pltuv(tfp, Mid, x,&x[m]);
+    plt(tfp,Mid,Z,N,x);
     fprintf(pp,"plot \"%s\" w l\n",tmpname(tfp));
     fflush(pp);
     tmpclose(tfp);
 
     pfp = tmpopen();
-    plt(pfp,Z,N,p);
+    plt(pfp,Mid,Z,N,p);
     fprintf(ppp,"splot \"%s\" w l\n",tmpname(pfp));
     fflush(ppp);
     tmpclose(pfp);

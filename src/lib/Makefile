@@ -11,7 +11,6 @@ all: ;
 	cc -I../include -c esolver/minesolver.c
 	cc -I../include -c mesh/fp2mesh.c
 	cc -I../include -c mesh/plt.c
-	cc -I../include -c mesh/pltuv.c
 	cc -I../include -c mesh/forgamma.c
 	cc -I../include -c mesh/np1.c
 	cc -I../include -c foreach/foreach.c

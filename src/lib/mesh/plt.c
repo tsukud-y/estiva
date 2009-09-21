@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <estiva/op.h>
 #include <estiva/ary.h>
 #include <estiva/mesh.h>
@@ -145,7 +146,51 @@ static void estiva_contaplt(FILE *fp, xyc *Z, nde *N, double *u)
 }
 
 
-void estiva_plt(FILE *fp, xyc *Z, nde *N, double *u)
+static void arrow(FILE *fp,double x0,double y0,double x, double y)
+{
+  double xl,yl,xr,yr,h;
+  h = 0.2;
+
+  xl = (-sqrt(3.0)/2.0)*h; yl = ( 1.0/2.0)*h;
+  xr = (-sqrt(3.0)/2.0)*h; yr = (-1.0/2.0)*h;
+
+  fprintf(fp,"%f %f\n",x0,y0);
+  fprintf(fp,"%f %f\n",x0+x,y0+y);
+  fprintf(fp,"\n");
+  fprintf(fp,"%f %f\n",x0+x,y0+y);
+  fprintf(fp,"%f %f\n",x0+x+x*xl-y*yl,y0+y+y*xl+x*yl);
+  fprintf(fp,"\n");
+  fprintf(fp,"%f %f\n",x0+x,y0+y);
+  fprintf(fp,"%f %f\n",x0+x+x*xr-y*yr,y0+y+y*xr+x*yr);
+  fprintf(fp,"\n");
+
+}
+
+
+
+static void estiva_pltuv(FILE *fp, xyc *Mid, double *u, double *v)
+{
+  double t, h, x0,y0,x,y;
+  long i,m;
+  t = 0.5;
+  h = 0.5;
+  m = dim1(Mid);
+  for(i=1;i<=m;i++){
+    x0 = Mid[i].x;
+    y0 = Mid[i].y;
+
+    x  = t*u[i];
+    y  = t*v[i];
+
+    arrow(fp,x0,y0,x,y);
+    fprintf(fp,"%f %f\n",x0,y0);
+    fprintf(fp,"%f %f\n",x0+x,y0+y);
+    fprintf(fp,"\n");
+  }
+  fflush(fp);
+}
+
+void estiva_plt(FILE *fp, xyc *Mid, xyc *Z, nde *N, double *u)
 {
   if (defop("-conta")) {
   
@@ -158,7 +203,8 @@ void estiva_plt(FILE *fp, xyc *Z, nde *N, double *u)
   
   if ( dim1(N) == dim1(u) )
     estiva_p1plt(fp,Z,N,p0top1(Z,N,u));
-  else
+  else if ( dim1(Z) == dim1(u) )
     estiva_p1plt(fp,Z,N,u);
+  else 
+    estiva_pltuv(fp,Mid,u,&u[dim1(Mid)]);
 }
-
