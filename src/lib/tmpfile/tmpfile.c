@@ -10,7 +10,7 @@ FILE *estiva_tmpopen(void)
 {
   int i;
   for ( i = 0; i<=98; i++) if ( tmpfp[i] == NULL) break;
-  sprintf(filename[i],"%d",tmpcounter);
+  sprintf(filename[i],"tmpfile.%d",tmpcounter);
   tmpfp[i] = fopen(filename[i],"w");
   tmpcounter++;
   return tmpfp[i];
