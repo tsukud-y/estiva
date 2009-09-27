@@ -37,7 +37,7 @@ void fp2mesh(FILE* fp, xyc** Zp, nde** Np)
   
   if(Z == NULL || N == NULL){
     fprintf(stderr,"poisson: Can't alloc memory!\n");
-    exit(1);
+    abort();
   }
 
   rewind(fp);
@@ -55,7 +55,7 @@ void fp2mesh(FILE* fp, xyc** Zp, nde** Np)
       Z[i].label = (char*)malloc(16);
       if(Z[i].label == NULL){
 	fprintf(stderr,"poisson: Can't alloc memory\n");
-	exit(1);
+	abort();
       }
       sscanf(buf1000,"%d %lf %lf %s",&m, &Z[i].x, &Z[i].y,Z[i].label);
     }

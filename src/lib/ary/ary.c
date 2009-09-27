@@ -18,7 +18,7 @@ static void check(void* v)
     return;
   }
   fprintf(stderr,"dim(): You need alloc!\n");
-  exit(1);
+  abort();
 }
 
 size_t estiva_dim0(void* v)
@@ -46,7 +46,7 @@ static void* alloc(size_t n)
   if(p != NULL) return p;
   else{
     fprintf(stderr,"ary(): Can't alloc memory!\n");
-    exit(1);
+    abort();
   }
   return NULL;
 }

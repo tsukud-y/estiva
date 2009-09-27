@@ -26,7 +26,7 @@ static double *p0top1(xyc *Z, nde *N,double *p0)
 
   for(i=1;i<=dim1(p1);i++) if(pi[i]==0){
     fprintf(stderr,"mesh data error\n");
-    exit(1);
+    abort();
   }
   for(i=1;i<=dim1(p1);i++) p1[i]/= (double)pi[i];
   return p1;

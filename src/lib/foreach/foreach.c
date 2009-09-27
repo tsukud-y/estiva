@@ -13,7 +13,7 @@ static void estiva_cp(void *A, void *B, int size1, int size2)
   p2=(char *)B;
 
   if(size1 == size2) forall(0,i,size1-1) p2[i]=p1[i]; 
-  else{ fprintf(stderr,"estiva_cp: size mismatch\n"); exit(1);}
+  else{ fprintf(stderr,"estiva_cp: size mismatch\n"); abort();}
 }
 
 
@@ -59,7 +59,7 @@ int estiva_foreach(int fsize,void *f0,...)
   
   if(fsize==0||f0==NULL) return 0;    
   if(f(f0)==NULL){ R(f0,malloc(sizeof(int))); n(f0) = 0;}
-  if(f(f0)==NULL) exit(1);
+  if(f(f0)==NULL) abort();
   
   va_start(ap,f0); fi = f0; 
   forall(1,i,n(f0)) fi = va_arg(ap, void *);

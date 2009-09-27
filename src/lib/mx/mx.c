@@ -49,7 +49,7 @@ static void estiva_wmx(MX *T, long i, long j, double a){
     }
   } 
   fprintf(stderr,"initmx(m,n)'s n is too short\n");
-  exit(1);
+  abort();
 }
 
 double *estiva_mx(MX *T, long i, long j){
