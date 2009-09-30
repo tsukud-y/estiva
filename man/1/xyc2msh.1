@@ -1,5 +1,5 @@
 コマンド
-	xyc2msh - 有限要素格子データの生成フィルタ version 0.10
+	xyc2msh - 有限要素格子データの生成フィルタ
 
 使い方
 	% xyc2msh [filename]
@@ -98,33 +98,3 @@
 	要素が境界に接しているとして,
 	節点aの向かい側に隣接する三角形がない場合には,
 	[隣接要素a] := 0 となっている.
-
-インストール
-	以下の環境では make 一発で動作確認済みである.
-	FreeBSD 2.2 + gcc メモリ 128M (olivier.im.uec.ac.jp)
-	SunOS 4.1 + gcc メモリ 32M (raviart.im.uec.ac.jp)
-	HP-UX + gcc メモリ 64M (aqua.im.uec.ac.jp)
-
-	インストールと動作確認の方法は,
-
-	1. ディストリビューションの展開
-		% zcat xyc2msh.tar.Z | tar xvf -
-
-	2. コンパイル
-		% cd xyc2msh
-		% make
-	
-	3. 動作確認
-		% ./xyc2msh kanto.xyc    # (olivier で30秒程度)
-		% ./xyc2msh pt.xyc       # (  ..       4分程度)
-		% cat kanto.xyc | ./xyc2msh
-		
-	4. インストール
-		# cp xyc2msh /usr/local/bin
-
-履歴
-0.09	吹春氏の依頼により作成
-0.10	標準入力からの入力を可能にした
-	<nde> の前の空行を出力しないようにした	 
-0.11	ローソンの探査法の一部を修正
-	現時点では olivierのみで動作を確認

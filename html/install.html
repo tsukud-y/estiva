@@ -6,14 +6,13 @@ estiva0.9.tar.gz をダウンロードする
 (展開)
 % gzip -cd estiva0.9.tar.gz | tar xvpf -
 
-(インストール時オプションの指定)
 % cd estiva/src
-% ./configure -prefix /usr/local
-
-(/usr/local はインストール先ディレクトリ)
-
 % make
 
 % su
-# make install
+# mv lib/libestiva.a /usr/lib
+# mv include/estiva/ /usr/include/
+# mv bin/xmesh/xmesh /usr/local/bin/
+# mv bin/xmsh/xmsh /usr/local/bin/
+# mv bin/xyc2msh/xyc2msh /usr/local/bin/
 </pre>
