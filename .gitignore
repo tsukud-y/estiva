@@ -1,0 +1,12 @@
+GPATH
+GRTAGS
+GSYMS
+GTAGS
+ID
+*.o
+src/bin/unestiva/unestiva
+src/bin/xmesh/xmesh
+src/bin/xmsh/xmsh
+src/bin/xyc2msh/xyc2msh
+src/lib/libestiva.a
+
