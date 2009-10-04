@@ -108,7 +108,7 @@ static void estiva_contaplt(FILE *fp, xyc *Z, nde *N, double *u)
     fp = fopen("/tmp/plt.tmp","w");
     {
       double x, h, umax = u[1], umin = u[1];
-      int i;
+      int i, n;
 
       for (i=2; i<=dim1(Z); i++) {
 	if(umax < u[i]) umax = u[i];
@@ -118,8 +118,9 @@ static void estiva_contaplt(FILE *fp, xyc *Z, nde *N, double *u)
 
       if( 0.0 != atof(getop("-conta")) ) 
 	h = (umax-umin)/(1.0+atof(getop("-conta")));
-      
-      for (x = umin; x<=umax; x+=h) conta(fp,u,Z,N,x);
+
+      n = 1 + atoi(getop("-conta"));
+      for (x = umin, i=0; i<=n; x+=h, i++) conta(fp,u,Z,N,x);
 
       fclose(fp);
       fp = popen("gnuplot","w");
@@ -128,7 +129,7 @@ static void estiva_contaplt(FILE *fp, xyc *Z, nde *N, double *u)
     }
   } else {
       double x, h, umax = u[1], umin = u[1];
-      int i;
+      int i, n;
 
       for (i=2; i<=dim1(Z); i++) {
 	if(umax < u[i]) umax = u[i];
@@ -139,7 +140,9 @@ static void estiva_contaplt(FILE *fp, xyc *Z, nde *N, double *u)
       if( 0.0 != atof(getop("-conta")) ) 
 	h = (umax-umin)/(1.0+atof(getop("-conta")));
       
-      for (x = umin; x<=umax; x+=h) conta(fp,u,Z,N,x);
+
+      n = 1 + atoi(getop("-conta"));
+      for (x = umin, i=0; i<=n; x+=h, i++) conta(fp,u,Z,N,x);
 
       fflush(fp);
   }
