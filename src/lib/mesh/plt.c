@@ -173,7 +173,7 @@ static void estiva_pltuv(FILE *fp, xyc *Mid, double *u, double *v)
   double t, h, x0,y0,x,y;
   long i,m;
   t = 0.5;
-  h = 0.5;
+
   m = dim1(Mid);
   for(i=1;i<=m;i++){
     x0 = Mid[i].x;

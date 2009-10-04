@@ -16,7 +16,7 @@ void fp2mesh(FILE* fp, xyc** Zp, nde** Np)
 {
   static xyc* Z; static nde* N;
   char buf1000[1000], buf200[200];
-  int i, j, m, n, state = 1;
+  int i, j, m=0, n=0, state = 1;
   
 
   while(fgets(buf1000,999,fp)) switch(state){
