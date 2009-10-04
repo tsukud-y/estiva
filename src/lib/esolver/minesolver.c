@@ -21,7 +21,7 @@ static double invert(Matrix A,Vector x,double tol,int n,int *itr);
 
 double estiva_minesolver(double **A, double *x)
 {
-  int i, n=dim1(x), itr[2]={Itr, 0};
+  int n=dim1(x), itr[2]={Itr, 0};
   return invert(A,x,tol,n,itr);
 }
 

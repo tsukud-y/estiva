@@ -173,7 +173,7 @@ static void arrow(FILE *fp,double x0,double y0,double x, double y)
 
 static void estiva_pltuv(FILE *fp, xyc *Mid, double *u, double *v)
 {
-  double t, h, x0,y0,x,y;
+  double t, x0,y0,x,y;
   long i,m;
   t = 0.5;
 

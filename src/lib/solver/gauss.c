@@ -15,6 +15,7 @@ static long halfbw(double** a)
   n = dim2(a);
   for(i=1;i<=n;i++) for(j=1;j<=i;j++)
     if(a[j][n-(i-j)] != 0.0||a[n-(i-j)][j] != 0.0) return n-i;
+  return n;
 }
 
 
@@ -47,8 +48,8 @@ static long* LU(double  **a)
 
 static long gauss_c(double **a, double* b)
 { 
-  double *api,s,**x,bpi;
-  long *p,i,j,k,n,w,pi,pilimit; 
+  double *api,s,bpi;
+  long *p,i,j,n,w,pi,pilimit; 
 
   if(dim1(a) != dim1(b)) return 0;
 

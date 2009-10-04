@@ -1,6 +1,11 @@
 #include <stdio.h>
+#include <string.h>
 #include <estiva/op.h>
 #include <estiva/solver.h>
+
+extern int estiva_gausssolver(void *A, double *x, double *b);
+extern int estiva_blusolver(void *A, double *x, double *b);
+extern int estiva_pcgssolver(void *A, double *x, double *b) ;    
 
 int estiva_solver(void *A, double *x, double *b)
 {

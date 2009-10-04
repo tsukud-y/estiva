@@ -1,16 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <estiva/ary.h>
 #include <estiva/mesh.h>
-
-static void cp_fp(FILE* in, FILE* out)
-{
-  int c;
-  
-  while(EOF !=(c = getc(in))) putc(c,out);
-  fflush(out);
-  rewind(out);
-}
 
 void fp2mesh(FILE* fp, xyc** Zp, nde** Np)
 {

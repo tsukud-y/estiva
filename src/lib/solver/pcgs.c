@@ -364,10 +364,7 @@ typedef doublereal E_f;	/* real function with -R not specified */
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__3 = 3;
-static integer c__5 = 5;
+
 
 
 static int pcgs(doublereal *d__, doublereal *a, integer *ia, 
@@ -393,8 +390,6 @@ static int pcgs(doublereal *d__, doublereal *a, integer *ia,
     static doublereal ss, sw, res, beta, alpha;
 
     /* Fortran I/O blocks */
-    static cilist io___1 = { 0, 6, 0, 0, 0 };
-    static cilist io___18 = { 0, 6, 0, 0, 0 };
 
 
 /* ********************************************************************** */
