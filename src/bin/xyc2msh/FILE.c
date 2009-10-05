@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "estiva.h"
-#include "confary.h"
+#include "oldestiva.h"
+#include <estiva/ary.h>
 
 #define reary1(a,n) ary1(a,n)
 static char *S0;
@@ -37,6 +37,7 @@ char *estiva_S(int n)
   if(n==2) return S2[0]=='\0'?NULL:S2;
   if(n==3) return S3[0]=='\0'?NULL:S3;
   if(n==0) return S0;
+  return NULL;
 }
 void estiva_FILE_cp(FILE *fp,FILE *out)
      /* FILE_cp(fp,out) estiva_FILE_cp(fp,out) */

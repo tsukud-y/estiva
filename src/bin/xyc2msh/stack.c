@@ -1,6 +1,7 @@
-#include "estiva.h"
+#include "oldestiva.h"
 #include "stack.h"
-#include "confary.h"
+#include <stdio.h>
+#include <estiva/ary.h>
 
 static int top=0, *stack;
 

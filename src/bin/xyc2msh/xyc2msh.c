@@ -1,20 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "estiva.h"
+#include "oldestiva.h"
 #include "stack.h"
-#include "foreach.h"
-#include "confary.h"
+#include <estiva/foreach.h>
+#include <estiva/ary.h>
 #include "Delaunay.h"
 #include "FILE.h"
 
-#include "op.h"
+#include <estiva/op.h>
 static char *label(xyc *Z,int i)
 { static char *normal = "inner";
   return Z[i].label==NULL? normal:Z[i].label;
 }
 int main(int argc, char **argv)
-{ FILE *fp; xyc *Z; nde *N; int i,z;
+{ FILE *fp; xyc *Z; nde *N; int i;
   initop(argc,argv);
 
   if(argc == 1) fp = stdin;
@@ -39,5 +39,5 @@ int main(int argc, char **argv)
     fprintf(fp,"%4d  %4d %4d %4d  %4d %4d %4d\n",
 	    i, N[i].a,N[i].b,N[i].c,N[i].A,N[i].B,N[i].C);
   fclose(fp);
+  return 0;
 }
-

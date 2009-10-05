@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "estiva.h"
+#include "oldestiva.h"
 #include "stack.h"
-#include "foreach.h"
-#include "confary.h"
+#include <estiva/foreach.h>
+#include <estiva/ary.h>
 #include "Delaunay.h"
 #include "FILE.h"
 
@@ -97,6 +97,7 @@ static int notLawson(double x, double y)
     else if(fplane(x,y,0.0, x0,y0,0.0, x1,y1,0.0, x2,y2,1.0)>0.0) continue;
     else return e;
   }
+  return  0;
 }
 
 static int Lawson(int e, double x, double y)
@@ -146,7 +147,7 @@ static int degeneracy(int e1,int e2)
 
 void estiva_Delaunay(xyc **Zo, nde **No)
      /* Delaunay(Z,N) estiva_Delaunay(&(Z),&(N)) */
-{ int i,p,n,e,m,a,b,c,A,B,C,z; double xmin,ymin,xmax,ymax,length;
+{ int i,n,a,A,z; double xmin,ymin,xmax,ymax,length;
   static char super_node[] = "super_node";
   static int *fN,*fNinv,*fZ,*fZinv;
   Z= *Zo; n=1; z=dim1(Z); z -=3;
