@@ -1,5 +1,5 @@
 all: ;
-	cc *.c -o xmsh
+	cc *.c -Wall -lestiva -lm -o xmsh
 
 clean: ;
 	rm -f xmsh *.o
