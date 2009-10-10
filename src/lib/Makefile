@@ -6,6 +6,7 @@ all: ;
 	cc -I../include -c -Wall solver/gauss.c
 	cc -I../include -c -Wall solver/blu.c
 	cc -I../include -c -Wall solver/pcgs.c
+	cc -I../include -c -Wall solver/bicg.c
 	cc -I../include -c -Wall esolver/esolver.c
 	cc -I../include -c -Wall esolver/maxesolver.c
 	cc -I../include -c -Wall esolver/minesolver.c
