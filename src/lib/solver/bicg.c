@@ -3,20 +3,24 @@
 #include <estiva/mx.h>
 #include <estiva/solver.h>
 
-static int globalN = 0;
+static long globalN = 0;
 static MX *A;
 
 static int matvec(double *alpha, double *x, double *beta, double *y)
 {
   static double *t;
-  int i, j, n=globalN;
+  long i, j, J, n=globalN;
+
+  mx(A,1,1) = mx(A,1,1);
 
   ary1(t,n+1);
   for(i=0;i<n;i++) t[i] = 0.0;
-  for(i=1;i<=n;i++) for(j=1;j<=n;j++) {
-    //printf("mx %d %d\n",i,j);
-    t[i-1]+=mx(A,i,j)*x[j-1];
+
+  for(i=1;i<=n;i++) for(j=0; j< A->n; j++) {
+      J = A->IA[i-1][j];
+      if (J != 0) t[i-1] += A->A[i-1][j]*x[J-1];
   }
+
   for(i=0;i<n;i++) t[i] *= (*alpha);
   for(i=0;i<n;i++) t[i] += (*beta)*(y[i]);
   for(i=0;i<n;i++) y[i] = t[i];
