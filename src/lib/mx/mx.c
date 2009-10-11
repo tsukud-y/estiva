@@ -8,7 +8,9 @@
 
 void estiva_initmx(MX **Ap, long i, long j){
   MX *T;
-  if(*Ap == NULL) *Ap = malloc(sizeof(MX));
+  if(*Ap == NULL) {
+    *Ap = calloc(sizeof(MX),1);
+  }
   T = *Ap;
   T->m = i-1;
   T->n = j-1;
