@@ -4,7 +4,20 @@
 #include <estiva/solver.h>
 
 static long globalN = 0;
-static MX *A;
+static MX *A, *AT;
+
+MX *transmx(MX *M)
+{
+  static MX *MT;
+  long i, j;  
+
+  initmx(MT, M->m+1, M->n+1);
+
+  for (i=1; i<=M->m; i++) for (j=1; j<=M->m; j++) mx(MT,j,i) = mx(M,i,j);
+
+  return MT;
+}
+
 
 static int matvec(double *alpha, double *x, double *beta, double *y)
 {
@@ -30,14 +43,17 @@ static int matvec(double *alpha, double *x, double *beta, double *y)
 
 static int matvectrans(double *alpha, double *x, double *beta, double *y){
   static double *t;
-  int i, j, n=globalN;
+  long i, j, J, n=globalN;
 
   ary1(t,n+1);
   for(i=0;i<n;i++) t[i] = 0.0;
-  for(i=1;i<=n;i++) for(j=1;j<=n;j++) {
-    //printf("t mx %d %d\n",i,j);
-    t[i-1]+=mx(A,j,i)*x[j-1];
+
+
+  for(i=1;i<=n;i++) for(j=0; j< AT->n; j++) {
+      J = AT->IA[i-1][j];
+      if (J != 0) t[i-1] += AT->A[i-1][j]*x[J-1];
   }
+
   for(i=0;i<n;i++) t[i] *= (*alpha);
   for(i=0;i<n;i++) t[i] += (*beta)*(y[i]);
   for(i=0;i<n;i++) y[i] = t[i];
@@ -67,26 +83,16 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
    int n,ldw,iter,info, i; 
    static double *work, resid;
    A = pA;
+   AT = transmx(A);
+
    n = dim1(b);
    globalN=n;
-   ary1(work,n*6+10000000);
+   ary1(work,n*6+1);
    ldw = n;
    iter = 100 * n;
    resid = 0.0000000001;
-   printf("n = %d\n",n);
-   printf("mx %f ",mx(A,1,1));   printf("mx %f ",mx(A,1,2)); printf("mx %f\n",mx(A,1,3));
-   printf("mx %f ",mx(A,2,1));   printf("mx %f ",mx(A,2,2)); printf("mx %f\n",mx(A,2,3));
-   printf("mx %f ",mx(A,3,1));   printf("mx %f ",mx(A,3,2)); printf("mx %f\n",mx(A,3,3));
 
-   printf("b %f\n",b[1]);
-   printf("b %f\n",b[2]);
-   printf("b %f\n",b[3]);
-   
    for ( i=0; i<n; i++ ) x[i] = 1.0;
-
-   printf("x %f\n",x[1]);
-   printf("x %f\n",x[2]);
-   printf("x %f\n",x[3]);
 
    bicg_(&n, &b[1], &x[1], &work[1],
 	 &ldw, &iter, &resid, matvec, matvectrans, psolve,
