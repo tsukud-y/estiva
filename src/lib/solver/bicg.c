@@ -65,14 +65,18 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y){
 
 static int psolve(double *x, double *b){
   int i;
-  for(i=0; i<globalN; i++) x[i] = b[i];
+  for(i=0; i<globalN; i++) 
+    if(mx(A,i+1,i+1)==0.0) x[i] = b[i];
+    else               x[i] = b[i]/mx(A,i+1,i+1);
   return 0;
 }
 
 
 static int psolvetrans(double *x, double *b){
   int i;
-  for(i=0; i<globalN; i++) x[i] = b[i];
+  for(i=0; i<globalN; i++)
+    if(mx(A,i+1,i+1)==0.0) x[i] = b[i];
+    else               x[i] = b[i]/mx(A,i+1,i+1);
   return 0;
 }
 
