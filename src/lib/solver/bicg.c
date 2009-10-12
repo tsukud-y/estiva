@@ -5,15 +5,21 @@
 
 static long globalN = 0;
 static MX *A, *AT;
+static double *D;
 
 MX *transmx(MX *M)
 {
   static MX *MT;
-  long i, j;  
+  long i, j, J;  
 
   initmx(MT, M->m+1, M->n+1);
 
-  for (i=1; i<=M->m; i++) for (j=1; j<=M->m; j++) mx(MT,j,i) = mx(M,i,j);
+  mx(M,1,1) = mx(M,1,1);
+
+  for(i=1;i<= M->m;i++) for(j=0; j< M->n; j++) {
+      J = M->IA[i-1][j];
+      if (J != 0) mx(MT,J,i) = M->A[i-1][j];
+  }
 
   return MT;
 }
@@ -61,22 +67,16 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y){
 }
 
 
-
-
 static int psolve(double *x, double *b){
   int i;
-  for(i=0; i<globalN; i++) 
-    if(mx(A,i+1,i+1)==0.0) x[i] = b[i];
-    else               x[i] = b[i]/mx(A,i+1,i+1);
+  for(i=0; i<globalN; i++) x[i] = D[i]*b[i];
   return 0;
 }
 
 
 static int psolvetrans(double *x, double *b){
   int i;
-  for(i=0; i<globalN; i++)
-    if(mx(A,i+1,i+1)==0.0) x[i] = b[i];
-    else               x[i] = b[i]/mx(A,i+1,i+1);
+  for(i=0; i<globalN; i++) x[i] = D[i]*b[i];
   return 0;
 }
 
@@ -86,22 +86,31 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
 {
    int n,ldw,iter,info, i; 
    static double *work, resid;
+   printf("phase 1\n");
    A = pA;
    AT = transmx(A);
-
+   printf("phase 2\n");
    n = dim1(b);
    globalN=n;
+   ary1(D,n+1);
+   for(i=0;i<n;i++) 
+     if (mx(A,i+1,i+1) == 0.0) D[i] = 1.0;
+     else                      D[i] = 1.0/mx(A,i+1,i+1);
+
    ary1(work,n*6+1);
    ldw = n;
    iter = 100 * n;
-   resid = 0.0000000001;
+   resid = 0.0000001;
 
-   for ( i=0; i<n; i++ ) x[i] = 1.0;
+   for ( i=0; i<n; i++ ) x[i] = b[i];
 
+   printf("phase 3\n");
    bicg_(&n, &b[1], &x[1], &work[1],
 	 &ldw, &iter, &resid, matvec, matvectrans, psolve,
 	 psolvetrans, &info);
+   printf("phase 4\n");
    printf("iter = %d\n",iter);
+
    return iter;
 }
 

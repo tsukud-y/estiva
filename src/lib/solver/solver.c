@@ -11,11 +11,8 @@ extern int estiva_pcgssolver(void *A, double *x, double *b) ;
 int estiva_solver(void *A, double *x, double *b)
 {
 
-  if (!strcmp(getop("-solver"),"bicg") ){
-    printf("foo\n");
-    return estiva_bicgsolver(A,x,b);
-  }
+  if (!strcmp(getop("-solver"),"bicg") )  return estiva_bicgsolver(A,x,b);
   if (!strcmp(getop("-solver"),"gauss") ) return estiva_gausssolver(A,x,b);
-  if (!strcmp(getop("-solver"),"blu") ) return estiva_blusolver(A,x,b);
+  if (!strcmp(getop("-solver"),"blu") )   return estiva_blusolver(A,x,b);
   return estiva_pcgssolver(A,x,b);
 }

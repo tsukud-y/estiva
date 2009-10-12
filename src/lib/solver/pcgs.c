@@ -109,6 +109,7 @@ int estiva_pcgssolver(void* pA, double* x, double* b)
 
   B   = &x[1]  ;
   for(i=0; i<N; i++) B[i] = X[i+1];
+  printf("ITR = %ld\n",ITR);
   return IER;
 }
 
