@@ -68,15 +68,92 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y){
 
 
 static int psolve(double *x, double *b){
-  int i;
+  int i,j,J,k,max = 3, n=globalN;
+  double err;
+  static double *xold;
+  static int c;
+
   for(i=0; i<globalN; i++) x[i] = D[i]*b[i];
+  return 0;
+  
+  ary1(xold,n+1);
+  
+  for (i=0; i<n; i++) xold[i] = 0.0;
+
+  for(k=0;k<3;k++) {
+    for(i=0;i<n;i++) {
+      x[i]=b[i];
+
+#if 0
+      for(j=0;j<n;j++) if(j!=i) if(mx(A,i+1,j+1)!=0.0){
+	x[i] -= mx(A,i+1,j+1)*xold[j];
+	printf(" %d ",j);
+      }
+      printf("\n");
+#endif
+
+
+      for(j=0; j< A->n; j++) {
+	J = A->IA[i][j];
+	if (J != 0) if ( J-1 != i) if(A->A[i][j] !=0.0) {
+	  x[i] -= A->A[i][j]*xold[J-1];
+	  //x[i] -= mx(A,i+1,J)*xold[J-1];
+	  //printf("#%d ",J-1);
+	  //t[i-1] += A->A[i-1][j]*x[J-1];
+	}
+      }
+      //printf("\n");
+
+
+
+
+      x[i]=x[i]*D[i];
+    }
+    for(i=0;i<n;i++) xold[i]=x[i];
+  }
+
+  //printf("c = %d\n",c++);
   return 0;
 }
 
 
 static int psolvetrans(double *x, double *b){
-  int i;
+  int i,j,J,k,max = 3, n=globalN;
+  double err;
+  static double *xold;
+  static int c;
+
   for(i=0; i<globalN; i++) x[i] = D[i]*b[i];
+  return 0;
+
+  ary1(xold,n+1);
+
+  for (i=0; i<n; i++) xold[i] = 0.0;
+
+  for(k=0;k<3;k++) {
+    for(i=0;i<n;i++) {
+      x[i]=b[i];
+      //for(j=0;j<n;j++) if(j!=i) x[i] -= mx(A,j+1,i+1)*xold[j];
+
+
+      for(j=0; j< AT->n; j++) {
+	J = AT->IA[i][j];
+	if (J != 0) if ( J-1 != i) if(AT->A[i][j] !=0.0) {
+	  x[i] -= AT->A[i][j]*xold[J-1];
+	  //x[i] -= mx(A,i+1,J)*xold[J-1];
+	  //printf("#%d ",J-1);
+	  //t[i-1] += A->A[i-1][j]*x[J-1];
+	}
+      }
+      //printf("\n");
+
+
+
+
+      x[i]=x[i]*D[i];
+    }
+    for(i=0;i<n;i++) xold[i]=x[i];
+  }
   return 0;
 }
 
