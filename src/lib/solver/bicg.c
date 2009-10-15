@@ -7,23 +7,6 @@ static long globalN = 0;
 static MX *A, *AT;
 static double *D;
 
-MX *transmx(MX *M)
-{
-  static MX *MT;
-  long i, j, J;  
-
-  initmx(MT, M->m+1, M->n+1);
-
-  mx(M,1,1) = mx(M,1,1);
-
-  for(i=1;i<= M->m;i++) for(j=0; j< M->n; j++) {
-      J = M->IA[i-1][j];
-      if (J != 0) mx(MT,J,i) = M->A[i-1][j];
-  }
-
-  return MT;
-}
-
 
 static int matvec(double *alpha, double *x, double *beta, double *y)
 {
@@ -68,10 +51,8 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y){
 
 
 static int psolve(double *x, double *b){
-  int i,j,J,k,max = 3, n=globalN;
-  double err;
+  int i,j,J,k, n=globalN;
   static double *xold;
-  static int c;
 
   for(i=0; i<globalN; i++) x[i] = D[i]*b[i];
   return 0;
@@ -118,10 +99,8 @@ static int psolve(double *x, double *b){
 
 
 static int psolvetrans(double *x, double *b){
-  int i,j,J,k,max = 3, n=globalN;
-  double err;
+  int i,j,J,k, n=globalN;
   static double *xold;
-  static int c;
 
   for(i=0; i<globalN; i++) x[i] = D[i]*b[i];
   return 0;
@@ -165,7 +144,8 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
    static double *work, resid;
    printf("phase 1\n");
    A = pA;
-   AT = transmx(A);
+   transmx(AT,A);
+
    printf("phase 2\n");
    n = dim1(b);
    globalN=n;
