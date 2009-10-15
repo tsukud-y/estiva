@@ -7,24 +7,14 @@ static long globalN = 0;
 static MX *A, *AT;
 static double *D;
 
-
 static int matvec(double *alpha, double *x, double *beta, double *y)
 {
   static double *t;
-  long i, j, J, n=globalN;
+  long i, n = A->m; 
 
-  mx(A,1,1) = mx(A,1,1);
-
-  ary1(t,n+1);
-  for(i=0;i<n;i++) t[i] = 0.0;
-
-  for(i=1;i<=n;i++) for(j=0; j< A->n; j++) {
-      J = A->IA[i-1][j];
-      if (J != 0) t[i-1] += A->A[i-1][j]*x[J-1];
-  }
-
-  for(i=0;i<n;i++) t[i] *= (*alpha);
-  for(i=0;i<n;i++) t[i] += (*beta)*(y[i]);
+  mulmx(t,A,x);
+  for(i=0;i<n;i++) t[i] *= *alpha;
+  for(i=0;i<n;i++) t[i] += *beta*y[i];
   for(i=0;i<n;i++) y[i] = t[i];
   return 0;
 }
@@ -32,19 +22,11 @@ static int matvec(double *alpha, double *x, double *beta, double *y)
 
 static int matvectrans(double *alpha, double *x, double *beta, double *y){
   static double *t;
-  long i, j, J, n=globalN;
+  long i, n = AT->m;
 
-  ary1(t,n+1);
-  for(i=0;i<n;i++) t[i] = 0.0;
-
-
-  for(i=1;i<=n;i++) for(j=0; j< AT->n; j++) {
-      J = AT->IA[i-1][j];
-      if (J != 0) t[i-1] += AT->A[i-1][j]*x[J-1];
-  }
-
-  for(i=0;i<n;i++) t[i] *= (*alpha);
-  for(i=0;i<n;i++) t[i] += (*beta)*(y[i]);
+  mulmx(t,AT,x);
+  for(i=0;i<n;i++) t[i] *= *alpha;
+  for(i=0;i<n;i++) t[i] += *beta*y[i];
   for(i=0;i<n;i++) y[i] = t[i];
   return 0;
 }
