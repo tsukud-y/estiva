@@ -35,35 +35,6 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y){
 }
 
 
-#if 0
-int precondjacobi(MX *A, double *x, double *D, double *b)
-{
-  int i,j,J,k,n;
-  static double *xold;
-
-  n = dim1(D);
-
-  ary1(xold,n+1);
-    
-  for (i=0; i<n; i++) xold[i] = 0.0;
-
-  for(k=0;k<3;k++) {
-    for(i=0;i<n;i++) {
-      x[i]=b[i];
-      for(j=0; j< A->n; j++) {
-	J = A->IA[i][j];
-	if (J != 0) if ( J-1 != i) if(A->A[i][j] !=0.0) {
-	  x[i] -= A->A[i][j]*xold[J-1];
-	}
-      }
-      x[i]=x[i]*D[i];
-    }
-    for(i=0;i<n;i++) xold[i]=x[i];
-  }
-  return 0;
-}
-#endif
-
 static int psolve(double *x, double *b)
 {
   if (!strcmp(getop("-precond"),"none")) { 
@@ -99,11 +70,10 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
 {
    int n,ldw,iter,info, i; 
    static double *work, resid;
-   printf("phase 1\n");
+
    A = pA;
    transmx(AT,A);
 
-   printf("phase 2\n");
    n = dim1(b);
 
    ary1(D,n+1);
@@ -118,36 +88,14 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
 
    for ( i=0; i<n; i++ ) x[i] = b[i];
 
-   printf("phase 3\n");
    bicg_(&n, &b[1], &x[1], &work[1],
 	 &ldw, &iter, &resid, matvec, matvectrans, psolve,
 	 psolvetrans, &info);
-   printf("phase 4\n");
+
    printf("iter = %d\n",iter);
 
    return iter;
 }
-
-#if 0
-int main()
-{
-  int n;
-  static double *b, *x;
-
-  n = 2;
-  initmx(A,n+1,n+1); ary1(x,n+1); ary1(b,n+1); 
-
-  mx(A,1,1) = 2.0; mx(A,1,2) = -1.0; b[1] = 10.0;
-  mx(A,2,1) = -1.0; mx(A,2,2) = 2.0; b[2] = 4.0;
-
-  estiva_bicgsolver(A,x,b);
-
-  printf("%f\n", x[1] );
-  printf("%f\n", x[2] );
-
-  return 0;
-}
-#endif
 
 
 /******************* f2c.h ***************************************************/
