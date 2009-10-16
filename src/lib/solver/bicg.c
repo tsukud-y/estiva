@@ -35,7 +35,8 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y){
 }
 
 
-int precondjacobi(MX *A, double *x, double *b)
+#if 0
+int precondjacobi(MX *A, double *x, double *D, double *b)
 {
   int i,j,J,k,n;
   static double *xold;
@@ -61,7 +62,7 @@ int precondjacobi(MX *A, double *x, double *b)
   }
   return 0;
 }
-
+#endif
 
 static int psolve(double *x, double *b)
 {
@@ -73,7 +74,7 @@ static int psolve(double *x, double *b)
     precondscaling(x,D,b); 
     return 0;
   }
-  precondjacobi(A,x,b);
+  precondjacobi(A,x,D,b);
   return 0;
 }
 
@@ -88,7 +89,7 @@ static int psolvetrans(double *x, double *b)
     precondscaling(x,D,b); 
     return 0;
   }
-  precondjacobi(AT,x,b);
+  precondjacobi(AT,x,D,b);
   return 0;
 }
 

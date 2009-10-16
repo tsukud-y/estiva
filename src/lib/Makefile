@@ -6,6 +6,7 @@ all: ;
 	cc -I../include -c -g  -Wall mx/mulmx.c
 	cc -I../include -c -g  -Wall precond/precondnone.c
 	cc -I../include -c -g  -Wall precond/precondscaling.c
+	cc -I../include -c -g  -Wall precond/precondjacobi.c
 	cc -I../include -c -g  -Wall solver/solver.c
 	cc -I../include -c -g  -Wall solver/gauss.c
 	cc -I../include -c -g  -Wall solver/blu.c
