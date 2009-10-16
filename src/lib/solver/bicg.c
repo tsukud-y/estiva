@@ -2,8 +2,10 @@
 #include <string.h>
 #include <estiva/ary.h>
 #include <estiva/mx.h>
+#include <estiva/precond.h>
 #include <estiva/solver.h>
 #include <estiva/op.h>
+
 
 static MX *A, *AT;
 static double *D;
@@ -32,19 +34,6 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y){
   return 0;
 }
 
-
-void precondnone(long n, double *x, double *b)
-{
-  long i;
-  for (i=0; i<n; i++) x[i] = b[i];
-}
-
-void precondscaling(double *x, double *D, double *b)
-{
-  long i, n;
-  n = dim1(D);
-  for (i=0; i<n; i++) x[i] = D[i]*b[i];
-}
 
 int precondjacobi(MX *A, double *x, double *b)
 {
