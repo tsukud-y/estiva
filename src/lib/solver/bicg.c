@@ -7,7 +7,7 @@
 #include <estiva/op.h>
 
 
-static MX *A, *AT;
+static MX *A, *AT, *LU, *LUT;
 static double *D;
 
 static int matvec(double *alpha, double *x, double *beta, double *y)
@@ -64,6 +64,43 @@ static int psolvetrans(double *x, double *b)
   return 0;
 }
 
+static int inS(MX *A, long i, long j)
+{
+  long k;
+  if ( mx(A,i,j) != 0.0 ) return 1;
+
+  for (k=0; k< A->n; k++) if (j == A->IA[i-1][k]) return 1;
+
+  return 0;
+}
+
+
+void ilumx(MX *A)
+{
+  long r, i, j, n = A->m;
+  double d, e;
+
+  mx(A,1,1) = mx(A,1,1);
+
+  for (r=1; r<n; r++) {
+    d = 1.0; if ( mx(A,r,r) != 0.0 ) d /= mx(A,r,r);
+
+    for (i=r+1; i<=n; i++) {
+      
+      if ( inS(A,i,r) ) {
+	e = d*mx(A,i,r);
+	mx(A,i,r) = e;
+	for (j=r+1; j<=n; j++) {
+	  if ( inS(A,i,j) && inS(A,r,j) )
+	    mx(A,i,j) -= e*mx(A,r,j);
+	}
+      }
+    }
+  }
+
+}
+
+
 static int bicg_();
 
 int estiva_bicgsolver(void* pA, double* x, double* b)
@@ -73,6 +110,11 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
 
    A = pA;
    transmx(AT,A);
+   clonemx(LU,A);
+   clonemx(LUT,AT);
+
+   ilumx(LU);
+   ilumx(LUT);
 
    n = dim1(b);
 

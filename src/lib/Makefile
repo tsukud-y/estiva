@@ -3,6 +3,7 @@ all: ;
 	cc -I../include -c -g  -Wall ary/ary.c
 	cc -I../include -c -g  -Wall mx/mx.c
 	cc -I../include -c -g  -Wall mx/transmx.c
+	cc -I../include -c -g  -Wall mx/clonemx.c
 	cc -I../include -c -g  -Wall mx/mulmx.c
 	cc -I../include -c -g  -Wall precond/precondnone.c
 	cc -I../include -c -g  -Wall precond/precondscaling.c
