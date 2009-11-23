@@ -100,6 +100,41 @@ void ilumx(MX *A)
 
 }
 
+#define TRUE 1
+#define FALSE 0
+
+static void ILU_decomposition(MX *A)
+{
+  static double *pivots, element;
+  long i, j, k, found, n = A->m;
+
+  ary1(pivots, n+1);
+
+  for ( i=1; i<=n; i++ ) {
+    pivots[i] = mx(A,i,i);
+  }
+  for ( i=1; i<=n; i++ ) {
+    if ( pivots[i] == 0.0) pivots[i] = 1.0;
+  }
+  for ( i=1; i<=n; i++ ) {
+    pivots[i] = 1.0 / pivots[i];
+    
+    for ( j=i+1; j<=n; j++ ) {
+      found = FALSE;
+      if ( mx(A,j,i) != 0.0 ) {
+	found = TRUE;
+	element = mx(A,j,i);
+      } // endif
+      
+    } // for (j)
+  } // for (i)
+
+  printf("hello ILU\n");
+}
+
+#undef TRUE
+#undef FALSE
+
 
 static int bicg_();
 
@@ -110,11 +145,16 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
 
    A = pA;
    transmx(AT,A);
-   clonemx(LU,A);
-   clonemx(LUT,AT);
 
-   ilumx(LU);
-   ilumx(LUT);
+
+   if ( !strcmp(getop("-precond"),"ILU") ) {
+     clonemx(LU,A);
+     clonemx(LUT,AT);
+     ILU_decomposition(LU);
+
+     //ilumx(LU);
+     //ilumx(LUT);
+   }
 
    n = dim1(b);
 
