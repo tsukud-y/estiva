@@ -34,7 +34,7 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y){
   return 0;
 }
 
-extern int estiva_gausssolver(void* pA, double *x, double* b);
+extern int estiva_ILUsolver(void* pA, double *x, double* b);
 
 
 static int psolve(double *x, double *b)
@@ -47,7 +47,6 @@ static int psolve(double *x, double *b)
     long i;
     static double *x1, *b1;
     ary1(x1,A->m+1); ary1(b1,A->m+1);
-    printf("dim1(x1) = %d, dim1(b1) = %d\n",dim1(x1),dim1(b1));
 
     x1[0] = 0.0;
     for (i=1; i<=A->m; i++) x1[i] = x[i-1];
@@ -55,7 +54,7 @@ static int psolve(double *x, double *b)
     b1[0] = 0.0;
     for (i=1; i<=A->m; i++) b1[i] = b[i-1];
 
-    estiva_gausssolver(LU,x1,b1);
+    estiva_ILUsolver(LU,x1,b1);
 
     for (i=1; i<=A->m; i++) x[i-1] = x1[i];
     for (i=1; i<=A->m; i++) b[i-1] = b1[i];
@@ -81,7 +80,6 @@ static int psolvetrans(double *x, double *b)
     long i;
     static double *x1, *b1;
     ary1(x1,A->m+1); ary1(b1,A->m+1);
-    printf("dim1(x1) = %d, dim1(b1) = %d\n",dim1(x1),dim1(b1));
 
     x1[0] = 0.0;
     for (i=1; i<=A->m; i++) x1[i] = x[i-1];
@@ -89,14 +87,14 @@ static int psolvetrans(double *x, double *b)
     b1[0] = 0.0;
     for (i=1; i<=A->m; i++) b1[i] = b[i-1];
 
-    estiva_gausssolver(LUT,x1,b1);
+    estiva_ILUsolver(LUT,x1,b1);
 
     for (i=1; i<=A->m; i++) x[i-1] = x1[i];
     for (i=1; i<=A->m; i++) b[i-1] = b1[i];
 
     return 0;
 
-    estiva_gausssolver(LUT,x-1,b-1);
+    estiva_ILUsolver(LUT,x-1,b-1);
     return 0;
   }
   if (!strcmp(getop("-precond"),"scaling")) { 
@@ -146,10 +144,10 @@ void ilumx(MX *A)
 #define TRUE 1
 #define FALSE 0
 
-static void ILU_decomposition(MX *A)
+void ILU_decomposition(MX *A)
 {
   static double *pivots, element;
-  long i, j, k, found, n = A->m;
+  long i, j, found, n = A->m;
 
   ary1(pivots, n+1);
 
@@ -212,11 +210,6 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
    resid = 0.0000001;
 
    for ( i=0; i<n; i++ ) x[i] = b[i];
-
-   
-   printf("dim1(b) = %d, dim1(x) = %d, dim1(work) = %d, A->m = %d\n",
-	  dim1(b),dim1(x),dim1(work), A->m);
-
 
 
    bicg_(&n, &b[1], &x[1], &work[1],
