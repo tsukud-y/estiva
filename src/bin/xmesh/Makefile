@@ -1,5 +1,19 @@
-all: ;
-	cc *.c -Wall -o xmesh
+PROG = xmesh
+SRCS = main.c
+OBJS = main.o
+CPPFLAGS = -Wall
+CFLAGS = -I../../include
+LDFLAGS =  -L../../lib -lestiva -lm
 
-clean: ;
-	rm -f xmesh *.o
+.PHONY: all clean
+
+all: $(PROG)
+
+$(PROG): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS) 
+
+.c.o:
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+clean :
+	rm -f $(PROG) $(OBJS)

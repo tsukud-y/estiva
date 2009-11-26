@@ -1,3 +1,5 @@
+.PHONY: all clean 
+
 default : all
 
 all : ;

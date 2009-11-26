@@ -1,7 +1,20 @@
-default : xyc2msh
+PROG =  xyc2msh
+SRCS = Delaunay.c  FILE.c  oldestiva.c  stack.c  xyc2msh.c
+OBJS = Delaunay.o  FILE.o  oldestiva.o  stack.o  xyc2msh.o
 
-xyc2msh : ;
-	gcc *.c -Wall -lestiva -o xyc2msh
+CPPFLAGS = -Wall
+CFLAGS = -I../../include
+LDFLAGS = -L../../lib -lestiva -lm
 
-clean : ;
-	rm -f *.o xyc2msh
+.PHONY: all clean
+
+all: $(PROG)
+
+$(PROG) : $(OBJS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
+
+.c.o:
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+clean :
+	rm -f $(OBJS) $(PROG)
