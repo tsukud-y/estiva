@@ -726,7 +726,7 @@ static int f__scale;
 #define GET(x) if((x=(*f__getn)())<0) return(x)
 #define VAL(x) (x!='\n'?x:' ')
 #define PUT(x) (*f__putn)(x)
-extern int f__cursor;
+static int f__cursor;
 
 /******************************** rawid.h ************************************/
 #ifdef KR_headers
@@ -3109,8 +3109,7 @@ f__fatal(int n, char *s)
 		fprintf(stderr,"%s: %s\n",s,F_err[n-100]);
 	if (f__curunit) {
 		fprintf(stderr,"apparent state: unit %d ",f__curunit-f__units);
-		fprintf(stderr, f__curunit->ufnm ? "named %s\n" : "(unnamed)\n",
-			f__curunit->ufnm);
+		//fprintf(stderr, f__curunit->ufnm ? "named %s\n" : "(unnamed)\n", f__curunit->ufnm);
 		}
 	else
 		fprintf(stderr,"apparent state: internal I/O\n");
@@ -3675,7 +3674,7 @@ long f__inode(char *a, int *dev)
 /****************************** wsfe.c ***************************************/
 
 /*write sequential formatted external*/
-extern int f__hiwater;
+static  int f__hiwater;
 
 int 
 #ifdef KR_headers
