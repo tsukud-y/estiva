@@ -3,7 +3,7 @@ PROG = unestiva
 # SRCS = $(shell find . -name '*.c')
 # OBJS = $(subst .c,.o,$(SRCS))
 SRCS = main.c
-OBJS = main.o
+OBJS = $(SRCS:.c=.o)
 
 
 .PHONY: all clean

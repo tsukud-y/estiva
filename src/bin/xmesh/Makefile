@@ -1,6 +1,6 @@
 PROG = xmesh
 SRCS = main.c
-OBJS = main.o
+OBJS = $(SRCS:.c=.o)
 CPPFLAGS = -Wall
 CFLAGS = -I../../include
 LDFLAGS =  -L../../lib -lestiva -lm
