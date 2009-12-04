@@ -46,7 +46,7 @@ static long* LU(double  **a)
 }
 
 
-static long gauss_c(double **a, double* b)
+static long gauss_c(long *pivot, double **a, double* b)
 { 
   double *api,s,bpi;
   long *p,i,j,n,w,pi,pilimit; 
@@ -57,6 +57,7 @@ static long gauss_c(double **a, double* b)
   w = halfbw(a);
 
   if(NULL==(p=LU(a))) return 0;
+  //p = pivot;
   
   for(i=1;i<=n;i++){
     pilimit=less(i+w,n); bpi=b[p[i]];
@@ -67,14 +68,18 @@ static long gauss_c(double **a, double* b)
     forall(i+1,j,pilimit) s -= api[j]*b[j];
     b[pi] = s/api[i];
   }
-  
+
+  {
+    static int counter = 0;
+    printf("counter = %d\n",counter++);
+  }
   return 1;
 }
 
 #include <estiva/mx.h>
 #define A(i,j) mx(A,i,j)
 
-static long gauss(void* A, double* b)
+static long gauss(long *pivot, void* A, double* b)
 {
   static double **M;
   long i, j, n;
@@ -83,16 +88,16 @@ static long gauss(void* A, double* b)
   ary2(M,n+1,n+1);
 
   for(i=1; i<=n; i++) for(j=1; j<=n; j++) M[i][j] = A(i,j);
-  return gauss_c(M,b);
+  return gauss_c(pivot,M,b);
 }
 
-long estiva_ILUsolver(void *A, double *x, double *b)
+long estiva_ILUsolver(long *pivot, void *A, double *x, double *b)
 {
   long i, n;
   n = dim1(b);
 
   for (i=0; i<=n; i++) x[i] = b[i];  
-  return gauss(A,x);
+  return gauss(pivot,A,x);
 }
 
 
@@ -100,6 +105,7 @@ void estiva_precondILU(long *pivot, MX *A, double *x, double *b)
 {
   long i;
   static double *x1, *b1;
+
   ary1(x1,A->m+1); ary1(b1,A->m+1);
 
   x1[0] = 0.0;
@@ -108,10 +114,31 @@ void estiva_precondILU(long *pivot, MX *A, double *x, double *b)
   b1[0] = 0.0;
   for (i=1; i<=A->m; i++) b1[i] = b[i-1];
   
-  estiva_ILUsolver(A,x1,b1);
+  estiva_ILUsolver(pivot,A,x1,b1);
 
   for (i=1; i<=A->m; i++) x[i-1] = x1[i];
   for (i=1; i<=A->m; i++) b[i-1] = b1[i];
 
   printf("hello precondILU solver\n");
+}
+
+void ILU(long *pivot, MX *A)
+{
+  static double *p;
+  static double **ILU;
+  long i, j, n;
+  
+  n = A->m;
+  ary2(ILU,n+1,n+1);
+  
+  for(i=1; i<=n; i++) for(j=1; j<=n; j++) ILU[i][j] = A(i,j);
+
+  /*
+  p= LU(ILU);
+
+  for(i=0; i<=n; i++) pivot[i] = p[i];
+
+  for(i=1; i<=n; i++) for(j=1; j<=n; j++) A(i,j) = ILU[i][j];
+  */
+  printf("hello ILU decomposition!V\n");
 }

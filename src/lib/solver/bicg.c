@@ -36,8 +36,12 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
 
 
    if ( !strcmp(getop("-precond"),"ILU") ) {
+     ary1(pivot,A->m+1);
+     ary1(pivotT,A->m+1);
      clonemx(LU,A);
+     ILU(pivot,LU);
      clonemx(LUT,AT);
+     ILU(pivotT,LUT);
    }
 
    n = dim1(b);
@@ -962,6 +966,9 @@ L10:
 	    , &c__BiCG1);
 
     *resid = dnrm2_(n, &work[r * work_dim1 + 1], &c__BiCG1) / bnrm2;
+    
+    printf("resid = %lf\n",*resid);
+
     if (*resid <= tol) {
 	goto L30;
     }
