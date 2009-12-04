@@ -9,159 +9,27 @@
 
 static MX *A, *AT, *LU, *LUT;
 static double *D;
-
+static long *pivot, *pivotT;
+static int bicg_();
 
 static int matvec(double *alpha, double *x, double *beta, double *y)
-{
-  matvecmx(A, alpha, x, beta, y);
-  return 0;
-}
+{ matvecmx(A, alpha, x, beta, y); return 0; }
 
-
-static int matvectrans(double *alpha, double *x, double *beta, double *y){
-  matvecmx(AT, alpha, x, beta, y);
-  return 0;
-}
-
-
-extern int estiva_ILUsolver(void* pA, double *x, double* b);
-
-
-static void precondILU(MX *A, double *x, double *b)
-{
-  long i;
-  static double *x1, *b1;
-  ary1(x1,A->m+1); ary1(b1,A->m+1);
-
-  x1[0] = 0.0;
-  for (i=1; i<=A->m; i++) x1[i] = x[i-1];
-    
-  b1[0] = 0.0;
-  for (i=1; i<=A->m; i++) b1[i] = b[i-1];
-  
-  estiva_ILUsolver(A,x1,b1);
-
-  for (i=1; i<=A->m; i++) x[i-1] = x1[i];
-  for (i=1; i<=A->m; i++) b[i-1] = b1[i];
-
-  printf("hello precondILU solver\n");
-}
+static int matvectrans(double *alpha, double *x, double *beta, double *y)
+{ matvecmx(AT, alpha, x, beta, y); return 0; }
 
 static int psolve(double *x, double *b)
-{
-  if (!strcmp(getop("-precond"),"none")) { 
-    precondnone(A->m,x,b); 
-    return 0;
-  }
-  if (!strcmp(getop("-precond"),"ILU")) {
-    precondILU(LU,x,b);
-    return 0;
-  }
-  if (!strcmp(getop("-precond"),"scaling")) { 
-    precondscaling(x,D,b); 
-    return 0;
-  }
-  precondjacobi(A,x,D,b);
-  return 0;
-}
-
+{ psolvemx(A,pivot,LU,D,x,b); return 0; }
 
 static int psolvetrans(double *x, double *b)
-{  
-  if (!strcmp(getop("-precond"),"none")) { 
-    precondnone(A->m,x,b); 
-    return 0;
-  }
-  if (!strcmp(getop("-precond"),"ILU")) {
-    precondILU(LUT,x,b);
-    return 0;
-  }
-  if (!strcmp(getop("-precond"),"scaling")) { 
-    precondscaling(x,D,b); 
-    return 0;
-  }
-  precondjacobi(AT,x,D,b);
-  return 0;
-}
+{ psolvemx(AT,pivotT,LUT,D,x,b);  return 0; }
 
-static int inS(MX *A, long i, long j)
-{
-  long k;
-  if ( mx(A,i,j) != 0.0 ) return 1;
-
-  for (k=0; k< A->n; k++) if (j == A->IA[i-1][k]) return 1;
-
-  return 0;
-}
-
-
-void ilumx(MX *A)
-{
-  long r, i, j, n = A->m;
-  double d, e;
-
-  mx(A,1,1) = mx(A,1,1);
-
-  for (r=1; r<n; r++) {
-    d = 1.0; if ( mx(A,r,r) != 0.0 ) d /= mx(A,r,r);
-
-    for (i=r+1; i<=n; i++) {
-      
-      if ( inS(A,i,r) ) {
-	e = d*mx(A,i,r);
-	mx(A,i,r) = e;
-	for (j=r+1; j<=n; j++) {
-	  if ( inS(A,i,j) && inS(A,r,j) )
-	    mx(A,i,j) -= e*mx(A,r,j);
-	}
-      }
-    }
-  }
-
-}
-
-#define TRUE 1
-#define FALSE 0
-
-void ILU_decomposition(MX *A)
-{
-  static double *pivots, element;
-  long i, j, found, n = A->m;
-
-  ary1(pivots, n+1);
-
-  for ( i=1; i<=n; i++ ) {
-    pivots[i] = mx(A,i,i);
-  }
-  for ( i=1; i<=n; i++ ) {
-    if ( pivots[i] == 0.0) pivots[i] = 1.0;
-  }
-  for ( i=1; i<=n; i++ ) {
-    pivots[i] = 1.0 / pivots[i];
-    
-    for ( j=i+1; j<=n; j++ ) {
-      found = FALSE;
-      if ( mx(A,j,i) != 0.0 ) {
-	found = TRUE;
-	element = mx(A,j,i);
-      } // endif
-      
-    } // for (j)
-  } // for (i)
-
-  printf("hello ILU\n");
-}
-
-#undef TRUE
-#undef FALSE
-
-
-static int bicg_();
 
 int estiva_bicgsolver(void* pA, double* x, double* b)
 {
    int n,ldw,iter,info, i; 
    static double *work, resid;
+
 
    A = pA;
    transmx(AT,A);
@@ -170,10 +38,6 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
    if ( !strcmp(getop("-precond"),"ILU") ) {
      clonemx(LU,A);
      clonemx(LUT,AT);
-
-     //ILU_decomposition(LU);
-     //ilumx(LU);
-     //ilumx(LUT);
    }
 
    n = dim1(b);
@@ -190,11 +54,8 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
 
    for ( i=0; i<n; i++ ) x[i] = b[i];
 
-
    bicg_(&n, &b[1], &x[1], &work[1],
-	 &ldw, &iter, &resid, matvec, matvectrans, psolve,
-	 psolvetrans, &info);
-
+	 &ldw, &iter, &resid, matvec, matvectrans, psolve, psolvetrans, &info);
 
    printf("iter = %d\n",iter);
 

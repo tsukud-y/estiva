@@ -94,3 +94,24 @@ long estiva_ILUsolver(void *A, double *x, double *b)
   for (i=0; i<=n; i++) x[i] = b[i];  
   return gauss(A,x);
 }
+
+
+void estiva_precondILU(long *pivot, MX *A, double *x, double *b)
+{
+  long i;
+  static double *x1, *b1;
+  ary1(x1,A->m+1); ary1(b1,A->m+1);
+
+  x1[0] = 0.0;
+  for (i=1; i<=A->m; i++) x1[i] = x[i-1];
+    
+  b1[0] = 0.0;
+  for (i=1; i<=A->m; i++) b1[i] = b[i-1];
+  
+  estiva_ILUsolver(A,x1,b1);
+
+  for (i=1; i<=A->m; i++) x[i-1] = x1[i];
+  for (i=1; i<=A->m; i++) b[i-1] = b1[i];
+
+  printf("hello precondILU solver\n");
+}
