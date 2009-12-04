@@ -13,12 +13,13 @@ typedef struct{
 #define clonemx(AT,A)         estiva_clonemx(&AT,A)
 #define mulmx(t,A,x)          estiva_mulmx(&t,A,x)
 #define mx(A,i,j)           (*estiva_mx(A,i,j))
+#define matvecmx(A,alpha,x,beta,y) estiva_matvecmx(A,alpha,x,beta,y)
 
 extern void    estiva_initmx(MX **Ap, long i, long j);
 extern void    estiva_transmx(MX **ATp, MX *A);
 extern void    estiva_clonemx(MX **ATp, MX *A);
 extern void    estiva_mulmx(double **tp, MX *A, double *x);
 extern double *estiva_mx(MX *T, long i, long j);
-
+extern void    estiva_matvecmx(MX *A, double *alpha, double *x, double *beta, double *y);
 
 #endif

@@ -9,7 +9,7 @@ SRCS = ./ary/ary.c ./esolver/esolver.c ./esolver/maxesolver.c \
 	./precond/precondILU.c ./precond/precondjacobi.c \
 	./precond/precondnone.c ./precond/precondscaling.c ./solver/bicg.c \
 	./solver/blu.c ./solver/gauss.c ./solver/pcgs.c ./solver/solver.c \
-	./tmpfile/tmpfile.c
+	./tmpfile/tmpfile.c ./mx/matvecmx.c
 OBJS =  ./ary/ary.o ./esolver/esolver.o ./esolver/maxesolver.o \
 	./esolver/minesolver.o ./foreach/foreach.o ./mesh/forgamma.o \
 	./mesh/fp2mesh.o ./mesh/np1.o ./mesh/plt.o ./mx/clonemx.o \
@@ -17,7 +17,7 @@ OBJS =  ./ary/ary.o ./esolver/esolver.o ./esolver/maxesolver.o \
 	./precond/precondILU.o ./precond/precondjacobi.o \
 	./precond/precondnone.o ./precond/precondscaling.o ./solver/bicg.o \
 	./solver/blu.o ./solver/gauss.o ./solver/pcgs.o ./solver/solver.o \
-	./tmpfile/tmpfile.o
+	./tmpfile/tmpfile.o ./mx/matvecmx.o
 
 CFLAGS = -I../include
 CPPFLAGS = -Wall -g

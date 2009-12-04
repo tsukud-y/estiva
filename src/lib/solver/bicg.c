@@ -10,32 +10,42 @@
 static MX *A, *AT, *LU, *LUT;
 static double *D;
 
+
 static int matvec(double *alpha, double *x, double *beta, double *y)
 {
-  static double *t;
-  long i, n = A->m; 
-
-  mulmx(t,A,x);
-  for(i=0;i<n;i++) t[i] *= *alpha;
-  for(i=0;i<n;i++) t[i] += *beta*y[i];
-  for(i=0;i<n;i++) y[i] = t[i];
+  matvecmx(A, alpha, x, beta, y);
   return 0;
 }
 
 
 static int matvectrans(double *alpha, double *x, double *beta, double *y){
-  static double *t;
-  long i, n = AT->m;
-
-  mulmx(t,AT,x);
-  for(i=0;i<n;i++) t[i] *= *alpha;
-  for(i=0;i<n;i++) t[i] += *beta*y[i];
-  for(i=0;i<n;i++) y[i] = t[i];
+  matvecmx(AT, alpha, x, beta, y);
   return 0;
 }
 
+
 extern int estiva_ILUsolver(void* pA, double *x, double* b);
 
+
+static void precondILU(MX *A, double *x, double *b)
+{
+  long i;
+  static double *x1, *b1;
+  ary1(x1,A->m+1); ary1(b1,A->m+1);
+
+  x1[0] = 0.0;
+  for (i=1; i<=A->m; i++) x1[i] = x[i-1];
+    
+  b1[0] = 0.0;
+  for (i=1; i<=A->m; i++) b1[i] = b[i-1];
+  
+  estiva_ILUsolver(A,x1,b1);
+
+  for (i=1; i<=A->m; i++) x[i-1] = x1[i];
+  for (i=1; i<=A->m; i++) b[i-1] = b1[i];
+
+  printf("hello precondILU solver\n");
+}
 
 static int psolve(double *x, double *b)
 {
@@ -44,21 +54,7 @@ static int psolve(double *x, double *b)
     return 0;
   }
   if (!strcmp(getop("-precond"),"ILU")) {
-    long i;
-    static double *x1, *b1;
-    ary1(x1,A->m+1); ary1(b1,A->m+1);
-
-    x1[0] = 0.0;
-    for (i=1; i<=A->m; i++) x1[i] = x[i-1];
-
-    b1[0] = 0.0;
-    for (i=1; i<=A->m; i++) b1[i] = b[i-1];
-
-    estiva_ILUsolver(LU,x1,b1);
-
-    for (i=1; i<=A->m; i++) x[i-1] = x1[i];
-    for (i=1; i<=A->m; i++) b[i-1] = b1[i];
-
+    precondILU(LU,x,b);
     return 0;
   }
   if (!strcmp(getop("-precond"),"scaling")) { 
@@ -77,24 +73,7 @@ static int psolvetrans(double *x, double *b)
     return 0;
   }
   if (!strcmp(getop("-precond"),"ILU")) {
-    long i;
-    static double *x1, *b1;
-    ary1(x1,A->m+1); ary1(b1,A->m+1);
-
-    x1[0] = 0.0;
-    for (i=1; i<=A->m; i++) x1[i] = x[i-1];
-
-    b1[0] = 0.0;
-    for (i=1; i<=A->m; i++) b1[i] = b[i-1];
-
-    estiva_ILUsolver(LUT,x1,b1);
-
-    for (i=1; i<=A->m; i++) x[i-1] = x1[i];
-    for (i=1; i<=A->m; i++) b[i-1] = b1[i];
-
-    return 0;
-
-    estiva_ILUsolver(LUT,x-1,b-1);
+    precondILU(LUT,x,b);
     return 0;
   }
   if (!strcmp(getop("-precond"),"scaling")) { 
