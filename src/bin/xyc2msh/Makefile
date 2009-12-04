@@ -1,6 +1,6 @@
 PROG =  xyc2msh
 SRCS = Delaunay.c  FILE.c  oldestiva.c  stack.c  xyc2msh.c
-OBJS = Delaunay.o  FILE.o  oldestiva.o  stack.o  xyc2msh.o
+OBJS = $(SRCS:.c=.o)
 
 CPPFLAGS = -Wall
 CFLAGS = -I../../include
