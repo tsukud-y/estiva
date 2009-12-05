@@ -56,8 +56,9 @@ static long gauss_c(long *pivot, double **a, double* b)
   n = dim2(a);
   w = halfbw(a);
 
-  if(NULL==(p=LU(a))) return 0;
-  //p = pivot;
+  //if(NULL==(p=LU(a))) return 0;
+  //for (i=0; i<=n; i++) printf("p[%d]=%d\n",i,p[i]);
+  p = pivot;
   
   for(i=1;i<=n;i++){
     pilimit=less(i+w,n); bpi=b[p[i]];
@@ -124,7 +125,7 @@ void estiva_precondILU(long *pivot, MX *A, double *x, double *b)
 
 void ILU(long *pivot, MX *A)
 {
-  static double *p;
+  static long *p;
   static double **ILU;
   long i, j, n;
   
@@ -133,12 +134,13 @@ void ILU(long *pivot, MX *A)
   
   for(i=1; i<=n; i++) for(j=1; j<=n; j++) ILU[i][j] = A(i,j);
 
-  /*
   p= LU(ILU);
 
   for(i=0; i<=n; i++) pivot[i] = p[i];
 
+  //for (i=0; i<=n; i++) printf("pivot[%ld]=%ld\n",i,pivot[i]);
+
   for(i=1; i<=n; i++) for(j=1; j<=n; j++) A(i,j) = ILU[i][j];
-  */
+
   printf("hello ILU decomposition!V\n");
 }
