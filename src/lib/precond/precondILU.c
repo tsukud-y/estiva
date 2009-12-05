@@ -123,7 +123,7 @@ void estiva_precondILU(long *pivot, MX *A, double *x, double *b)
   printf("hello precondILU solver\n");
 }
 
-void ILU(long *pivot, MX *A)
+void estiva_ILU(long *pivot, MX *A)
 {
   static long *p;
   static double **ILU;
