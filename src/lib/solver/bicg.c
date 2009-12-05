@@ -38,8 +38,12 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
    if ( !strcmp(getop("-precond"),"ILU") ) {
      ary1(pivot,A->m+1);
      ary1(pivotT,A->m+1);
+
+     LU = NULL;
      clonemx(LU,A);
      ILU(pivot,LU);
+
+     LUT = NULL;
      clonemx(LUT,AT);
      ILU(pivotT,LUT);
    }

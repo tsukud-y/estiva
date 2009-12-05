@@ -138,8 +138,6 @@ void ILU(long *pivot, MX *A)
 
   for(i=0; i<=n; i++) pivot[i] = p[i];
 
-  //for (i=0; i<=n; i++) printf("pivot[%ld]=%ld\n",i,pivot[i]);
-
   for(i=1; i<=n; i++) for(j=1; j<=n; j++) A(i,j) = ILU[i][j];
 
   printf("hello ILU decomposition!V\n");
