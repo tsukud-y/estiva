@@ -9,7 +9,9 @@ SRCS = ./ary/ary.c ./esolver/esolver.c ./esolver/maxesolver.c \
 	./precond/precondILU.c ./precond/precondjacobi.c \
 	./precond/precondnone.c ./precond/precondscaling.c ./solver/bicg.c \
 	./solver/blu.c ./solver/gauss.c ./solver/pcgs.c ./solver/solver.c \
-	./tmpfile/tmpfile.c ./mx/matvecmx.c ./mx/psolvemx.c ./solver/cgs.c
+	./tmpfile/tmpfile.c ./mx/matvecmx.c ./mx/psolvemx.c ./solver/cgs.c \
+	./solver/bicgstab.c
+
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I../include
 CPPFLAGS = -Wall -g
