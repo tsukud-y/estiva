@@ -213,8 +213,8 @@ static int pcgs(double *d, double *a, long *ia,
 	double *p, double *q, double *r, double *r0, 
 	double *e, double *h, double *w, long *m, long *ier)
 {
-  long dim1, i, j, k, nn;
-  double y, c1, c2, c3, x1, x2, th, sw, res, beta, alpha;
+  long dim1, i, j, k;
+  double y, c1, c2, c3, x1, x2, th, res, beta, alpha;
   ILUtype ilu;
 
   /* Parameter adjustments */

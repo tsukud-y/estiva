@@ -107,7 +107,7 @@ void solveILU(CRS crs, double *y, double *x)
 }
 
 
-static void solveILUT(CRS crs, double *y, double *x)
+void solveILUT(CRS crs, double *y, double *x)
 {
   long i, j, n, *row_ptr, *diag_ptr, *col_ind;
   double *val, *pivots, tmp;
@@ -192,7 +192,6 @@ void estiva_precondILU(CRS *dummypivots, MX *A, double *x, double *b)
 
 void estiva_ILU(CRS *dummypivots, MX *A)
 {
-  static init=0;
   long i;
   
   for  (  i = 1;  i < A->m;  i++ ) if ( mx(A,i,i) == 0.0 ) mx(A,i,i) = 1.0;
