@@ -9,7 +9,7 @@
 
 static MX *A, *AT, *LU, *LUT;
 static double *D;
-static long *pivot, *pivotT;
+static CRS pivot, pivotT;
 static int bicg_();
 
 static int matvec(double *alpha, double *x, double *beta, double *y)
@@ -19,10 +19,10 @@ static int matvectrans(double *alpha, double *x, double *beta, double *y)
 { matvecmx(AT, alpha, x, beta, y); return 0; }
 
 static int psolve(double *x, double *b)
-{ psolvemx(A,pivot,LU,D,x,b); return 0; }
+{ psolvemx(A,&pivot,LU,D,x,b); return 0; }
 
 static int psolvetrans(double *x, double *b)
-{ psolvemx(AT,pivotT,LUT,D,x,b);  return 0; }
+{ psolvemx(AT,&pivotT,LUT,D,x,b);  return 0; }
 
 
 int estiva_bicgsolver(void* pA, double* x, double* b)
@@ -30,22 +30,21 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
    int n,ldw,iter,info, i; 
    static double *work, resid;
 
-
    A = pA;
    transmx(AT,A);
 
 
    if ( !strcmp(getop("-precond"),"ILU") ) {
-     ary1(pivot,A->m+1);
-     ary1(pivotT,A->m+1);
+     //ary1(pivot,A->m+1);
+     //ary1(pivotT,A->m+1);
 
      LU = NULL;
      clonemx(LU,A);
-     ILU(pivot,LU);
+     ILU(&pivot,LU);
 
      LUT = NULL;
      clonemx(LUT,AT);
-     ILU(pivotT,LUT);
+     ILU(&pivotT,LUT);
    }
 
    n = dim1(b);
@@ -971,7 +970,7 @@ L10:
 
     *resid = dnrm2_(n, &work[r * work_dim1 + 1], &c__BiCG1) / bnrm2;
     
-    printf("resid = %lf\n",*resid);
+    //printf("resid = %lf\n",*resid);
 
     if (*resid <= tol) {
 	goto L30;

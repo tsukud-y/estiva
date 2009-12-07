@@ -129,7 +129,7 @@ static MX* A__(xyc *Mid, nde *N, MX *M, double t, MX *K, MX *Hx, MX *Hy)
   m = dim1(Mid);
   n = dim1(N);
   NUM = m*2+n;
-  initmx(A, NUM+1,NUM+1);
+  initmx(A, NUM+1,8);
 
   for(i=1;i<=m;i++) for(j=1; j<=m; j++){
     mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j);
