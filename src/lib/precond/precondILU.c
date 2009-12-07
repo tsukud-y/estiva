@@ -3,9 +3,9 @@
 #include <estiva/ary.h>
 #include <estiva/solver.h>
 #include <estiva/mx.h>
-static void fprintCRS(FILE *fp, CRS crs);
+void fprintCRS(FILE *fp, CRS crs);
 
-static void mx2CRS(MX *A, CRS *crs)
+void mx2CRS(MX *A, CRS *crs)
 {
   long i, j, k, n=0, *diag_ptr, *row_ptr, *col_ind,found, FALSE=0, TRUE=1;
   double *val, *pivots, element;
@@ -71,16 +71,11 @@ static void mx2CRS(MX *A, CRS *crs)
 }
 
 
-static void solveILU(CRS crs, double *y, double *x)
+void solveILU(CRS crs, double *y, double *x)
 {
   long i, j, n, *row_ptr, *diag_ptr, *col_ind;
   double sum, *val, *pivots;
   static double *z;
-  static init=0;
-  
-  //if (init == 1) {fprintCRS(fopen("CRSTsolve.txt","w"), crs); exit(0);}
-  //init = 1;
-
 
   n        = dim1(crs.pivots);
   row_ptr  = crs.row_ptr;
@@ -90,13 +85,13 @@ static void solveILU(CRS crs, double *y, double *x)
   pivots   = crs.pivots;
 
   ary1(z, n+1);
+  x--, y--;
 
-  for  (  i = 1;  i <= n;  i++  )  y[i] = 0.0;
-  for  (  i = 1;  i <= n;  i++  )  z[i] = 0.0;
+  for  (  i = 1;  i <= n;  i++  )  { y[i] = z[i] = 0.0; }
 
   for  (  i = 1;  i <= n;  i++  )  {
     sum = 0.0;
-    for  (  j = row_ptr[i];  j < diag_ptr[i]-1;  j++  )  {
+    for  (  j = row_ptr[i];  j <= diag_ptr[i]-1;  j++  )  {
       sum = sum + val[j] * z[col_ind[j]];
     }
     z[i] = pivots[i] * ( x[i] - sum );
@@ -104,12 +99,13 @@ static void solveILU(CRS crs, double *y, double *x)
 
   for  (  i = n;  i >= 1;  i--  )  {
     sum = 0.0;
-    for  (  j = diag_ptr[i]+1;  j <= row_ptr[i+1]-1;  j++  )  {
+    for  (  j = diag_ptr[i];  j <= row_ptr[i+1]-1;  j++  )  {
       sum = sum + val[j] * y[col_ind[j]];
       y[i] = z[i] - pivots[i] * sum;
     }
   }
-} 
+}
+
 
 static void solveILUT(CRS crs, double *y, double *x)
 {
@@ -150,7 +146,7 @@ static void solveILUT(CRS crs, double *y, double *x)
 } 
 
 
-static void fprintCRS(FILE *fp, CRS crs)
+void fprintCRS(FILE *fp, CRS crs)
 {
   long k, m, n;
   n = crs.n;
@@ -191,18 +187,7 @@ static void fprintCRS(FILE *fp, CRS crs)
 
 void estiva_precondILU(CRS *dummypivots, MX *A, double *x, double *b)
 {
-  long i;
-  //static CRS crs;
-  static long c;
-
-  for (i=0; i<A->m; i++) x[i] = b[i];  
-
   solveILU(*dummypivots,x,b);
-
-  //for (i=0; i<A->m; i++) printf("%lf\n",x[i]);
-
-  printf("counter = %ld\n",c++);
-  
 }
 
 void estiva_ILU(CRS *dummypivots, MX *A)
@@ -210,7 +195,7 @@ void estiva_ILU(CRS *dummypivots, MX *A)
   static init=0;
   long i;
   
-  //for  (  i = 1;  i < A->m;  i++ ) if ( mx(A,i,i) == 0.0 ) mx(A,i,i) = 0.0000001;
+  for  (  i = 1;  i < A->m;  i++ ) if ( mx(A,i,i) == 0.0 ) mx(A,i,i) = 1.0;
   
   mx2CRS(A,dummypivots);
 
