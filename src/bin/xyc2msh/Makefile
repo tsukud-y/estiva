@@ -2,7 +2,7 @@ PROG =  xyc2msh
 SRCS = Delaunay.c  FILE.c  oldestiva.c  stack.c  xyc2msh.c
 OBJS = $(SRCS:.c=.o)
 
-CPPFLAGS = -Wall
+CPPFLAGS = -Wall -g -O2
 CFLAGS = -I../../include
 LDFLAGS = -L../../lib -lestiva -lm
 

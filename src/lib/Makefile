@@ -14,7 +14,7 @@ SRCS = ./ary/ary.c ./esolver/esolver.c ./esolver/maxesolver.c \
 
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I../include
-CPPFLAGS = -Wall -g
+CPPFLAGS = -Wall -g -O2
 
 RM := /bin/rm
 AR := /bin/ar

@@ -1,7 +1,7 @@
 PROG = xmsh
 SRCS = main.c
 OBJS = $(SRCS:.c=.o)
-CPPFLAGS = -Wall
+CPPFLAGS = -Wall -g -O2
 CFLAGS = -I../../include
 LDFLAGS =  -L../../lib -lestiva -lm
 
