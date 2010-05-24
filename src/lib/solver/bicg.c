@@ -27,8 +27,8 @@ static int psolvetrans(double *x, double *b)
 
 int estiva_bicgsolver(void* pA, double* x, double* b)
 {
-   int n,ldw,iter,info, i; 
-   static double *work, resid;
+  long int n,ldw,iter,info, i; 
+  static double *work, resid;
 
    A = pA;
    transmx(AT,A);
@@ -64,7 +64,7 @@ int estiva_bicgsolver(void* pA, double* x, double* b)
    bicg_(&n, &b[1], &x[1], &work[1],
 	 &ldw, &iter, &resid, matvec, matvectrans, psolve, psolvetrans, &info);
 
-   printf("iter = %d\n",iter);
+   printf("iter = %ld\n",iter);
 
    return iter;
 }

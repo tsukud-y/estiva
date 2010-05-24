@@ -8,7 +8,7 @@ void fprintCRS(FILE *fp, CRS crs);
 void mx2CRS(MX *A, CRS *crs)
 {
   long i, j, k, n=0, *diag_ptr, *row_ptr, *col_ind,found, FALSE=0, TRUE=1;
-  double *val, *pivots, element;
+  double *val, *pivots, element=0.0;
 
   mx(A,1,1) = mx(A,1,1);
 

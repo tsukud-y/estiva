@@ -21,8 +21,8 @@ static int psolve(double *x, double *b)
 
 int estiva_bicgstabsolver(void* pA, double* x, double* b)
 {
-   int n,ldw,iter,info, i; 
-   static double *work, resid;
+  long int n,ldw,iter,info, i; 
+  static double *work, resid;
 
    A = pA;
    transmx(AT,A);
@@ -65,7 +65,7 @@ int estiva_bicgstabsolver(void* pA, double* x, double* b)
 
 
 
-   printf("iter = %d\n",iter);
+   printf("iter = %ld\n",iter);
 
    return iter;
 }

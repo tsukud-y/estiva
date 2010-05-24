@@ -21,7 +21,7 @@ static int psolve(double *x, double *b)
 
 int estiva_cgssolver(void* pA, double* x, double* b)
 {
-   int n,ldw,iter,info, i; 
+   long int n,ldw,iter,info, i; 
    static double *work, resid;
 
    A = pA;
@@ -60,7 +60,7 @@ int estiva_cgssolver(void* pA, double* x, double* b)
 
 
 
-   printf("iter = %d\n",iter);
+   printf("iter = %ld\n",iter);
 
    return iter;
 }
