@@ -2,7 +2,7 @@ PROG = xmesh
 SRCS = main.c
 OBJS = $(SRCS:.c=.o)
 CPPFLAGS = -Wall -g -O2
-CFLAGS = -I../../include -fno-strict-aliasing
+CFLAGS = -I../../include
 LDFLAGS =  -L../../lib -lestiva -lm
 
 .PHONY: all clean
@@ -10,7 +10,7 @@ LDFLAGS =  -L../../lib -lestiva -lm
 all: $(PROG)
 
 $(PROG): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS) 
+	$(CC) $(OBJS) -o $@ $(LDFLAGS) 
 
 .c.o:
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@

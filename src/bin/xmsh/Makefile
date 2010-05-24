@@ -10,7 +10,7 @@ LDFLAGS =  -L../../lib -lestiva -lm
 all: $(PROG)
 
 $(PROG): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS) 
+	$(CC) $(OBJS) -o $@ $(LDFLAGS) 
 
 .c.o:
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
