@@ -3979,9 +3979,9 @@ w_ned(struct f__syl *p)
 		f__cursor += p->p1;
 		return(1);
 	case APOS:
-		return(wrt_AP(*(char **)&p->p2));
+	  return(wrt_AP(*(char **)(void *)&p->p2));
 	case H:
-		return(wrt_H(p->p1,*(char **)&p->p2));
+	  return(wrt_H(p->p1,*(char **)(void *)&p->p2));
 	}
 }
 
@@ -4134,7 +4134,7 @@ ne_d(char *s, char **p)
 		case 'H':
 		case 'h':
 			sp = &f__syl[op_gen(H,n,0,0)];
-			*(char **)&sp->p2 = s + 1;
+		*(char **)(void *)&sp->p2 = s + 1;
 			s+=n;
 			break;
 		}
@@ -4142,11 +4142,14 @@ ne_d(char *s, char **p)
 	case GLITCH:
 	case '"':
 	case '\'':
-		sp = &f__syl[op_gen(APOS,0,0,0)];
-		*(char **)&sp->p2 = s;
-		if((*p = ap_end(s)) == NULL)
-			return(0);
-		return(1);
+	  {
+	    sp = &f__syl[op_gen(APOS,0,0,0)];
+	    
+	    *(char **)(void *)&sp->p2 = s;
+	    if((*p = ap_end(s)) == NULL)
+	      return(0);
+	    return(1);
+	  }
 	case 'T':
 	case 't':
 		if(*(s+1)=='l' || *(s+1) == 'L')

@@ -13,7 +13,7 @@ SRCS = ./ary/ary.c ./esolver/esolver.c ./esolver/maxesolver.c \
 	./solver/bicgstab.c ./fgetline/fgetline.c ./fgetline/chomp.c
 
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -I../include -fno-strict-aliasing
+CFLAGS = -I../include
 CPPFLAGS = -Wall -g -O2
 
 RM := /bin/rm
