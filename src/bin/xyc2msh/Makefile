@@ -3,7 +3,7 @@ SRCS = Delaunay.c  FILE.c  oldestiva.c  stack.c  xyc2msh.c
 OBJS = $(SRCS:.c=.o)
 
 CPPFLAGS = -Wall -g -O2
-CFLAGS = -I../../include
+CFLAGS = -I../../include -fno-strict-aliasing
 LDFLAGS = -L../../lib -lestiva -lm
 
 .PHONY: all clean
