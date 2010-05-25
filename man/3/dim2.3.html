@@ -11,7 +11,7 @@ DIM0(3)              ESTIVA ライブラリ関数マニュアル                DIM0(3)
      ESTIVA ライブラリ (libestiva, -lestiva)
 
 書式
-     #include <estiva/ary.h>
+     #include "estiva/ary.h"
 
      size_t
      dim0(void *v);
@@ -31,7 +31,7 @@ DIM0(3)              ESTIVA ライブラリ関数マニュアル                DIM0(3)
      dim?() 関数が便利なのは、呼び出したサブ関数の中でも
      用いることが出来ることです。
 例
-#include <estiva/ary.h>
+#include "estiva/ary.h"
 
      main(){
             static double *u;
