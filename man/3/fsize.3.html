@@ -1,0 +1,28 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FSIZE(3)              ESTIVA ライブラリ関数マニュアル                FSIZE(3)
+
+名称
+     FSIZE - ファイルのサイズの取得
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/fgetline.h"
+
+     long
+     fsize(FILE *fp)
+
+解説
+     fsize(fp)はファイルポインタfpより、
+     ファイルのサイズを算出します。
+
+戻り値
+     ファイルのサイズ
+     
+     
+バグ
+     fsize()は高速化の余地があります。
