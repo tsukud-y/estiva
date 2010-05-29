@@ -47,6 +47,8 @@ void *estiva_pop(que **q, void *e, size_t n)
   if (p->elem==NULL) return NULL;
   memcpy(e,*(void**)p->elem,n);
   *q = p->next;
+  free(*(void**)p->elem);
+  free(p->elem);
   free(p);
   return e;
 }
