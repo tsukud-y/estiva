@@ -7,6 +7,6 @@
 
 char *estiva_fgetline(FILE *fp);
 char *estiva_chomp(char *str);
-int   estiva_fsize(FILE *fp);
+long  estiva_fsize(FILE *fp);
 
 #endif
