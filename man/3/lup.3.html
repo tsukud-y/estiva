@@ -1,0 +1,54 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+LUP(3)                ESTIVA ライブラリ関数マニュアル                  LUP(3)
+
+名称
+     LUP - 待ち行列の内容をルックアップする
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/que.h"
+
+     void *
+     lup(que q, object e);
+
+解説
+     lup(q,e)は待ち行列qからエントリeをルックアップする。
+     ここにおけるeは文字列へのポインタ、もしくは、第一メンバに
+     文字列へのポインタをメンバとする構造体である。
+
+例1
+#include "estiva/que.h"
+
+     main(){
+           static que *q;
+           char *word = "hello", *result;
+           initq(q);
+           push(q,word);
+           result = lup(q,word);
+     }
+
+例2
+#include "estiva/que.h"
+ 
+typedef struct { char *key; double val;} element;
+
+     main(){
+           static que *q;
+           element e, *f;
+           e.key = "e"; e.val = 2.718;
+           push(q,e);
+           f = lup(q,e);
+     }
+
+戻り値
+     エントリeのキーにマッチしたエントリへのポインタです。
+     マッチしなかった場合はNULLが返ります。
+
+関連項目
+     initq(3), enq(3), push(3), pop(3), forq(3)
+

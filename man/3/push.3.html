@@ -1,0 +1,59 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+PUSH(3)               ESTIVA ライブラリ関数マニュアル                 PUSH(3)
+
+名称
+     PUSH - スタック(待ち行列)にエントリをプッシュする
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/que.h"
+
+     void
+     push(que q, object e);
+
+解説
+     push(q,e)はスタック(待ち行列)qにエントリeを追加する。
+     ここにおけるeは変数でさえあれば何でも構わない。
+
+例1
+#include "estiva/que.h"
+
+     main(){
+            static que *q;
+            int c = 'C';
+            initq(q);
+            pushq(q,c);
+     }
+
+例2
+#include "estiva/que.h"
+
+     main(){
+           static que *q;
+           char *word = "hello";
+           initq(q);
+           push(q,word);
+     }
+
+例3
+#include "estiva/que.h"
+ 
+typedef struct { char *key; double val;} element;
+
+     main(){
+           static que *q;
+           element e;
+           e.key = "e"; e.val = 2.718;
+           push(q,e);
+     }
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     initq(3), enq(3), pop(3), lup(3), forq(3)

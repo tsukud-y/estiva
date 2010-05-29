@@ -1,0 +1,29 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FGETLINE(3)           ESTIVA ライブラリ関数マニュアル             FGETLINE(3)
+
+名称
+     FGETLINE - ファイルより一行読み込み
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/fgetline.h"
+
+     char *
+     fgetline(FILE *fp)
+
+解説
+     fgetline(fp)はファイルポインタfpより、一行取り出して
+     バッファに格納し、バッファのポインタを返します。
+
+戻り値
+     fgetline(fp)はファイルポインタfpより、一行取り出して
+     バッファに格納し、バッファのポインタを返します。
+     
+
+関連項目
+     chomp(3)

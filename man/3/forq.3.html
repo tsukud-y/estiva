@@ -1,0 +1,45 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FORQ(3)               ESTIVA ライブラリ関数マニュアル                 FORQ(3)
+
+名称
+     FORQ - 待ち行列の内容でループ
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/que.h"
+
+     forq(que q, object e)
+
+解説
+     forq(q,e)は待ち行列qからエントリeを一つずつ取り出して
+     ループを行う。
+     ここにおけるeは変数でさえあればなんでも良い。
+
+例
+#include "estiva/que.h"
+ 
+typedef struct { char *key; double val;} element;
+
+     main(){
+           static que *q;
+           element e, *f;
+           e.key = "e"; e.val = 2.718;
+           push(q,e);
+           e.key = "pi"; e.val = 3.14;
+           push(q,e);
+
+           forq(q,e) printf("%s %f\n", e.key, e.val);              
+     }
+
+戻り値
+     ループ文です。戻り値はありません。
+     
+
+関連項目
+     initq(3), enq(3), push(3), pop(3), lup(3)
+

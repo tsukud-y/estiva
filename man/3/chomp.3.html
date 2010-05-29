@@ -1,0 +1,26 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+CHOMP(3)             ESTIVA ライブラリ関数マニュアル               CHOMP(3)
+
+名称
+     CHOMP - 文字列最後の改行文字を取り除く
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/fgetline.h"
+
+     char *
+     chomp(char *str)
+
+解説
+     chomp(str)は文字列strの最後の改行文字を取り除きます。
+
+戻り値
+     アドレスstrです。
+
+関連項目
+     fgetline(3)
