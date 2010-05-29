@@ -10,7 +10,8 @@ SRCS = ./ary/ary.c ./esolver/esolver.c ./esolver/maxesolver.c \
 	./precond/precondnone.c ./precond/precondscaling.c ./solver/bicg.c \
 	./solver/blu.c ./solver/gauss.c ./solver/pcgs.c ./solver/solver.c \
 	./tmpfile/tmpfile.c ./mx/matvecmx.c ./mx/psolvemx.c ./solver/cgs.c \
-	./solver/bicgstab.c ./fgetline/fgetline.c ./fgetline/chomp.c
+	./solver/bicgstab.c ./fgetline/fgetline.c ./fgetline/chomp.c \
+	./que/que.c
 
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I../include
