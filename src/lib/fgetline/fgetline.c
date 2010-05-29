@@ -18,8 +18,8 @@ char *estiva_fgetline(FILE *fp)
   for ( i=0; EOF != (c = fgetc(fp)) && c != '\n'; )
     if ( i < n )  buf[i++] = c;
     else          enq(q,c);
-  buf[i] = 0;
-  
+  buf[i] = '\n';
+  buf[i+1] = 0;
   j = 0; forq(q,c) j++;
   
   ary1(ret,n+j+2);
@@ -27,5 +27,8 @@ char *estiva_fgetline(FILE *fp)
   strcat(ret,buf);
   
   forq(q,c) ret[i++] = c;
+  ret[i] = '\n';
+  ret[i+1] = 0;
+
   return ret;
 }
