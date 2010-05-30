@@ -66,17 +66,3 @@ void *estiva_lup(que *q, void **s2, size_t n)
   }
   return NULL;
 }
-
-
-
-
-int estiva_forq(que *q, void *e, size_t n)
-{
-  static que *p;
-  
-  if ( p == NULL ) p = q;
-  else p = p->next;
-  if ( p->elem != NULL )  memcpy(e,*(void**)p->elem,n);
-  if ( p->elem == NULL ) { p = NULL; return 0; }
-  return 1;
-}

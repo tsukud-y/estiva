@@ -52,7 +52,7 @@ void estiva_forqinit(que *q, void **e)
   p(e) = q;
 }
 
-int estiva_forq2(void **e)
+int estiva_forq(void **e)
 {
   if ( p(e)->elem == NULL ) { 
     free(f(e)); 

@@ -9,7 +9,7 @@ char *estiva_fgetline(FILE *fp)
 {
   static char *buf, *ret;
   static que *q;
-  unsigned long i, j, n=5;
+  unsigned long i, j, n=80;
   int c, *cp; 
 
   ary1(buf,n+1);
@@ -20,13 +20,13 @@ char *estiva_fgetline(FILE *fp)
     else          enq(q,c);
   buf[i] = '\n';
   buf[i+1] = 0;
-  j = 0; forq2(q,cp) j++;
+  j = 0; forq(q,cp) j++;
   
   ary1(ret,n+j+2);
   ret[0] = 0;
   strcat(ret,buf);
   
-  forq2(q,cp) ret[i++] = *cp;
+  forq(q,cp) ret[i++] = *cp;
   ret[i] = '\n';
   ret[i+1] = 0;
 

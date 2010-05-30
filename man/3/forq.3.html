@@ -13,12 +13,11 @@ FORQ(3)               ESTIVA ライブラリ関数マニュアル                 FORQ(3)
 書式
      #include "estiva/que.h"
 
-     forq(que q, object e)
+     forq(que q, void *f)
 
 解説
-     forq(q,e)は待ち行列qからエントリeを一つずつ取り出して
+     forq(q,f)は待ち行列qからポインタfを一つずつ取り出して
      ループを行う。
-     ここにおけるeは変数でさえあればなんでも良い。
 
 例
 #include "estiva/que.h"
@@ -33,7 +32,7 @@ typedef struct { char *key; double val;} element;
            e.key = "pi"; e.val = 3.14;
            push(q,e);
 
-           forq(q,e) printf("%s %f\n", e.key, e.val);              
+           forq(q,f) printf("%s %f\n", f->key, f->val);              
      }
 
 戻り値
