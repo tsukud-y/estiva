@@ -3,9 +3,8 @@
 #include <estiva/ary.h>
 #include <estiva/solver.h>
 #include <estiva/mx.h>
-void fprintCRS(FILE *fp, CRS crs);
 
-void mx2CRS(MX *A, CRS *crs)
+static void mx2CRS(MX *A, CRS *crs)
 {
   long i, j, k, n=0, *diag_ptr, *row_ptr, *col_ind,found, FALSE=0, TRUE=1;
   double *val, *pivots, element=0.0;
@@ -71,7 +70,7 @@ void mx2CRS(MX *A, CRS *crs)
 }
 
 
-void solveILU(CRS crs, double *y, double *x)
+static void solveILU(CRS crs, double *y, double *x)
 {
   long i, j, n, *row_ptr, *diag_ptr, *col_ind;
   double sum, *val, *pivots;
@@ -107,7 +106,8 @@ void solveILU(CRS crs, double *y, double *x)
 }
 
 
-void solveILUT(CRS crs, double *y, double *x)
+#if 0
+static void solveILUT(CRS crs, double *y, double *x)
 {
   long i, j, n, *row_ptr, *diag_ptr, *col_ind;
   double *val, *pivots, tmp;
@@ -144,9 +144,11 @@ void solveILUT(CRS crs, double *y, double *x)
     }
   }
 } 
+#endif
 
 
-void fprintCRS(FILE *fp, CRS crs)
+#if 0
+static void fprintCRS(FILE *fp, CRS crs)
 {
   long k, m, n;
   n = crs.n;
@@ -182,7 +184,7 @@ void fprintCRS(FILE *fp, CRS crs)
   }
   fprintf(fp,"\n");
 }
-
+#endif
 
 
 void estiva_precondILU(CRS *dummypivots, MX *A, double *x, double *b)
