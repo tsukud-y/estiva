@@ -1,5 +1,5 @@
 PROG =  xyc2msh
-SRCS = Delaunay.c  FILE.c  oldestiva.c  stack.c  xyc2msh.c
+SRCS = Delaunay.c  FILE.c stack.c  xyc2msh.c
 OBJS = $(SRCS:.c=.o)
 
 CPPFLAGS = -Wall -g -O2

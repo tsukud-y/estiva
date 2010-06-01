@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "oldestiva.h"
+#include "estiva/std.h"
 #include "stack.h"
 #include <estiva/foreach.h>
 #include <estiva/ary.h>
@@ -156,13 +156,13 @@ void estiva_Delaunay(xyc **Zo, nde **No)
   xmin = Z[1].x; ymin = Z[1].y;
   xmax = Z[1].x; ymax = Z[1].y;
   forall(2,i,z){
-    xmin=less(xmin,Z[i].x); xmax=more(xmax,Z[i].x);
-    ymin=less(ymin,Z[i].y); ymax=more(ymax,Z[i].y);
+    xmin=min(xmin,Z[i].x); xmax=max(xmax,Z[i].x);
+    ymin=min(ymin,Z[i].y); ymax=max(ymax,Z[i].y);
   }
 
 
 
-  length = more(xmax-xmin, ymax-ymin);
+  length = max(xmax-xmin, ymax-ymin);
   Z[z+1].x = xmin - length/2.0;
   Z[z+1].y = ymin - length/2.0;
   Z[z+2].x = xmin + length*3.0;
