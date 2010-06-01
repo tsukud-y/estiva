@@ -1,0 +1,28 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FLINES(3)             ESTIVA ライブラリ関数マニュアル               FLINES(3)
+
+名称
+     FLINES - ファイルの行の数のカウント
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/fgetline.h"
+
+     long
+     flines(FILE *fp)
+
+解説
+     flines(fp)はファイルポインタfpより、
+     ファイルの行数を算出します。
+
+戻り値
+     ファイルの行数
+     
+     
+バグ
+     flines()は高速化の余地があります。
