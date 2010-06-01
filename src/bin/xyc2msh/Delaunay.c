@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "estiva/std.h"
-#include "stack.h"
 #include <estiva/foreach.h>
 #include <estiva/ary.h>
 #include "Delaunay.h"
 #include "FILE.h"
+#include "estiva/que.h"
 
 
 #if 0
@@ -179,6 +179,7 @@ void estiva_Delaunay(xyc **Zo, nde **No)
   n=1;
 
   forall(1,i,z){
+    static que *q;
     int e0,e1,e2,a,b,c,A,B,C; 
     e0=Lawson(n,Z[i].x,Z[i].y); e1=n+1; e2=n+2; n+=2;
     a=N[e0].a,b=N[e0].b,c=N[e0].c,A=N[e0].A,B=N[e0].B,C=N[e0].C;
@@ -191,10 +192,11 @@ void estiva_Delaunay(xyc **Zo, nde **No)
     foreach(a)&N[B].A,&N[B].B,&N[B].C,end if(a==e0) a=e1;
     foreach(a)&N[C].A,&N[C].B,&N[C].C,end if(a==e0) a=e2;
     
-    push(e0); push(e1); push(e2); 
-    while(pop(e1))
+    initq(q);
+    push(q,e0); push(q,e1); push(q,e2); 
+    while(pop(q,e1))
       if(incircle(i,(e2=(N[e1].a==i?N[e1].A:(N[e1].b==i?N[e1].B:N[e1].C)))))
-	if(!degeneracy(e1,e2)){ push(e1); push(e2);}
+	if(!degeneracy(e1,e2)){ push(q,e1); push(q,e2);}
   }
 
 

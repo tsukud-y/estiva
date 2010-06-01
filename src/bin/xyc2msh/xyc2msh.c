@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "estiva/std.h"
-#include "stack.h"
 #include <estiva/foreach.h>
 #include <estiva/ary.h>
 #include "Delaunay.h"
