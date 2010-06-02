@@ -21,6 +21,7 @@ void estiva_cp(void *A, void *B, int size1, int size2)
   else{ fprintf(stderr,"estiva_cp: size mismatch\n"); exit(1);}
 }
 
+#if 0
 static int flag;
 void estiva_initecho(void)
 {flag=1;}
@@ -30,3 +31,4 @@ int estiva_echo(char *str)
   if(flag){ fprintf(stderr,"%s",str);flag=0;return 1;}
   return 0;
 }
+#endif
