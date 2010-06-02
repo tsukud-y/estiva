@@ -4,10 +4,8 @@
 #include "estiva/std.h"
 #include <estiva/foreach.h>
 #include <estiva/ary.h>
-#include "Delaunay.h"
-#include "FILE.h"
 #include "estiva/que.h"
-
+#include "estiva/mesh.h"
 
 #if 0
 typedef struct { double x, y; char *label;}xyc;
@@ -145,7 +143,7 @@ static int degeneracy(int e1,int e2)
 }
 #define finv(g,f,n) ary1(g,n+1); forall(1,i,dim1(f)) g[f[i]]=i;
 
-void estiva_Delaunay(xyc **Zo, nde **No)
+void estiva_delaunay(xyc **Zo, nde **No)
      /* Delaunay(Z,N) estiva_Delaunay(&(Z),&(N)) */
 { int i,n,a,A,z; double xmin,ymin,xmax,ymax,length;
   static char super_node[] = "super_node";
@@ -244,21 +242,7 @@ void estiva_Delaunay(xyc **Zo, nde **No)
 
   cp(Z,*Zo); cp(N,*No);
 }
-xyc *estiva_fp2Z(FILE *fp)
-     /* fp2Z(fp) estiva_fp2Z(fp) */
-{ static xyc *Z; int i,z; FILE *tfp;
-  
-  FILE_cp(fp,(tfp=tmpfile())); rewind(tfp);
-  z=0; forFILE(tfp)if(S(1)!=NULL&&S(2)!=NULL)z++; rewind(tfp);
-  
-  ary1(Z,z+4);
-  i= 1; forFILE(tfp)if(S(1)!=NULL&&S(2)!=NULL){
-    Z[i].x= atof(S(1)); Z[i].y= atof(S(2));
-    Z[i].label= (S(3)==NULL?NULL:strdup(S(3)));
-    i++;
-  }fclose(tfp);
-  return Z;
-}
+
 #ifdef dela
 #include "op.h"
 static char *label(xyc *Z,int i)

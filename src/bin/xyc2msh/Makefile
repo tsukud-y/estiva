@@ -1,5 +1,5 @@
 PROG =  xyc2msh
-SRCS = Delaunay.c  FILE.c xyc2msh.c
+SRCS = main.c
 OBJS = $(SRCS:.c=.o)
 
 CPPFLAGS = -Wall -g -O2

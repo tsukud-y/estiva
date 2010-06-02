@@ -4,8 +4,7 @@
 #include "estiva/std.h"
 #include <estiva/foreach.h>
 #include <estiva/ary.h>
-#include "Delaunay.h"
-#include "FILE.h"
+#include "estiva/mesh.h"
 
 #include <estiva/op.h>
 static char *label(xyc *Z,int i)
@@ -27,7 +26,7 @@ int main(int argc, char **argv)
   Z = fp2Z(fp); 
   fclose(fp);
 
-  Delaunay(Z,N);
+  delaunay(Z,N);
 
   fp=stdout;
   fprintf(fp,"<xyc>\n");
