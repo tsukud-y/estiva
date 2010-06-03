@@ -14,13 +14,13 @@ FP2MESH(3)            ESTIVA ライブラリ関数マニュアル                FP2MESH(3)
      #include "estiva/mesh.h"
 
      void
-     fp2mesh(FILE* fp, xyc** Zp, nde** Np);
+     fp2mesh(FILE* fp, xyc* Z, nde* N);
 
 解説
      fp2mesh()ルーチンはストリームらmesh形式のデータを格納します。
 
      xyc2msh で生成した mesh 形式のデータファイルを引数 fp で
-     指定すると、Zp, Np にデータを格納します。
+     指定すると、Z, N にデータを格納します。
 
 戻り値
      戻り値はありません。

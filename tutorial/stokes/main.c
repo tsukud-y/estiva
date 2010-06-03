@@ -234,7 +234,7 @@ int main(int argc, char** argv)
   initop(argc,argv);
 
   fp = stdfp();
-  fp2mesh(fp, &Z, &N);
+  fp2mesh(fp, Z, N);
   fclose(fp);
 
   if(defop("-t")) t=atof(getop("-t"));

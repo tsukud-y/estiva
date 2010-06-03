@@ -55,7 +55,7 @@ main(int argc, char **argv)
   static double **A, *u;
 
   initop(argc, argv);
-  fp2mesh(stdfp(),&Z, &N);
+  fp2mesh(stdfp(),Z,N);
 
   ary2(A,dim1(Z)+1, dim1(Z)+1); ary1(u,dim1(Z)+1);
 

@@ -4,7 +4,7 @@
 #include <estiva/ary.h>
 #include <estiva/mesh.h>
 
-void fp2mesh(FILE* fp, xyc** Zp, nde** Np)
+void estiva_fp2mesh(FILE* fp, xyc** Zp, nde** Np)
 {
   static xyc* Z; static nde* N;
   char buf1000[1000], buf200[200];

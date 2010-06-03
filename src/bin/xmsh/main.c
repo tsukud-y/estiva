@@ -24,7 +24,7 @@ int main(int argc, char **argv){
 
   initop(argc, argv);
 
-  fp2mesh(stdfp(),&Z, &N);
+  fp2mesh(stdfp(),Z, N);
 
   pltmsh(stdout,Z,N);
   return 0;

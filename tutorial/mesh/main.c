@@ -8,7 +8,7 @@ main(){
   int i;
   static xyc *Z; static nde *N;
   
-  fp2mesh(fopen("foo.mesh","r"),&Z,&N);
+  fp2mesh(fopen("foo.mesh","r"),Z,N);
 
 
   for(i=1; i<=dim1(Z); i++)
