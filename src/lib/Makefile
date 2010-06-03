@@ -12,7 +12,7 @@ SRCS = ary/ary.c esolver/esolver.c esolver/maxesolver.c \
 	tmpfile/tmpfile.c mx/matvecmx.c mx/psolvemx.c solver/cgs.c \
 	solver/bicgstab.c fgetline/fgetline.c fgetline/chomp.c \
 	que/que.c fgetline/fsize.c que/forq.c fgetline/flines.c \
-	std/std.c mesh/fp2Z.c mesh/delaunay.c
+	std/std.c mesh/fp2xyc.c mesh/delaunay.c
 
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I../include

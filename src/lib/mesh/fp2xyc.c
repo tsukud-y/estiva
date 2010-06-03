@@ -50,8 +50,8 @@ static void estiva_FILE_cp(FILE *fp,FILE *out)
   while(EOF !=(c=getc(fp))) putc(c,out);
 }     
 
-xyc *estiva_fp2Z(FILE *fp)
-/* fp2Z(fp) estiva_fp2Z(fp) */
+xyc *estiva_fp2xyc(FILE *fp)
+/* fp2xyc(fp) estiva_fp2xyc(fp) */
 { static xyc *Z; int i,z; FILE *tfp;
   
   FILE_cp(fp,(tfp=tmpfile())); rewind(tfp);
