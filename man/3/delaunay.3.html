@@ -1,0 +1,29 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+DELAUNAY(3)            ESTIVA ライブラリ関数マニュアル                DELAUNAY(3)
+
+名称
+     delaunay - デローニー三角分割
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/mesh.h"
+
+     void
+     delaunay(xyc* Z, nde* N);
+
+解説
+     delaunay()ルーチンはメッシュジェネレーションを行います。
+
+     節点-座標対応表 Z より、要素-節点対応表 N を
+     生成します。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     xyc2msh(1), xmesh(1), fp2xyc(3)
