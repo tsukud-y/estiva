@@ -13,18 +13,18 @@ FP2XYC(3)            ESTIVA ライブラリ関数マニュアル                FP2XYC(3)
 書式
      #include "estiva/mesh.h"
 
-     xyc *
-     fp2xyc(FILE* fp);
+     void 
+     fp2xyc(FILE* fp, xyc *Z);
 
 解説
      fp2xyc()ルーチンはストリームらxyc形式配列のデータを生成します。
 
      xyc2msh に渡すのと同じ形式のデータを引数 fp で
-     指定すると、xyc形式の配列のデータが生成されます。
-
+     指定すると、xyc形式の配列のデータが生成され、引数 Zにセット
+     されます。
 
 戻り値
-     xyc形式の配列のデータへの先頭ポインタです。
+     戻り値はありません。
      
 関連項目
      xyc2msh(1), xmesh(1), fp2msh(3)

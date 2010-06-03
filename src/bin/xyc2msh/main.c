@@ -23,7 +23,7 @@ int main(int argc, char **argv)
     exit(1);
   }
   
-  Z = fp2xyc(fp); 
+  fp2xyc(fp,Z); 
   fclose(fp);
 
   delaunay(Z,N);

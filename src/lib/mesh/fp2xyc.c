@@ -4,6 +4,7 @@
 #include "estiva/std.h"
 #include <estiva/ary.h>
 #include "estiva/mesh.h"
+#include "estiva/fgetline.h"
 
 #define  forFILE(fp) while(estiva_forFILE(fp)) 
 #define  S(n) estiva_S(n) 
@@ -12,23 +13,14 @@
 #define reary1(a,n) ary1(a,n)
 static char *S0;
 
-static int getline(char *buf,FILE *fp)
-{ char c; int i;
-  for(i=0;1;){
-    c = getc(fp);
-    buf[i] = '\0';
-    if(c=='\n'){ return 0;}
-    if(c==EOF ){ return 1;}
-    buf[i]=c;
-    i++;
-  }
-}
 static char S1[999], S2[999], S3[999];
 static int estiva_forFILE(FILE *fp)
      /* forFILE(fp) while(estiva_forFILE(fp)) */
-{ int sup;
-  sup=128; ary1(S0,sup);
-  if(getline(S0,fp))if(feof(fp)){ary1(S0,0); return 0;}
+{ 
+  if( !feof(fp) ){
+    S0 = fgetline(fp);
+      if(feof(fp)){ary1(S0,0); return 0;}
+  }
   S1[0] = '\0';
   S2[0] = '\0';
   S3[0] = '\0';
@@ -50,7 +42,7 @@ static void estiva_FILE_cp(FILE *fp,FILE *out)
   while(EOF !=(c=getc(fp))) putc(c,out);
 }     
 
-xyc *estiva_fp2xyc(FILE *fp)
+void estiva_fp2xyc(FILE *fp, xyc **Zp)
 /* fp2xyc(fp) estiva_fp2xyc(fp) */
 { static xyc *Z; int i,z; FILE *tfp;
   
@@ -63,5 +55,5 @@ xyc *estiva_fp2xyc(FILE *fp)
     Z[i].label= (S(3)==NULL?NULL:strdup(S(3)));
     i++;
   }fclose(tfp);
-  return Z;
+  *Zp = Z;
 }
