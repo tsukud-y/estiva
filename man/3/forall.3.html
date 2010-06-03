@@ -1,0 +1,28 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FORALL(3)           ESTIVA ライブラリ関数マニュアル                FORALL(3)
+
+名称
+    forall()  - forマクロ
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式	
+     #include "estiva/std.h"
+
+     forall(m,i,n)
+
+解説
+     forall()マクロは m<=i<=n の範囲でiをループさせます。
+     置換された結果は
+     for(i=m;i<=n;i++)
+     となります。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     ...

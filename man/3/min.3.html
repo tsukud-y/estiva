@@ -1,0 +1,28 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+MIN(3)           ESTIVA ライブラリ関数マニュアル                MIN(3)
+
+名称
+    min()  - 最大値
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式	
+     #include "estiva/std.h"
+
+     min(x,y)
+
+解説
+     min ()マクロは 2つの変数のうちの最小値を返します
+     置換された結果は
+     (x＜y?(x):(y))
+     となります。
+
+戻り値
+     引き数のうちの最小値が返ります。    
+
+関連項目
+     max(3)
