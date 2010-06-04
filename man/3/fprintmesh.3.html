@@ -1,0 +1,28 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FPRINTMESH(3)         ESTIVA ライブラリ関数マニュアル           FPRINTMESH(3)
+
+名称
+     fprintmesh - ストリームへmesh形式のデータを出力
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/mesh.h"
+
+     void
+     fprintmesh(FILE* fp, xyc* Z, nde* N);
+
+解説
+     fprintmesh()ルーチンはストリームへmesh形式のデータを出力します。
+
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     xyc2msh(1), xmesh(1), fp2xyc(3), fp2mesh(3), delaunay(3)
+
