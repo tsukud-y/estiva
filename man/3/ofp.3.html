@@ -1,0 +1,36 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+OFP(3 )              ESTIVA ライブラリ関数マニュアル                 OFP(3)
+
+名称
+     ofp - 出力用ファイルストリーム
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/op.h"
+
+     FILE *
+     ofp(void);
+
+解説
+     ofp() は出力用ファイルストリームを適当に選択してファイル
+     ポインタを返します。
+
+     1. -o オプションで指定されたファイルを開くことを試みます。
+     2. 適当なファイルが該当しない場合は、標準出力を開きます。
+
+     ofp()関数を呼び出す前に一度initop(3)を呼び出す必要があります。
+     もしinitop()ルーチンを呼び出すことなくofp()を呼び出した場合には、
+     コマンドライン引数がなにもないままmain()関数を呼び出したと同じ
+     動作をofp()は行います。具体的にはofp()はこの場合常に標準出力を
+     返します。
+
+戻り値
+     戻り値は標準出力に準ずるファイルポインタです。
+
+関連項目
+     initop(3), stdfp(3)

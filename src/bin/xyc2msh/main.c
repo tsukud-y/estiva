@@ -15,7 +15,7 @@ int main(int argc, char **argv)
   
   delaunay(Z,N);
   
-  fp = stdout;
+  fp = ofp();
   fprintmesh(fp,Z,N);
   fclose(fp);
   return 0;
