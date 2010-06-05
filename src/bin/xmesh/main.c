@@ -1,44 +1,50 @@
 #include <stdio.h>
 #include <unistd.h>
-
-void sleep_forever(void) {
-  while(1) sleep(24*60*60);
-}
-
-FILE *tmpopen(char *name) {
-  char filename[1024];
-  sprintf(filename,"/tmp/%s",name);
-  return fopen(filename,"w");
-}
-
-char *tmpname(char *name) {
-  return name;
-}
+#include "estiva/op.h"
+#include "estiva/mesh.h"
+#include "estiva/ary.h"
 
 
-int main(int argc, char **argv) {
-  FILE *pp, *xyc2msh;
-  int c;
-
-  if (argc == 2 ) {
-    char command[1024];
-    sprintf(command,"cat %s|xyc2msh|xmsh>/tmp/tmpfile.plt",argv[1]);
-    xyc2msh = popen(command,"w");
+static void pltmsh(FILE *fp, xyc *Z, nde *N)
+{
+  long e, a, b, c;
+  for(e=1;e<=dim1(N);e++){
+    a = N[e].a, b = N[e].b, c = N[e].c;
+    fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
+    fprintf(fp,"%f %f\n",Z[b].x,Z[b].y);
+    fprintf(fp,"%f %f\n",Z[c].x,Z[c].y);
+    fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
+    fprintf(fp,"\n\n");
   }
-  else {
-    xyc2msh = popen("xyc2msh|xmsh>/tmp/tmpfile.plt","w");
-    while (EOF != (c = getchar())) putc(c,xyc2msh);
-  }
-
-  pclose(xyc2msh);
+}
 
 
+void sleep_forever(void) 
+{
+  while(1) sleep(60*3);
+}
+
+
+int main(int argc, char **argv) 
+{
+  FILE *fp, *pp;
+  xyc  *Z;
+  nde  *N;
+
+  initop(argc,argv);
+  fp = stdfp();
+  fp2xyc(fp,Z);
+  fclose(fp);
+
+  delaunay(Z,N);
 
   pp = popen("gnuplot","w");
-  fprintf(pp,"set nokey\n");
-  fprintf(pp,"plot '/tmp/tmpfile.plt' w l\n");
+  fprintf(pp,"plot '-' title \"\"with lines\n");
+  pltmsh(pp,Z,N);
+  fprintf(pp,"e\n");
   fflush(pp);
-
   sleep_forever();
+  pclose(pp);
+
   return 0;
 }
