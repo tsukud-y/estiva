@@ -12,6 +12,7 @@ void estiva_initgamma(void);
 int  estiva_gamma(xyc* Z,int *p,char *str);
 void estiva_delaunay(xyc **Zo, nde **No);
 void estiva_fprintmesh(FILE *fp, xyc *Z, nde *N);
+void estiva_xmesh(xyc *Z);
 
 
 #define fp2xyc(fp,Z)       estiva_fp2xyc(fp,&(Z))
@@ -21,5 +22,6 @@ void estiva_fprintmesh(FILE *fp, xyc *Z, nde *N);
 #define forgamma(Z,i,str)  for(estiva_initgamma();estiva_gamma(Z,&(i),str);)
 #define delaunay(Z,N)      estiva_delaunay(&(Z),&(N)) 
 #define fprintmesh(fp,Z,N) estiva_fprintmesh(fp,Z,N)
+#define xmesh(Z)           estiva_xmesh(Z)
 
 #endif
