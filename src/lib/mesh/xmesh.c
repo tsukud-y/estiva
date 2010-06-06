@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include "estiva/op.h"
 #include "estiva/mesh.h"
@@ -40,5 +41,6 @@ void estiva_xmesh(xyc *Z)
     fflush(pp); 
     sleep_forever();
     pclose(pp);
+    exit(0);
   }
 }

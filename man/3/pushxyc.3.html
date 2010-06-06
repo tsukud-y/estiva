@@ -1,0 +1,57 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+PUSHXYC(3)               ESTIVA ライブラリ関数マニュアル                 PUSHXYC(3)
+
+名称
+     PUSHXYC - スタック(待ち行列)にxycエントリをプッシュする
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/que.h"
+
+     void
+     pushxyc(que q, double x, double y, char *label);
+
+解説
+     pushxyc(3)はスタック(待ち行列)qにxycエントリを追加する。
+     セットした複数のエントリから、genmesh(3)を用いて
+     メッシュジェネレーションを行うことが出来る。
+
+
+例:
+#include ＜stdio.h＞
+#include "estiva/mesh.h"
+#include "estiva/que.h"
+#include "estiva/op.h"
+
+
+int main(int argc, char **argv)
+{
+  static xyc *Z;
+  static nde *N;
+  static que *q;
+
+  initop(argc,argv);
+  initq(q);
+
+  pushxyc(q,1.0,1.0,"g");
+  pushxyc(q,0.0,1.0,"g");
+  pushxyc(q,1.0,0.0,"g");
+  pushxyc(q,0.0,0.0,"g");
+  pushxyc(q,0.5,0.5,NULL);
+
+  genmesh(q,Z,N);
+
+  return 0;
+}
+
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     initq(3), genmesh(3);
