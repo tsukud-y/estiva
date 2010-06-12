@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include "estiva/que.h"
+#include "estiva/mesh.h"
+#include "estiva/foreach.h"
+#include "estiva/ary.h"
+#include "estiva/op.h"
+
+static void pltmsh(FILE *fp, xyc *Z, nde *N)
+{
+  long e, a, b, c;
+  for(e=1;e<=dim1(N);e++){
+    a = N[e].a, b = N[e].b, c = N[e].c;
+    fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
+    fprintf(fp,"%f %f\n",Z[b].x,Z[b].y);
+    fprintf(fp,"%f %f\n",Z[c].x,Z[c].y);
+    fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
+    fprintf(fp,"\n\n");
+  }
+
+
+}
+
+
+void estiva_p2(xyc *Z, nde *N)
+{
+  int i, e, m, n, u;
+  e = dim1(N);
+
+  for(i=1;i<=e;i++)
+    foreach(m)&N[i].A,&N[i].B,&N[i].C,end
+      m = -m;
+
+  n=dim1(Z)+1;
+  for(i=1;i<=e;i++)
+    foreach(m)&N[i].A,&N[i].B,&N[i].C,end
+      if(m<=0){
+        foreach(u)&N[-m].A,&N[-m].B,&N[-m].C,end if(u== -i) u=n;
+        m=n++;
+      }
+  
+  if ( defop("-xmeshp2") ) if ( fork() == 0 ) {
+    long i;
+    FILE *pp;
+    pp = popen("gnuplot -geometry +0+0","w");
+    {
+      fprintf(pp,"set border 0\n");
+      fprintf(pp,"set format x \"\"\n");
+      fprintf(pp,"set format y \"\"\n");
+      fprintf(pp,"set noxtics \n");
+      fprintf(pp,"set noytics \n");
+    }
+    {
+      for ( i=1; i<=dim1(Z); i++)
+	fprintf(pp,"set label \"%ld\" at %f,%f\n",i,Z[i].x,Z[i].y);
+    }
+    {
+      for ( i=1; i<=dim1(N); i++)
+	fprintf(pp,"set label \"%d\" at %f,%f\n", N[i].C,
+		(Z[N[i].a].x + Z[N[i].b].x)/2.0,
+		(Z[N[i].a].y + Z[N[i].b].y)/2.0);
+      for ( i=1; i<=dim1(N); i++)
+	fprintf(pp,"set label \"%d\" at %f,%f\n", N[i].A,
+		(Z[N[i].b].x + Z[N[i].c].x)/2.0,
+		(Z[N[i].b].y + Z[N[i].c].y)/2.0);
+      for ( i=1; i<=dim1(N); i++)
+	fprintf(pp,"set label \"%d\" at %f,%f\n", N[i].B,
+		(Z[N[i].c].x + Z[N[i].a].x)/2.0,
+		(Z[N[i].c].y + Z[N[i].a].y)/2.0);
+
+    }
+    {
+      for ( i=1; i<=dim1(N); i++)
+	fprintf(pp,"set label \"(%ld)\" at %f,%f\n",i,
+		(Z[N[i].a].x + Z[N[i].b].x + Z[N[i].c].x)/3.0,
+		(Z[N[i].a].y + Z[N[i].b].y + Z[N[i].c].y)/3.0);
+    }
+    fprintf(pp,"plot '-' title \"\" with lines\n");
+    pltmsh(pp,Z,N);
+    fprintf(pp,"e\n");
+    fflush(pp);
+    sleep(30*60);
+    pclose(pp);
+    exit(0);
+  }
+}
+
+

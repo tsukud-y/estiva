@@ -1,0 +1,35 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+P2(3)               ESTIVA ライブラリ関数マニュアル                   P2(3)
+
+名称
+     p2 - 2次要素(中点節点)のジェネレーション
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/mesh.h"
+
+     void
+     p2(xyc* Z, nde* N);
+
+解説
+     p2()ルーチンは2次要素のジェネレーションを行います。
+     要素-節点対応表 N における、要素-隣接関係表を
+     中点節点対応表に変換します。
+
+     コマンドラインオプション "-xmeshp2" があるときは、
+     gnuplotによる、格子データの表示も行います。
+     このとき、要素番号および、節点番号の表示が行われます。
+
+     コマンドラインオプション解釈の為には
+     initop(3)を呼んでおく必要があります。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     initop(3), genmesh(3)
