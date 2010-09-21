@@ -2968,7 +2968,7 @@ f__fatal(int n, char *s)
 	else
 		fprintf(stderr,"%s: %s\n",s,F_err[n-100]);
 	if (f__curunit) {
-		fprintf(stderr,"apparent state: unit %d ",f__curunit-f__units);
+		fprintf(stderr,"apparent state: unit %ld ",f__curunit-f__units);
 		//fprintf(stderr, f__curunit->ufnm ? "named %s\n" : "(unnamed)\n", f__curunit->ufnm);
 		}
 	else
@@ -3319,7 +3319,7 @@ integer f_open(a) olist *a;
 integer f_open(olist *a)
 #endif
 {	unit *b;
-	int n;
+	int n = 0;
 	integer rv;
 	char buf[256], *s;
 	cllist x;
@@ -3990,9 +3990,19 @@ w_ned(struct f__syl *p)
 		f__cursor += p->p1;
 		return(1);
 	case APOS:
-	        return(wrt_AP(*(char **)(void *)&p->p2));
+	  {
+	    char *cp;
+	    cp = (char *)&p->p2;
+	    return(wrt_AP(*(char **)cp));
+	    /* return(wrt_AP(*(char **)(void *)&p->p2));*/
+	  }
 	case H:
-        	return(wrt_H(p->p1,*(char **)(void *)&p->p2));
+	  {
+	    char *cp;
+	    cp = (char *)&p->p2;
+	    return(wrt_H(p->p1,*(char **)cp));
+	    /* return(wrt_H(p->p1,*(char **)(void *)&p->p2));*/
+	  }
 	}
 }
 
@@ -4144,20 +4154,30 @@ ne_d(char *s, char **p)
 		case 'x': (void) op_gen(X,n,0,0); break;
 		case 'H':
 		case 'h':
-			sp = &f__syl[op_gen(H,n,0,0)];
-        		*(char **)(void *)&sp->p2 = s + 1;
-			s+=n;
-			break;
+		  {
+		    char *cp;
+		    sp = &f__syl[op_gen(H,n,0,0)];
+		    cp = (char *)&sp->p2;
+		    *(char **)cp = s + 1;
+		    /* *(char **)(void *)&sp->p2 = s + 1;*/
+		    s+=n;
+		    break;
+		  }
 		}
 		break;
 	case GLITCH:
 	case '"':
 	case '\'':
-		sp = &f__syl[op_gen(APOS,0,0,0)];
-         	*(char **)(void *)&sp->p2 = s;
-		if((*p = ap_end(s)) == NULL)
-			return(0);
-		return(1);
+	  {
+	    char *cp;
+	    sp = &f__syl[op_gen(APOS,0,0,0)];
+	    cp = (char *)&sp->p2;
+	    *(char **)cp = s;
+	    /* *(char **)(void *)&sp->p2 = s; */
+	    if((*p = ap_end(s)) == NULL)
+	      return(0);
+	    return(1);
+	  }
 	case 'T':
 	case 't':
 		if(*(s+1)=='l' || *(s+1) == 'L')
