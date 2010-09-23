@@ -21,7 +21,7 @@ static void pltmsh(FILE *fp, xyc *Z, nde *N)
   }
 }
 
-void pltp2(double *x, xyc * Z, nde *N)
+void estiva_pltp2(double *x, xyc * Z, nde *N)
 {
   FILE *pp;
   static double *u, *v;

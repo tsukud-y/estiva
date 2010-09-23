@@ -20,8 +20,12 @@ void estiva_rectmesh(xyc **Zp, nde **Np)
   for ( x = 0.0; x <= 1.0; x += h)
     for ( y = 0.0; y <= 1.0; y += h) {
       
-      if ( x == 0.0 || x == 1.0 || y == 0.0 || y == 1.0 )
-	pushxyc(q,x,y,"g");
+      if ( x == 0.0 || x == 1.0 || y == 0.0 || y == 1.0 ) {
+	if ( y == 1.0 && x != 0.0 && x != 1.0 )
+	  pushxyc(q,x,y,"gamma");
+	else 
+	  pushxyc(q,x,y,"zero");
+      }
       else 
 	pushxyc(q,x,y,NULL);
     }
