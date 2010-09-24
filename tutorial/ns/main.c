@@ -10,68 +10,89 @@
 #include "estiva/mx.h"
 #include "estiva/foreach.h"
 #include "estiva/que.h"
+#include "estiva/solver.h"
 
 
-void nsA(MX **Ap, xyc *Z, nde *N)
+void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N)
 {
-  static double *S, *U, *V;
-  static MX *M, *AX, *AY, *D, *HX, *HY;
-  static MX *A;
-
-  double tau = 0.1;
-  long i, j, m, n;
-    
-  ary1(U,10000);
-  for ( i = 0; i< 9999; i++ ) U[i] = 1.0;
-  ary1(V,10000);
-  for ( i = 0; i< 9999; i++ ) V[i] = 1.0;
+  static double *S;
+  static MX *M, *K, *Hx, *Hy;
+  double t = 0.001;
 
   femdelta(S,Z,N);
   nsM(M,S,N);
-  nsAX(AX,U,S,Z,N);
-  nsAY(AY,V,S,Z,N);
-  nsD(D,S,Z,N);
-  nsHX(HX,S,Z,N);
-  nsHY(HY,S,Z,N);
+  nsD(K,S,Z,N);
+  nsHX(Hx,S,Z,N);
+  nsHY(Hy,S,Z,N);
 
+
+  MX *A; long i, j, NUM, m, n;
   m = dimp2(N);
   n = dim1(Z);
-  initmx(*Ap,2*m+n+1,50);
-  A = *Ap;
-  
-  for(i=1; i<=m; i++) for(j=1; j<=n; j++) mx(A,i,2*m+j)   = -mx(HX,i,j);
-  for(i=1; i<=m; i++) for(j=1; j<=n; j++) mx(A,m+i,2*m+j) = -mx(HY,i,j);
-  for(i=1; i<=n; i++) for(j=1; j<=m; j++) mx(A,2*m+i,j)   =  mx(HX,j,i);
-  for(i=1; i<=n; i++) for(j=1; j<=m; j++) mx(A,2*m+i,m+j) =  mx(HY,j,i);
 
-  for(i=1; i<=m; i++) for(j=1; j<=m; j++) {
-      mx(A,i  , j  ) = mx(M,i,j)/tau + mx(D,i,j);
+  NUM = m*2+n;
+  initmx(*Ap, NUM+1, 50);  
+  A = *Ap;
+
+  for (i=1;i<=NUM;i++) for (j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+
+
+  for(i=1;i<=m;i++) for(j=1; j<=m; j++){
+      mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j);
+      mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j);
     }
-  for(i=1; i<=m; i++) for(j=1; j<=m; j++) {
-      mx(A,i+m, j+m) = mx(M,i,j)/tau + mx(D,i,j);
+
+  for(i=1;i<=m;i++) for(j=1; j<=n; j++){
+      mx(A,i,2*m+j) = -t*mx(Hx,i,j);
+      mx(A,2*m+j,i) = -t*mx(Hx,i,j);
     }
+
+  for(i=1;i<=m;i++) for(j=1; j<=n; j++){
+      mx(A,m+i,2*m+j) = -t*mx(Hy,i,j);
+      mx(A,2*m+j,m+i) = -t*mx(Hy,i,j);
+    }
+
+  forgammap2(i,"zero",Z,N) { 
+    for (j=1; j<=NUM; j++) {
+      mx(A,i,j)   = 0.0; 
+      mx(A,m+i,j) = 0.0;
+    }
+    mx(A,i,i)     = 1.0; 
+    mx(A,m+i,m+i) = 1.0;
+    b[i]   = 0.0;  
+    b[m+i] = 0.0; 
+  }
+  forgammap2(i,"gamma",Z,N) { 
+    for (j=1; j<=NUM; j++) {
+      mx(A,i,j)   = 0.0; 
+      mx(A,m+i,j) = 0.0;
+    }
+    mx(A,i,i)     = 1.0; 
+    mx(A,m+i,m+i) = 1.0;
+    b[i]        = 0.0625;
+    b[m+i]      = 0.0; 
+  }
+
+  for(j=1; j<=NUM; j++) mx(A,NUM,j) = 0.0;
+  mx(A,NUM,NUM) = 1.0; 
+  b[NUM] = 1.0; 
 }
 
 
 int main(int argc, char **argv)
 {
-  static xyc *Z; static nde *N;
-  static MX *A;
-  static double *x;
-  long i;
+  static xyc *Z; static nde *N; static MX *A; static double *x, *b;
+  long  m, n, NUM;
   
   initop(argc,argv);
   rectmesh(Z,N);
 
-  ary1(x,dimp2(N)*2+dim1(Z)+1);
-  for (i=1;i<=dimp2(N);i++) x[i] = -0.05;
-  for (i=dimp2(N)+1;i<=dimp2(N)*2;i++) x[i] = -0.05;
-
-  nsA(&A,Z,N);
-  
-  forgammap2(i,"zero" ,Z,N) { x[i] = 0.0;  x[dimp2(N)+i] = 0.0; }
-  forgammap2(i,"gamma",Z,N) { x[i] = 0.05; x[dimp2(N)+i] = 0.0; }
-  
+  m = dimp2(N);
+  n = dim1(Z);
+  NUM = m*2+n;
+  ary1(x,NUM+1); ary1(b,NUM+1);
+  nsA(&A,x,b,Z,N);
+  solver(A,x,b);
   pltp2(x,Z,N);
   sleep(60);
   return 0;

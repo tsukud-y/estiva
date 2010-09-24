@@ -19,7 +19,15 @@ void estiva_AY(MX **AYp, double *V, double *S, xyc *Z, nde *N);
 void estiva_D(MX **Dp, double *S, xyc *Z, nde *N);
 void estiva_HX(MX **HXp, double *S, xyc *Z, nde *N);
 void estiva_HY(MX **HYp, double *S, xyc *Z, nde *N);
-
+void setBCD(double b1, double b2, double c1, double c2, double s);
+double alphaB(long j);
+double  betaB(long j);
+double gammaB(long j);
+double alphaC(long j);
+double  betaC(long j);
+double gammaC(long j);
+  
+extern double Delta;
 
 /*
 //                                   a1    a2    a3    a4    a5    a6

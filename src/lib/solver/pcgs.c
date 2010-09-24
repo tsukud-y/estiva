@@ -52,7 +52,7 @@ int estiva_pcgssolver(void* pA, double* x, double* b)
   ary1(  D, N   )         ;
   ary2(  A, 2*NL, N+2*NL );
   ary2( IA, 2*NL, N+2*NL );
-  ary1(  R, N   )         ;
+  ary1(  R, N+1 )         ;
   ary1(  X, N+1 )         ;  ary1( DD, N+1 );  ary1( P, N+1 );  ary1( Q, N+1 ); 
   ary1(  M, 2*N )         ;
 

@@ -3,77 +3,142 @@
 
 
 #include <stdio.h>
-#include <estiva/mx.h>
-#include <estiva/mesh.h>
-#include <estiva/foreach.h>
-#include <estiva/ary.h>
+#include <stdlib.h>
+#include <math.h>
+#include "estiva/mx.h"
+#include "estiva/mesh.h"
+#include "estiva/foreach.h"
+#include "estiva/ary.h"
 
-//                                   a1    a2    a3    a4    a5    a6
-static double b[] = { 0.0,         -1.0,  0.0, -3.0,  0.0,  4.0,  0.0};
-static double c[] = { 0.0,          0.0, -1.0, -3.0,  4.0,  0.0,  0.0};
-static double d[] = { 0.0,          0.0,  0.0,  4.0, -4.0, -4.0,  4.0};
-static double e[] = { 0.0,          2.0,  0.0,  2.0,  0.0, -4.0,  0.0};
-static double f[] = { 0.0,          0.0,  2.0,  2.0, -4.0,  0.0,  0.0};
+static double be[] = { NAN,         -1.0,  0.0, -3.0,  0.0,  4.0,  0.0, NAN};
+static double ce[] = { NAN,          0.0, -1.0, -3.0,  4.0,  0.0,  0.0, NAN};
+static double de[] = { NAN,          0.0,  0.0,  4.0, -4.0, -4.0,  4.0, NAN};
+static double ee[] = { NAN,          2.0,  0.0,  2.0,  0.0, -4.0,  0.0, NAN};
+static double fe[] = { NAN,          0.0,  2.0,  2.0, -4.0,  0.0,  0.0, NAN};
 
+static double B1, B2, C1, C2;
+double Delta;
 
-static double dij(long i, long j, double B1, double B2, double B3, double C1, double C2, double C3)
-{
-  double dij, alphaBi, betaBi, gammaBi, alphaCi, betaCi, gammaCi;
-  double      alphaBj, betaBj, gammaBj, alphaCj, betaCj, gammaCj;
-
-  alphaBi =     b[i]*B1 +     c[i]*B2;
-  betaBi  = 2.0*e[i]*B1 +     d[i]*B2;
-  gammaBi =     d[i]*B1 + 2.0*f[i]*B2;
-
-  alphaBj =     b[j]*B1 +     c[j]*B2;
-  betaBj  = 2.0*e[j]*B1 +     d[j]*B2;
-  gammaBj =     d[j]*B1 + 2.0*f[j]*B2;
-  
-  alphaCi =     b[i]*C1 +     c[i]*C2;
-  betaCi  = 2.0*e[i]*C1 +     d[i]*C2;
-  gammaCi =     d[i]*C1 + 2.0*f[i]*C2;
-  
-  alphaCj =     b[j]*C1 +     c[j]*C2;
-  betaCj  = 2.0*e[j]*C1 +     d[j]*C2;
-  gammaCj =     d[j]*C1 + 2.0*f[j]*C2;
-
-  dij =
-    +  12.0*(alphaBi*alphaBj + alphaCi*alphaCj)
-    +   4.0*(alphaBi* betaBj +  betaBi*alphaBj + alphaBi*gammaBj * gammaBi*alphaBj)
-    +   4.0*(alphaCi* betaCj +  betaCi*alphaCj + alphaCi*gammaCj * gammaCi*alphaCj)
-    +   1.0*( betaBi*gammaBj + gammaBi* betaBj +  betaCi*gammaCj * gammaCi* betaCj)
-    +   2.0*( betaBi* betaBj + gammaBi*gammaBj +  betaCi* betaCj * gammaCi*gammaCj)
-    ;
-  return dij/12.0;
+void setBCD(double b1, double b2, double c1, double c2, double s){
+  B1 = b1; B2 = b2; C1 = c1; C2 = c2, Delta = s;
 }
 
 
-void estiva_D(MX **Dp, double *S, xyc *Z, nde *N)
+double alphaB(long j)
 {
-  int I, J, i, j, e, a, b, c, A, B, C, n;
-  double delta;
-  static MX *D;
-  static double B1, B2, B3, C1, C2, C3;
+  switch(j){
+  case 1: 
+  case 2: 
+  case 3: 
+  case 4: 
+  case 5: 
+  case 6: return be[j]*B1 + ce[j]*B2;
+  default: abort();
+  }
+  return NAN;
+}
 
-  initmx(D,dimp2(N)+1,28);
 
-  n = dim1(N);
-  for ( e = 1; e <= n; e++ ) {
-    a = N[e].a; b = N[e].b; c = N[e].c; A = N[e].A; B = N[e].B; C = N[e].C;
-    delta = S[e];
-    i = 0;
-    foreach(I) &a, &b, &c, &A, &B, &C, end {
-      ++i; j=0;
-      foreach(J) &a, &b, &c, &A, &B, &C, end {
-        B1 = Z[b].y - Z[c].y; B1 /= 2.0*delta;
-        B2 = Z[c].y - Z[a].y; B2 /= 2.0*delta;
-        B3 = Z[a].y - Z[b].y; B3 /= 2.0*delta;
-        C1 = Z[b].x - Z[c].x; C1 /= 2.0*delta;
-        C2 = Z[c].x - Z[a].x; C2 /= 2.0*delta;
-        C3 = Z[a].x - Z[b].x; C3 /= 2.0*delta;
-        mx(D,I,J) = delta*dij(i,++j, B1, B2, B3, C1, C2, C3);
+double betaB(long j)
+{
+  switch(j){
+  case 1: 
+  case 2: 
+  case 3: 
+  case 4: 
+  case 5: 
+  case 6: return 2.0*ee[j]*B1 + de[j]*B2;
+  default: abort();
+  }
+  return NAN;
+}
+
+
+double gammaB(long j)
+{
+  switch(j){
+  case 1: 
+  case 2: 
+  case 3: 
+  case 4: 
+  case 5: 
+  case 6: return de[j]*B1 + 2.0*fe[j]*B2;
+  default: abort();
+  }
+  return NAN;
+}
+
+double alphaC(long j)
+{
+  switch(j){
+  case 1: 
+  case 2: 
+  case 3: 
+  case 4: 
+  case 5: 
+  case 6: return be[j]*C1 + ce[j]*C2;
+  default: abort();
+  }
+  return NAN;
+}
+
+
+double betaC(long j)
+{
+  switch(j){
+  case 1: 
+  case 2: 
+  case 3: 
+  case 4: 
+  case 5: 
+  case 6: return 2.0*ee[j]*C1 + de[j]*C2;
+  default: abort();
+  }
+  return NAN;
+}
+
+
+double gammaC(long j)
+{
+  switch(j){
+  case 1: 
+  case 2: 
+  case 3: 
+  case 4: 
+  case 5: 
+  case 6: return de[j]*C1 + 2.0*fe[j]*C2;
+  default: abort();
+  }
+  return NAN;
+}
+
+
+static double k(long i, long j)
+{
+  return (Delta/12.0) * ( 12.0  *(alphaB(i)*alphaB(j) + alphaC(i)*alphaC(j))                                             
+			  + 4.0 *(alphaB(i)* betaB(j) +  betaB(i)*alphaB(j) + alphaB(i)*gammaB(j) * gammaB(i)*alphaB(j)) 
+			  + 4.0 *(alphaC(i)* betaC(j) +  betaC(i)*alphaC(j) + alphaC(i)*gammaC(j) * gammaC(i)*alphaC(j)) 
+			  + 1.0 *( betaB(i)*gammaB(j) + gammaB(i)* betaB(j) +  betaC(i)*gammaC(j) * gammaC(i)* betaC(j)) 
+			  + 2.0 *( betaB(i)* betaB(j) + gammaB(i)*gammaB(j) +  betaC(i)* betaC(j) * gammaC(i)*gammaC(j)) );
+}
+
+void estiva_D(MX **Kp, double *S, xyc *Z, nde *N)
+{
+  MX *K; long  a, b, c, A, B, C, e, m, n, I, J, i, j; double s;
+
+  m = dimp2(N); n = dim1(N); initmx(*Kp,m+1,28); K = *Kp;
+
+  for (e=1; e<=n; e++) {
+    a=N[e].a; b=N[e].b; c=N[e].c; A=N[e].A; B=N[e].B; C=N[e].C; s=S[e];
+    setBCD((Z[b].y-Z[c].y)/(2.0*s), (Z[c].y-Z[a].y)/(2.0*s), (Z[c].x-Z[b].x)/(2.0*s), (Z[a].x-Z[c].x)/(2.0*s), s);
+    i=1; 
+    foreach(I)&a,&b,&c,&A,&B,&C,end {
+      j=1;
+      foreach(J)&a,&b,&c,&A,&B,&C,end {
+        mx(K,I,J) += k(i,j);
+        j++;
       }
+      i++;
     }
   }
-  *Dp = D;
 }

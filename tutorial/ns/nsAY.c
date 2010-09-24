@@ -82,7 +82,7 @@ void estiva_AY(MX **AYp, double *V, double *S, xyc *Z, nde *N)
         v[4] = V[A];
         v[5] = V[B];
         v[6] = V[C];
-        mx(AY,I,J) = delta*ayij(i,++j, v, C1, C2, C3);
+        mx(AY,I,J) += delta*ayij(i,++j, v, C1, C2, C3);
       }
     }
   }

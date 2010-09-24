@@ -80,7 +80,7 @@ void estiva_AX(MX **AXp, double *U, double *S, xyc *Z, nde *N)
 	u[4] = U[A];
 	u[5] = U[B];
 	u[6] = U[C];
-	mx(AX,I,J) = delta*axij(i,++j, u, B1, B2, B3);
+	mx(AX,I,J) += delta*axij(i,++j, u, B1, B2, B3);
       }
     }
   }

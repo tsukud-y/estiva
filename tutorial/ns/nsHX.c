@@ -1,69 +1,41 @@
 #include "ns.h"
 #include "fem.h"
 
-
+#include <math.h>
 #include "estiva/mesh.h"
 #include "estiva/foreach.h"
 #include "estiva/ary.h"
 #include "estiva/mx.h"
 
-//                                   a1    a2    a3    a4    a5    a6
-static double b[] = { 0.0,         -1.0,  0.0, -3.0,  0.0,  4.0,  0.0};
-static double c[] = { 0.0,          0.0, -1.0, -3.0,  4.0,  0.0,  0.0};
-static double d[] = { 0.0,          0.0,  0.0,  4.0, -4.0, -4.0,  4.0};
-static double e[] = { 0.0,          2.0,  0.0,  2.0,  0.0, -4.0,  0.0};
-static double f[] = { 0.0,          0.0,  2.0,  2.0, -4.0,  0.0,  0.0};
+static double ad[] = { NAN,         0.0,  0.0,  1.0, NAN};
+static double bd[] = { NAN,         1.0,  0.0, -1.0, NAN};
+static double cd[] = { NAN,         0.0,  1.0, -1.0, NAN};
 
-//                                  a'1   a'2   a'3
-static double ad[] = { 0.0,         0.0,  0.0,  1.0};
-static double bd[] = { 0.0,         1.0,  0.0, -1.0};
-static double cd[] = { 0.0,         0.0,  1.0, -1.0};
-
-
-static double hxij(long i, long j, double B1, double B2, double B3)
+static double hx(long i, long j)
 {
-  double hxij, alphaBi, betaBi, gammaBi;
-
-  alphaBi =     b[i]*B1 +     c[i]*B2;
-  betaBi  = 2.0*e[i]*B1 +     d[i]*B2;
-  gammaBi =     d[i]*B1 + 2.0*f[i]*B2;
-  
-  hxij =
-    +  12.0*(alphaBi*ad[j])
-    +   4.0*( betaBi*ad[j] + alphaBi*bd[j] + gammaBi*ad[j] + alphaBi*cd[j])
-    +   1.0*( betaBi*cd[j] + gammaBi*bd[j])
-    +   2.0*( betaBi*bd[j] + gammaBi*cd[j])
-    ;
-  return hxij/12.0;
+  return (Delta/12.0) * (12.0*(alphaB(i)*ad[j])                                                      
+			 +4.0*( betaB(i)*ad[j] + alphaB(i)*bd[j] + gammaB(i)*ad[j] + alphaB(i)*cd[j]) 
+			 +1.0*( betaB(i)*cd[j] + gammaB(i)*bd[j])                                    
+			 +2.0*( betaB(i)*bd[j] + gammaB(i)*cd[j])                                     );
 }
 
 
-
-void estiva_HX(MX **HXp, double *S, xyc *Z, nde *N)
+void estiva_HX(MX **Hxp, double *S, xyc *Z, nde *N)
 {
-  int I, J, i, j, e, a, b, c, A, B, C, n;
-  double delta;
-  static MX *HX;
-  static double  B1, B2, B3;
+  MX *Hx;long a, b, c, A, B, C, e, m, n, I, J, i, j; double s;
+  m = dimp2(N); n = dim1(N); initmx(*Hxp,m+1,21); Hx = *Hxp;
 
-  initmx(HX,dimp2(N)+1,21);
-
-  n = dim1(N);
-  for ( e = 1; e <= n; e++ ) {
-    a = N[e].a; b = N[e].b; c = N[e].c; A = N[e].A; B = N[e].B; C = N[e].C;
-    delta = S[e];
-    i = 0;
-    foreach(I) &a, &b, &c, &A, &B, &C, end {
-      ++i; j=0;
-      foreach(J) &a, &b, &c, end {
-	B1 = Z[b].y - Z[c].y; B1 /= 2.0*delta;
-	B2 = Z[c].y - Z[a].y; B2 /= 2.0*delta;
-	B3 = Z[a].y - Z[b].y; B3 /= 2.0*delta;
-	mx(HX,I,J) = delta*hxij(i,++j, B1, B2, B3);
+  for(e=1;e<=n;e++){
+    a=N[e].a; b=N[e].b; c=N[e].c; A=N[e].A; B=N[e].B; C=N[e].C; s=S[e];
+    setBCD((Z[b].y-Z[c].y)/(2.0*s), (Z[c].y-Z[a].y)/(2.0*s), NAN, NAN, s);
+    i=1; 
+    foreach(I)&a,&b,&c,&A,&B,&C,end {
+      j=1;
+      foreach(J)&a,&b,&c,end {
+        mx(Hx,I,J) += hx(i,j);
+        j++;
       }
+      i++;
     }
   }
-  *HXp = HX;
 }
-
-

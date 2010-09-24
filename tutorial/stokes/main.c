@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <estiva/op.h>
-#include <estiva/ary.h>
-#include <estiva/mx.h>
-#include <estiva/solver.h>
-#include <estiva/mesh.h>
-#include <estiva/tmpfile.h>
+#include "estiva/op.h"
+#include "estiva/ary.h"
+#include "estiva/mx.h"
+#include "estiva/solver.h"
+#include "estiva/mesh.h"
+#include "estiva/tmpfile.h"
 
 
 #define length(a,b) \
