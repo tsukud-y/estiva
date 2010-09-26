@@ -25,13 +25,16 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
 {
   FILE *pp;
   static double *u, *v;
-  long e, m, n, dim1N;
+  long e, m, n, dim1N, i;
   double x0, y0;
 
   pp = popen("gnuplot","w");
 
   u = x;
   v = x + dimp2(N);
+
+  for (i=1; i<=dimp2(N); i++) u[i]/=10.0;
+  for (i=1; i<=dimp2(N); i++) v[i]/=10.0;
 
   dim1N = dim1(N);
   for (e=1; e<=dim1N; e++)

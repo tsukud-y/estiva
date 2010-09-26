@@ -10,7 +10,8 @@ void estiva_femdelta(double **Sp, xyc *Z, nde *N)
   double xi, xj, xk, yi, yj, yk;
 
   e = dim1(N);
-  ary1(S,e+1);
+  ary1(*Sp,e+1);
+  S = *Sp;
 
   for( i=1; i<=e; i++ ){
     xi = Z[N[i].a].x;
@@ -22,5 +23,4 @@ void estiva_femdelta(double **Sp, xyc *Z, nde *N)
     S[i] = xi*yj+xj*yk+xk*yi-yi*xj-yj*xk-yk*xi;
     S[i] /= 2.0;
   }
-  *Sp = S;
 }

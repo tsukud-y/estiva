@@ -214,9 +214,9 @@ static void boundary_condition(nde *N, xyc *Mid, MX *A, double *b)
   }
 
   
-  for(j=1;j<=NUM;j++) mx(A,NUM,j) = 0.0;
-  mx(A,NUM,NUM) = 1.0;
-  b[NUM] = 0.0;
+  for(j=1;j<=NUM;j++) mx(A,2*m+1,j) = 0.0;
+  mx(A,2*m+1,2*m+1) = 1.0;
+  b[2*m+1] = 0.0;
 
 }
 
@@ -227,18 +227,16 @@ int main(int argc, char** argv)
   static double *Fx, *Fy, *Ux, *Uy, *b, *x, *p, *S;
   static xyc *Z, *Mid; static nde *N;
   
-  double t=0.1;
-  int             i,  k, NUM, m, n;
+  double t=0.001;
+  int             i, j, k, NUM, m, n;
   FILE *fp, *tfp, *pp, *pfp, *ppp;
 
   initop(argc,argv);
 
-  fp = stdfp();
+  fp = fopen("stokes.mesh","r");
   fp2mesh(fp, Z, N);
   fclose(fp);
-
   if(defop("-t")) t=atof(getop("-t"));
-  fprintf(stderr,"t= %f\n",t);
 
   Mid = np1(Z,N);
   S   = S_(Z,N);
@@ -249,6 +247,9 @@ int main(int argc, char** argv)
 
   M  = M__(Mid,N,S);
   K  = K__(Mid,Z,N,S);
+  for(i=1;i<=m;i++) {
+    for(j=1;j<=m;j++)if(mx(K,i,j)!=0.0) printf("%d %d %f\n",i,j,mx(K,i,j));
+  }
   Hx = Hx__(Mid,Z,N);
   Hy = Hy__(Mid,Z,N);
 
@@ -256,7 +257,7 @@ int main(int argc, char** argv)
   ary1(x,NUM+1); ary1(p,n+1);
   
   pp = popen("gnuplot","w");
-  ppp= popen("gnuplot","w");
+
 
 
   for(k=1;;k++){
@@ -274,12 +275,6 @@ int main(int argc, char** argv)
     fprintf(pp,"plot \"%s\" w l\n",tmpname(tfp));
     fflush(pp);
     tmpclose(tfp);
-
-    pfp = tmpopen();
-    plt(pfp,Mid,Z,N,p);
-    fprintf(ppp,"splot \"%s\" w l\n",tmpname(pfp));
-    fflush(ppp);
-    tmpclose(pfp);
 
     for(i=1;i<=m;i++){ Ux[i] = x[i]; Uy[i] = x[i+m];}
     fprintf(stderr,"k = %d\n",k);

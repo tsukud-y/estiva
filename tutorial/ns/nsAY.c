@@ -73,9 +73,9 @@ void estiva_AY(MX **AYp, double *V, double *S, xyc *Z, nde *N)
     foreach(I) &a, &b, &c, &A, &B, &C, end {
       ++i; j=0;
       foreach(J) &a, &b, &c, &A, &B, &C, end {
-        C1 = Z[b].x - Z[c].x; C1 /= 2.0*delta;
-        C2 = Z[c].x - Z[a].x; C2 /= 2.0*delta;
-        C3 = Z[a].x - Z[b].x; C3 /= 2.0*delta;
+        C1 = Z[c].x - Z[b].x; C1 /= 2.0*delta;
+        C2 = Z[a].x - Z[c].x; C2 /= 2.0*delta;
+        C3 = Z[b].x - Z[a].x; C3 /= 2.0*delta;
         v[1] = V[a];
         v[2] = V[b];
         v[3] = V[c];
