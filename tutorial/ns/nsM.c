@@ -3,8 +3,7 @@
 
 double mij(long i, long j)
 {
-  double val;
-  val = (Delta/180.0)*
+  return  (Delta/180.0)*
     (180.0*(a(i)*a(j))                                                                                     +
      60.0 *(a(i)*b(j) + b(i)*a(j) + a(i)*c(j) + c(i)*a(j))                                                 +
      15.0 *(a(i)*d(j) + d(i)*a(j) + b(i)*c(j) + c(i)*b(j))                                                 +
@@ -14,5 +13,4 @@ double mij(long i, long j)
      2.0  *(d(i)*d(j) + e(i)*f(j) + f(i)*e(j))                                                             +
      3.0  *(d(i)*e(j) + e(i)*d(j) + d(i)*f(j) + f(i)*d(j))                                                 +
      12.0 *(e(i)*e(j) + f(i)*f(j))                                                                         );
-  return val;
 }
