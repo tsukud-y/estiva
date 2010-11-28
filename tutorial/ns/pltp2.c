@@ -25,7 +25,8 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
 {
   FILE *pp;
   static double *u, *v;
-  long e, m, n, dim1N, i;
+  long e, m, dim1N, i;
+  int n;
   double x0, y0;
 
   pp = popen("gnuplot","w");
