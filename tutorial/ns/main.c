@@ -14,10 +14,10 @@
 #include "estiva/solver.h"
 
 
-extern double mij(long i, long j);
-extern double kij(long i, long j);
-extern double hxij(long i, long j);
-extern double hyij(long i, long j);
+double mij(long i, long j);
+double kij(long i, long j);
+double hxij(long i, long j);
+double hyij(long i, long j);
 
 void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
 {
@@ -48,10 +48,11 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
 {
   static MX *A;
   long i, j, NUM, m, n;
-  double t = 0.001, Re = 1.0;
+  double t = 0.0001, Re = 1.0;
 
   m = dimp2(N); n = dim1(Z); NUM = m*2+n;
   initmx(*Ap, NUM+1, 50); A = *Ap; 
+
   for(i=1;i<=m;i++) for(j=1; j<=m; j++) mx(A,  i,   j) = mx(M,i,j)/t  + mx(K,i,j)/Re;
   for(i=1;i<=m;i++) for(j=1; j<=m; j++) mx(A,m+i, m+j) = mx(M,i,j)/t  + mx(K,i,j)/Re;
   for(i=1;i<=m;i++) for(j=1; j<=n; j++)	mx(A,i,2*m+j)   = -mx(Hx,i,j);
@@ -64,26 +65,30 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
 
 int main(int argc, char **argv)
 {
-  static xyc *Z; static nde *N; static MX *A, *K, *M, *Hx, *Hy; static double *x, *b, *S;
+  static xyc *Z; static nde *N; 
+  static MX *A, *K, *M, *Hx, *Hy; static double *x, *b, *S;
   long  i, k, m, n, NUM;
   
   initop(argc,argv);
   rectmesh(Z,N);
   m = dimp2(N); n = dim1(Z); NUM = m*2+n;
 
-  ary1(x,NUM+1); ary1(b,NUM+1);
+  ary1(x,NUM+1); 
+  ary1(b,NUM+1);
 
-  for(k=1;k<=4;k++) {
-    if (S  == NULL) { femdelta(S,Z,N); setZNS(Z,N,S);}
-    if (M  == NULL) genP2P2mx(&M,mij);
-    if (K  == NULL) genP2P2mx(&K,kij);
-    if (Hx == NULL) genP2P1mx(&Hx,hxij);
-    if (Hy == NULL) genP2P1mx(&Hy,hyij);
+  femdelta(S,Z,N); 
+  setZNS(Z,N,S);
+  genP2P2mx(&M,mij);
+  genP2P2mx(&K,kij);
+  genP2P1mx(&Hx,hxij);
+  genP2P1mx(&Hy,hyij);
+  nsA(&A,x,b,Z,N,K,M,Hx,Hy);
 
-    nsA(&A,x,b,Z,N,K,M,Hx,Hy);
+  for(k=1;k<=1;k++) {
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
-  }
+    for ( i = 0; i<=dim1(x); i++ )  b[i] = x[i];
+   }
   pltp2(x,Z,N);
   sleep(60);
   return 0;
