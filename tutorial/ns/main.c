@@ -114,6 +114,7 @@ int main(int argc, char **argv)
   for ( k = 1; k <= 10; k++ ) {
     b_(b,Z,N,M,x);
     boundary_condition(Z,N,A,b);
+    pltmx(A);
     solver(A,x,b);
     for ( i = 1; i <= m * 2; i++ ) x[i] *= 40.0;
     pltp2(x,Z,N);
