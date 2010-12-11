@@ -1,0 +1,28 @@
+<html><heapd>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+CLONEMX(3)                ESTIVA ライブラリ関数マニュアル                CLONEMX(3)
+
+名称
+     clonemx - 疎行列の複製
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/mx.h"
+
+     void
+     clonemx(MX * B, MX *A);
+
+解説
+     clonemx() 関数は疎行列の複製を作ります。
+     clonemx(B,A);　とすると、疎行列Bは疎行列Aの複製
+     となります。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     initmx(3), mx(3)
