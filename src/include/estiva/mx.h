@@ -22,15 +22,17 @@ typedef struct {
 #define matvecmx(A,alpha,x,beta,y) estiva_matvecmx(A,alpha,x,beta,y)
 #define psolvemx(A,pivot,LU,D,x,b) estiva_psolvemx(A,pivot,LU,D,x,b)
 #define pltmx(A)                   estiva_pltmx(A)
+#define clearmx(A)                  estiva_clearmx(A)
 
 
-extern void    estiva_initmx(MX **Ap, long i, long j);
-extern void    estiva_transmx(MX **ATp, MX *A);
-extern void    estiva_clonemx(MX **ATp, MX *A);
-extern void    estiva_mulmx(double **tp, MX *A, double *x);
-extern double *estiva_mx(MX *T, long i, long j);
-extern void    estiva_matvecmx(MX *A, double *alpha, double *x, double *beta, double *y);
-extern void    estiva_psolvemx(MX *A, CRS *pivot, MX *LU, double *D, double *x, double *b);
-extern void    estiva_pltmx(MX *A);
+void    estiva_initmx(MX **Ap, long i, long j);
+void    estiva_transmx(MX **ATp, MX *A);
+void    estiva_clonemx(MX **ATp, MX *A);
+void    estiva_mulmx(double **tp, MX *A, double *x);
+double *estiva_mx(MX *T, long i, long j);
+void    estiva_matvecmx(MX *A, double *alpha, double *x, double *beta, double *y);
+void    estiva_psolvemx(MX *A, CRS *pivot, MX *LU, double *D, double *x, double *b);
+void    estiva_pltmx(MX *A);
+void    estiva_clearmx(MX *A);
 
 #endif
