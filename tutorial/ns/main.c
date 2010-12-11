@@ -33,7 +33,7 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
 
   forgammap2(i,"gamma",Z,N) for(j=1; j<=NUM; j++) mx(A,i,j)   = 0.0; 
   forgammap2(i,"gamma",Z,N) mx(A,i,i)     = 1.0;
-  forgammap2(i,"gamma",Z,N) b[i]   = 1.0;  
+  forgammap2(i,"gamma",Z,N) b[i]   = 0.1;
   forgammap2(i,"gamma",Z,N) for(j=1; j<=NUM; j++) mx(A,m+i,j) = 0.0;
   forgammap2(i,"gamma",Z,N) mx(A,m+i,m+i) = 1.0;
   forgammap2(i,"gamma",Z,N) b[m+i] = 0.0; 
@@ -43,12 +43,39 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
   i = NUM; b[i] = 1.0; 
 }
 
+void b_(double *b, xyc *Z, nde *N, MX *M, double *x)
+{
+  static double *bx, *xx, *by, *xy;
+  long i, j, m, n;
+
+  m = dimp2(N); n = dim1(Z); 
+
+  ary1(bx,m+1);
+  ary1(by,m+1);
+  ary1(xx,m+1);
+  ary1(xy,m+1);
+
+  
+  for ( i = 1; i <= 2*m+n; i++ ) b[i] = 0.0;
+
+  for ( i = 1; i <= m; i++ ) {
+    xx[i] = x[i];
+    xy[i] = x[i+m];
+  }
+  mulmx(bx,M,xx);
+  mulmx(by,M,xy);
+  for ( i = 1; i <= m; i++ ) {
+    b[i]   = bx[i];
+    b[i+m] = by[i];
+  }
+}
+
 
 void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy)
 {
   static MX *A;
   long i, j, NUM, m, n;
-  double t = 0.0001, Re = 1.0;
+  double t = 0.001, Re = 1.0;
 
   m = dimp2(N); n = dim1(Z); NUM = m*2+n;
   initmx(*Ap, NUM+1, 50); A = *Ap; 
@@ -84,12 +111,15 @@ int main(int argc, char **argv)
   genP2P1mx(&Hy,hyij);
   nsA(&A,x,b,Z,N,K,M,Hx,Hy);
 
-  for(k=1;k<=1;k++) {
+  for ( k = 1; k <= 10; k++ ) {
+    b_(b,Z,N,M,x);
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
-    for ( i = 0; i<=dim1(x); i++ )  b[i] = x[i];
+    for ( i = 1; i <= m * 2; i++ ) x[i] *= 40.0;
+    pltp2(x,Z,N);
+    for ( i = 1; i <= m * 2; i++ ) x[i] /= 40.0;
+    sleep(5);
    }
-  pltp2(x,Z,N);
-  sleep(60);
+
   return 0;
 }
