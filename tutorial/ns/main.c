@@ -1,6 +1,7 @@
 #include "ns.h"
 #include "fem.h"
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -14,10 +15,11 @@
 #include "estiva/solver.h"
 
 
-double mij(long i, long j);
-double kij(long i, long j);
+double  mij(long i, long j);
+double  kij(long i, long j);
 double hxij(long i, long j);
 double hyij(long i, long j);
+
 
 void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
 {
@@ -64,6 +66,7 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
   mx(A,i,i) = 1.0; 
   b[i] = 1.0; 
 }
+
 
 void b_(double *b, xyc *Z, nde *N, MX *M, double *x)
 {
@@ -115,7 +118,6 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
 }
 
 
-
 int main(int argc, char **argv)
 {
   static xyc *Z; static nde *N; 
@@ -124,7 +126,10 @@ int main(int argc, char **argv)
   
   initop(argc,argv);
   rectmesh(Z,N);
-  m = dimp2(N); n = dim1(Z); NUM = m*2+n;
+
+  m   = dimp2(N); 
+  n   = dim1(Z); 
+  NUM = m*2 + n;
 
   ary1(x,NUM+1); 
   ary1(b,NUM+1);
@@ -144,8 +149,7 @@ int main(int argc, char **argv)
     for ( i = 1; i <= m * 2; i++ ) x[i] *= 40.0;
     pltp2(x,Z,N);
     for ( i = 1; i <= m * 2; i++ ) x[i] /= 40.0;
-    sleep(5);
    }
-
+  sleep(30);
   return 0;
 }
