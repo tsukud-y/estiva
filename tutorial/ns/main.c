@@ -38,9 +38,10 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
   forgammap2(i,"gamma",Z,N) mx(A,m+i,m+i) = 1.0;
   forgammap2(i,"gamma",Z,N) b[m+i] = 0.0; 
 
-  i = NUM; for(j=1; j<=NUM; j++) mx(A,i,j) = 0.0;
-  i = NUM; mx(A,i,i) = 1.0; 
-  i = NUM; b[i] = 1.0; 
+  i = NUM;
+  for(j=1; j<=NUM; j++) mx(A,i,j) = 0.0;
+  mx(A,i,i) = 1.0; 
+  b[i] = 1.0; 
 }
 
 void b_(double *b, xyc *Z, nde *N, MX *M, double *x)
