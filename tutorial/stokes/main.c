@@ -126,22 +126,21 @@ static MX* A__(xyc *Mid, nde *N, MX *M, double t, MX *K, MX *Hx, MX *Hy)
 {
   static MX *A;
   long   i, j, NUM, m, n;
-  m = dim1(Mid);
-  n = dim1(N);
-  NUM = m*2+n;
-  initmx(A, NUM+1,8);
 
-  for(i=1;i<=m;i++) for(j=1; j<=m; j++){
+  m   = dim1(Mid);
+  n   = dim1(N);
+  NUM = m*2+n;
+  initmx(A, NUM+1, 8);
+
+  for ( i = 1; i <= m; i++ ) for ( j = 1; j <= m; j++ ) {
     mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j);
     mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j);
   }
-  for(i=1;i<=m;i++) for(j=1; j<=n; j++){
-    mx(A,i,2*m+j) = -t*mx(Hx,i,j);
-    mx(A,2*m+j,i) = -t*mx(Hx,i,j);
-  }
-  for(i=1;i<=m;i++) for(j=1; j<=n; j++){
-    mx(A,m+i,2*m+j) = -t*mx(Hy,i,j);
-    mx(A,2*m+j,m+i) = -t*mx(Hy,i,j);
+  for ( i = 1; i <= m; i++ ) for ( j = 1; j <= n; j++ ) {
+    mx(A,    i,2*m+j) = -t*mx(Hx,i,j);
+    mx(A,2*m+j,    i) = -t*mx(Hx,i,j);
+    mx(A,  m+i,2*m+j) = -t*mx(Hy,i,j);
+    mx(A,2*m+j,  m+i) = -t*mx(Hy,i,j);
   }
   return A;
 }

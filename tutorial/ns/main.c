@@ -97,15 +97,21 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
   long i, j, NUM, m, n;
   double t = 0.001, Re = 1.0;
 
-  m = dimp2(N); n = dim1(Z); NUM = m*2+n;
+  m   = dimp2(N); 
+  n   = dim1(Z); 
+  NUM = m*2+n;
   initmx(*Ap, NUM+1, 50); A = *Ap; 
 
-  for(i=1;i<=m;i++) for(j=1; j<=m; j++) mx(A,  i,   j) = mx(M,i,j)/t  + mx(K,i,j)/Re;
-  for(i=1;i<=m;i++) for(j=1; j<=m; j++) mx(A,m+i, m+j) = mx(M,i,j)/t  + mx(K,i,j)/Re;
-  for(i=1;i<=m;i++) for(j=1; j<=n; j++)	mx(A,i,2*m+j)   = -mx(Hx,i,j);
-  for(i=1;i<=m;i++) for(j=1; j<=n; j++) mx(A,2*m+j,i)   = -mx(Hx,i,j);
-  for(i=1;i<=m;i++) for(j=1; j<=n; j++) mx(A,m+i,2*m+j) = -mx(Hy,i,j);
-  for(i=1;i<=m;i++) for(j=1; j<=n; j++) mx(A,2*m+j,m+i) = -mx(Hy,i,j);
+  for ( i = 1; i <= m; i++ ) for ( j = 1; j <= m; j++ ) {
+      mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j);
+      mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j);
+    }
+  for ( i = 1; i <= m; i++ ) for ( j = 1; j <= n; j++ ) {
+      mx(A,    i,2*m+j) = -t*mx(Hx,i,j);
+      mx(A,2*m+j,    i) = -t*mx(Hx,i,j);
+      mx(A,  m+i,2*m+j) = -t*mx(Hy,i,j);
+      mx(A,2*m+j,  m+i) = -t*mx(Hy,i,j);
+    }
 }
 
 
@@ -136,7 +142,7 @@ int main(int argc, char **argv)
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
     for ( i = 1; i <= m * 2; i++ ) x[i] *= 40.0;
-    pltp1(x,Z,N);
+    pltp2(x,Z,N);
     for ( i = 1; i <= m * 2; i++ ) x[i] /= 40.0;
     sleep(5);
    }
