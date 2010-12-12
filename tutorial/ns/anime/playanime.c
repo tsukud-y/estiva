@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <unistd.h>
 
 int main() {
   FILE *pp, *fp;
@@ -10,6 +10,7 @@ int main() {
   pp = popen("gnuplot","w");
   
   while (1) {
+    static long k = 0;
     sprintf(filename,"%ld.gnuplot",sequence++);
     fp = fopen(filename,"r");
     if ( NULL == fp ) return 0;
@@ -19,7 +20,9 @@ int main() {
     }
     fclose(fp);
     fflush(pp);
-    sleep(1);
+    printf("k = %ld\n",k++);
+    fflush(stdout);
+    usleep(100);
   }
   return 0;
 }
