@@ -69,8 +69,24 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
 }
 
 
-void b_(double *b, xyc *Z, nde *N, MX *M, double *x, double t)
+void nsRhs(double *b, xyc *Z, nde *N, MX *M, double *x, double t)
 {
+  long   i, j, NUM, m, n;
+
+  m = dimp2(N);
+  n = dim1(Z);
+
+  NUM = m*2+n;
+
+  for( i = 1; i <= NUM; i++ ) b[i] = 0.0;
+
+  for( i = 1; i <= m; i++ ) for ( j = 1; j <= m; j++ ) {
+      b[  i] += mx(M,i,j)*x[  j];
+      b[m+i] += mx(M,i,j)*x[m+j];
+    }
+
+
+  /*
   static int init = 0;
   static MX *M2;
 
@@ -83,11 +99,12 @@ void b_(double *b, xyc *Z, nde *N, MX *M, double *x, double t)
     initmx(M2, 2*m+n, 50);
     
     for ( i = 1; i <= m; i++ ) for ( j = 1; j <=m; j++ ) {
-	mx(M2,i,j) = mx(M,i,j);
-	mx(M2,i+m,j+m) = mx(M,i,j);
+	mx(M2,  i,  j) = mx(M,i,j);
+	mx(M2,m+i,m+j) = mx(M,i,j);
       }
   }
   mulmx(b,M2,x);
+  */
 }
 
 
@@ -144,7 +161,7 @@ int main(int argc, char **argv)
     nsAX(AX,x,S,Z,N);
     nsAY(AY,x+m,S,Z,N);
     nsA(&A,x,b,Z,N,K,M,Hx,Hy,AX,AY,t);
-    b_(b,Z,N,M,x,t);
+    nsRhs(b,Z,N,M,x,t);
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
    }

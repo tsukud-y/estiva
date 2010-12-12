@@ -145,25 +145,22 @@ void stokesA(MX **Ap, xyc *Mid, nde *N, MX *M, double tau, MX *K, MX *Hx, MX *Hy
 }
 
 
-static double* b_(xyc *Mid, nde *N,MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy)
+void stokesRhs(double *b, xyc *Mid, nde *N,MX *M,double t,double *Fx,double *Fy,double *Ux, double *Uy, double *x)
 {
-  static double *b;
-  long   i, NUM, m, n;
+  long   i, j, NUM, m, n;
 
   m = dim1(Mid);
   n = dim1(N);
 
   NUM = m*2+n;
-  ary1(b,NUM+1);
-  
 
-  for(i=1;i<=m;i++){
-    b[i]   = t*mx(M,i,i)*Fx[i] + mx(M,i,i)*Ux[i];
-    b[m+i] = t*mx(M,i,i)*Fy[i] + mx(M,i,i)*Uy[i];
+  for( i = 1; i <= NUM; i++ ) b[i] = 0.0;
+
+  for( i = 1; i <= m; i++ ) for ( j = 1; j <= m; j++ ) {
+    b[  i] += mx(M,i,j)*x[  j];
+    b[m+i] += mx(M,i,j)*x[m+j];
   }
 
-  for(i=1;i<=n;i++) b[i+2*m] = 0.0;
-  return b;
 }
 
 static void boundary_condition(nde *N, xyc *Mid, MX *A, double *b)
@@ -252,7 +249,7 @@ int main(int argc, char** argv)
   Hy = Hy__(Mid,Z,N);
 
   ary1(Fx,m+1);  ary1(Fy,m+1);  ary1(Ux,m+1);  ary1(Uy,m+1);
-  ary1(x,NUM+1); ary1(p,n+1);
+  ary1(x,NUM+1); ary1(p,n+1);   ary1(b,NUM+1);
   
   pp = popen("gnuplot","w");
 
@@ -261,7 +258,7 @@ int main(int argc, char** argv)
   for(k=1;;k++){
 
     stokesA(&A, Mid, N, M,t,K,Hx,Hy);
-    b = b_(Mid,N,M,t,Fx,Fy,Ux,Uy);
+    stokesRhs(b,Mid,N,M,t,Fx,Fy,Ux,Uy,x);
 
     boundary_condition(N,Mid,A,b);
 
