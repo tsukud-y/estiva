@@ -14,7 +14,7 @@ SOLVER(3)              ESTIVA ライブラリ関数マニュアル              SOLVER(3)
      #include "estiva/solver.h"
 
      void
-     solver(void *A, void *x, void *b);
+     solver(MX *A, double *x, double *b);
 
 解説
      solver() 関数は連立一次方程式 Ax = b を満たす x を求めます。
@@ -24,12 +24,15 @@ SOLVER(3)              ESTIVA ライブラリ関数マニュアル              SOLVER(3)
      指定することが出来ます。initop()関数による引数データの
      イニシャライズが必要です。
      
-     -solver pcgs  ... 前処理付き双共役勾配法(デフォルト)
-     -solver gauss ... ガウスの消去法
-     -solver blu   ... 帯LU分解
+     -solver bicg       ...  BiCG法
+     -solver gauss      ...  ガウスの消去法
+     -solver blu        ...  帯LU分解
+     -solver cgs        ...  CGS法 
+     -solver bicgstab   ...  BiCGstab法
+     指定なし (pcgs)    ...  前処理付き双共役勾配法(デフォルト)
 
 戻り値
      戻り値はありません。
 
 関連項目
-     ary1(3), ary2(3), initop(3)
+     ary1(3), initmx(3), initop(3)
