@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 #include "estiva/mesh.h"
 #include "estiva/ary.h"
 #include "estiva/op.h"
@@ -68,37 +69,40 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
 }
 
 
-void b_(double *b, xyc *Z, nde *N, MX *M, double *x)
+void b_(double *b, xyc *Z, nde *N, MX *M, double *x, double t)
 {
-  static double *bx, *xx, *by, *xy;
-  long i, j, m, n;
+  static double *Ux, *Uy, *bx, *by;
+  long i, m, n;
 
-  m = dimp2(N); n = dim1(Z); 
+  m = dimp2(N); 
+  n = dim1(Z); 
 
-  ary1(xx,m+1);
-  ary1(xy,m+1);
-
-  
-  for ( i = 1; i <= 2*m+n; i++ ) b[i] = 0.0;
+  ary1(Ux,m+1);
+  ary1(Uy,m+1);
 
   for ( i = 1; i <= m; i++ ) {
-    xx[i] = x[i];
-    xy[i] = x[i+m];
+    Ux[i] = x[i];
+    Uy[i] = x[i+m];
   }
-  mulmx(bx,M,xx);
-  mulmx(by,M,xy);
+
+  mulmx(bx,M,Ux);
+  mulmx(by,M,Uy);
+
   for ( i = 1; i <= m; i++ ) {
-    b[i]   = bx[i];
-    b[i+m] = by[i];
+    b[i  ] = t*bx[i];
+    b[i+m] = t*by[i];
   }
+
+  for ( i = 1; i <= n; i++ ) b[i + 2*m] = 0.0;
+
 }
 
 
-void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy)
+void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy, MX *AX, MX *AY, double t)
 {
   static MX *A;
   long i, j, NUM, m, n;
-  double t = 0.001, Re = 1.0;
+  double Re = 1.0;
 
   m   = dimp2(N); 
   n   = dim1(Z); 
@@ -106,8 +110,8 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
   initmx(*Ap, NUM+1, 50); A = *Ap; 
 
   for ( i = 1; i <= m; i++ ) for ( j = 1; j <= m; j++ ) {
-      mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j);
-      mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j);
+      mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j)/Re + 0.0*t*mx(AX,i,j);
+      mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j)/Re + 0.0*t*mx(AY,i,j);
     }
   for ( i = 1; i <= m; i++ ) for ( j = 1; j <= n; j++ ) {
       mx(A,    i,2*m+j) = -t*mx(Hx,i,j);
@@ -121,9 +125,10 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
 int main(int argc, char **argv)
 {
   static xyc *Z; static nde *N; 
-  static MX *A, *K, *M, *Hx, *Hy; static double *x, *b, *S;
-  long  i, k, m, n, NUM;
-  
+  static MX *A, *K, *M, *Hx, *Hy, *AX, *AY; static double *x, *b, *S;
+  long  i, k, kn = 1, m, n, NUM;
+  double t = 0.001;
+
   initop(argc,argv);
   rectmesh(Z,N);
 
@@ -140,16 +145,18 @@ int main(int argc, char **argv)
   genP2P2mx(&K,kij);
   genP2P1mx(&Hx,hxij);
   genP2P1mx(&Hy,hyij);
-  nsA(&A,x,b,Z,N,K,M,Hx,Hy);
 
-  for ( k = 1; k <= 10; k++ ) {
-    b_(b,Z,N,M,x);
+  
+  if ( defop("-kn") ) kn = atoi(getop("-kn"));
+  for ( k = 1; k <= kn; k++ ) {
+    nsAX(AX,x,S,Z,N);
+    nsAY(AY,x+m,S,Z,N);
+    nsA(&A,x,b,Z,N,K,M,Hx,Hy,AX,AY,t);
+    b_(b,Z,N,M,x,t);
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
-    for ( i = 1; i <= m * 2; i++ ) x[i] *= 40.0;
-    pltp2(x,Z,N);
-    for ( i = 1; i <= m * 2; i++ ) x[i] /= 40.0;
    }
+  pltp2(x,Z,N);
   sleep(30);
   return 0;
 }
