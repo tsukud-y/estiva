@@ -168,8 +168,7 @@ int main(int argc, char **argv)
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
     printf("kn - k = %ld\n",kn-k);
+    pltp2(x,Z,N);
    }
-  pltp2(x,Z,N);
-  sleep(30);
   return 0;
 }

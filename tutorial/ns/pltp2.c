@@ -32,8 +32,14 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
   int n;
   double x0, y0;
   double scale = 1.0;
+  static long sequence = 0;
+  static char filename[400];
+  long arrow = 1;
 
-  pp = popen("gnuplot","w");
+  //pp = popen("gnuplot","w");
+  sprintf(filename,"anime/%ld.gnuplot",sequence++);
+  pp = fopen(filename,"w");
+
 
   u = x;
   v = x + dimp2(N);
@@ -43,7 +49,7 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
   dim1N = dim1(N);
   for (e=1; e<=dim1N; e++)
     foreach(n) &N[e].a, &N[e].b, &N[e].c, end {
-      fprintf(pp,"set arrow from %f,%f to %f,%f\n",Z[n].x,Z[n].y,Z[n].x+u[n]*scale,Z[n].y+v[n]*scale);
+      fprintf(pp,"set arrow %ld from %f,%f to %f,%f\n",arrow++,Z[n].x,Z[n].y,Z[n].x+u[n]*scale,Z[n].y+v[n]*scale);
       if ( Z[n].label != NULL ) 
 	fprintf(pp,"set label \"%s\" at %f, %f;\n",Z[n].label, Z[n].x, Z[n].y);
     }
@@ -54,15 +60,16 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
     static char *label="zero";
     m = N[e].A;
     x0 = (Z[N[e].b].x + Z[N[e].c].x)/2.0, y0 = (Z[N[e].b].y + Z[N[e].c].y)/2.0;
-    fprintf(pp,"set arrow from %f,%f to %f,%f\n",x0,y0,x0+u[m]*scale,y0+v[m]*scale);
+    fprintf(pp,"set arrow %ld from %f,%f to %f,%f\n",arrow++,x0,y0,x0+u[m]*scale,y0+v[m]*scale);
     if ( (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label)) ||
+
          (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label))  ) {
       if (Z[N[e].b].label && Z[N[e].c].label) 
 	fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
     }
     m = N[e].B;
     x0 = (Z[N[e].c].x + Z[N[e].a].x)/2.0, y0 = (Z[N[e].c].y + Z[N[e].a].y)/2.0;
-    fprintf(pp,"set arrow from %f,%f to %f,%f\n",x0,y0,x0+u[m]*scale,y0+v[m]*scale);
+    fprintf(pp,"set arrow %ld from %f,%f to %f,%f\n",arrow++,x0,y0,x0+u[m]*scale,y0+v[m]*scale);
     if ( (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label)) ||
          (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label))  ) {
       if (Z[N[e].c].label && Z[N[e].a].label)
@@ -71,7 +78,7 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
 
     m = N[e].C;
     x0 = (Z[N[e].a].x + Z[N[e].b].x)/2.0, y0 = (Z[N[e].a].y + Z[N[e].b].y)/2.0;
-    fprintf(pp,"set arrow from %f,%f to %f,%f\n",x0,y0,x0+u[m]*scale,y0+v[m]*scale);
+    fprintf(pp,"set arrow %ld from %f,%f to %f,%f\n",arrow++,x0,y0,x0+u[m]*scale,y0+v[m]*scale);
     if ( (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label)) ||
          (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label))  ) {
       if (Z[N[e].a].label && Z[N[e].b].label)
@@ -83,4 +90,5 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
   pltmsh(pp,Z,N);
   fprintf(pp,"e\n");
   fflush(pp);
+  fclose(pp);
 }
