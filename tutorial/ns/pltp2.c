@@ -41,20 +41,39 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
   for (e=1; e<=dim1N; e++)
     foreach(n) &N[e].a, &N[e].b, &N[e].c, end {
       fprintf(pp,"set arrow from %f,%f to %f,%f\n",Z[n].x,Z[n].y,Z[n].x+u[n],Z[n].y+v[n]);
+      if ( Z[n].label != NULL ) 
+	fprintf(pp,"set label \"%s\" at %f, %f;\n",Z[n].label, Z[n].x, Z[n].y);
     }
 
+
+
   for (e=1; e<=dim1N; e++) {
+    static char *label="zero";
     m = N[e].A;
     x0 = (Z[N[e].b].x + Z[N[e].c].x)/2.0, y0 = (Z[N[e].b].y + Z[N[e].c].y)/2.0;
     fprintf(pp,"set arrow from %f,%f to %f,%f\n",x0,y0,x0+u[m],y0+v[m]);
-
+    if ( (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label)) ||
+         (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label))  ) {
+      if (Z[N[e].b].label && Z[N[e].c].label) 
+	fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+    }
     m = N[e].B;
     x0 = (Z[N[e].c].x + Z[N[e].a].x)/2.0, y0 = (Z[N[e].c].y + Z[N[e].a].y)/2.0;
     fprintf(pp,"set arrow from %f,%f to %f,%f\n",x0,y0,x0+u[m],y0+v[m]);
+    if ( (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label)) ||
+         (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label))  ) {
+      if (Z[N[e].c].label && Z[N[e].a].label)
+	fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+    }
 
     m = N[e].C;
     x0 = (Z[N[e].a].x + Z[N[e].b].x)/2.0, y0 = (Z[N[e].a].y + Z[N[e].b].y)/2.0;
     fprintf(pp,"set arrow from %f,%f to %f,%f\n",x0,y0,x0+u[m],y0+v[m]);
+    if ( (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label)) ||
+         (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label))  ) {
+      if (Z[N[e].a].label && Z[N[e].b].label)
+	fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+    }
   }
 
   fprintf(pp,"plot '-' title \"\" with lines\n");

@@ -62,5 +62,4 @@ void estiva_pltp1(double *x, xyc * Z, nde *N)
   pltmshx(pp,Z,N,x);
   fprintf(pp,"e\n");
   fflush(pp);
-  printf("hello\n");
 }
