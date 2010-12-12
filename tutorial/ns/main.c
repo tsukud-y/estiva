@@ -24,6 +24,7 @@ double hyij(long i, long j);
 
 void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
 {
+  static double velocity = 0.1;
   long i, j, NUM, m, n;
   m = dimp2(N); n = dim1(Z); NUM = m*2+n;
 
@@ -54,11 +55,13 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
     b[i]      = 0.0; 
   }
 
+  if ( defop("-velocity") ) velocity = atof(getop("-velocity"));
+
   forgammap2(i,"north",Z,N) {
     for(j=1; j<=NUM; j++) { mx(A,i,j) = 0.0; mx(A,m+i,j) = 0.0; }
     mx(A,i,i)     = 1.0;
     mx(A,m+i,m+i) = 1.0;
-    b[i]          = 0.1;
+    b[i]          = velocity;
     b[m+i]        = 0.0; 
   }
 
@@ -119,8 +122,8 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
   initmx(*Ap, NUM+1, 50); A = *Ap; 
 
   for ( i = 1; i <= m; i++ ) for ( j = 1; j <= m; j++ ) {
-      mx(A,  i,   j) = mx(M,i,j) + tau*mx(K,i,j) + 0.0*tau*mx(AX,i,j);
-      mx(A,m+i, m+j) = mx(M,i,j) + tau*mx(K,i,j) + 0.0*tau*mx(AY,i,j);
+      mx(A,  i,   j) = mx(M,i,j) + tau*mx(K,i,j) + tau*mx(AX,i,j);
+      mx(A,m+i, m+j) = mx(M,i,j) + tau*mx(K,i,j) + tau*mx(AY,i,j);
     }
   for ( i = 1; i <= m; i++ ) for ( j = 1; j <= n; j++ ) {
       mx(A,    i,2*m+j) = -tau*mx(Hx,i,j);
@@ -164,6 +167,7 @@ int main(int argc, char **argv)
     nsRhs(b,Z,N,M,x,t);
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
+    printf("kn - k = %ld\n",kn-k);
    }
   pltp2(x,Z,N);
   sleep(30);
