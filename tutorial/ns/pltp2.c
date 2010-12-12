@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "estiva/mesh.h"
 #include "estiva/foreach.h"
 #include "estiva/ary.h"
@@ -27,7 +28,7 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
 {
   FILE *pp;
   static double *u, *v;
-  long e, m, dim1N, i;
+  long e, m, dim1N;
   int n;
   double x0, y0;
   double scale = 1.0;

@@ -58,7 +58,7 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
     for(j=1; j<=NUM; j++) { mx(A,i,j) = 0.0; mx(A,m+i,j) = 0.0; }
     mx(A,i,i)     = 1.0;
     mx(A,m+i,m+i) = 1.0;
-    b[i]          = 100.0;
+    b[i]          = 0.1;
     b[m+i]        = 0.0; 
   }
 
@@ -71,37 +71,30 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
 
 void b_(double *b, xyc *Z, nde *N, MX *M, double *x, double t)
 {
-  static double *Ux, *Uy, *bx, *by;
-  long i, m, n;
+  static int init = 0;
+  static MX *M2;
 
-  m = dimp2(N); 
-  n = dim1(Z); 
+  if ( !init ) {
+    long i, j, m, n;
+    init = 1;
+    m = dimp2(N); 
+    n = dim1(Z); 
 
-  ary1(Ux,m+1);
-  ary1(Uy,m+1);
-
-  for ( i = 1; i <= m; i++ ) {
-    Ux[i] = x[i];
-    Uy[i] = x[i+m];
+    initmx(M2, 2*m+n, 50);
+    
+    for ( i = 1; i <= m; i++ ) for ( j = 1; j <=m; j++ ) {
+	mx(M2,i,j) = mx(M,i,j);
+	mx(M2,i+m,j+m) = mx(M,i,j);
+      }
   }
-
-  mulmx(bx,M,Ux);
-  mulmx(by,M,Uy);
-
-  for ( i = 1; i <= m; i++ ) {
-    b[i  ] = t*bx[i];
-    b[i+m] = t*by[i];
-  }
-
-  for ( i = 1; i <= n; i++ ) b[i + 2*m] = 0.0;
-
+  mulmx(b,M2,x);
 }
 
 
-void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy, MX *AX, MX *AY, double t)
+void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy, MX *AX, MX *AY, double tau)
 {
   static MX *A;
-  long i, j, NUM, m, n;
+  long   i, j, NUM, m, n;
 
   m   = dimp2(N); 
   n   = dim1(Z); 
@@ -109,14 +102,14 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
   initmx(*Ap, NUM+1, 50); A = *Ap; 
 
   for ( i = 1; i <= m; i++ ) for ( j = 1; j <= m; j++ ) {
-      mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j) + t*mx(AX,i,j);
-      mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j) + t*mx(AY,i,j);
+      mx(A,  i,   j) = mx(M,i,j) + tau*mx(K,i,j) + 0.0*tau*mx(AX,i,j);
+      mx(A,m+i, m+j) = mx(M,i,j) + tau*mx(K,i,j) + 0.0*tau*mx(AY,i,j);
     }
   for ( i = 1; i <= m; i++ ) for ( j = 1; j <= n; j++ ) {
-      mx(A,    i,2*m+j) = -t*mx(Hx,i,j);
-      mx(A,2*m+j,    i) = -t*mx(Hx,i,j);
-      mx(A,  m+i,2*m+j) = -t*mx(Hy,i,j);
-      mx(A,2*m+j,  m+i) = -t*mx(Hy,i,j);
+      mx(A,    i,2*m+j) = -tau*mx(Hx,i,j);
+      mx(A,2*m+j,    i) = -tau*mx(Hx,i,j);
+      mx(A,  m+i,2*m+j) = -tau*mx(Hy,i,j);
+      mx(A,2*m+j,  m+i) = -tau*mx(Hy,i,j);
     }
 }
 
@@ -125,7 +118,7 @@ int main(int argc, char **argv)
 {
   static xyc *Z; static nde *N; 
   static MX *A, *K, *M, *Hx, *Hy, *AX, *AY; static double *x, *b, *S;
-  long  i, k, kn = 1, m, n, NUM;
+  long   k, kn = 1, m, n, NUM;
   double t = 0.001;
 
   initop(argc,argv);
