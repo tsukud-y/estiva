@@ -58,7 +58,7 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
     for(j=1; j<=NUM; j++) { mx(A,i,j) = 0.0; mx(A,m+i,j) = 0.0; }
     mx(A,i,i)     = 1.0;
     mx(A,m+i,m+i) = 1.0;
-    b[i]          = 0.1;
+    b[i]          = 100.0;
     b[m+i]        = 0.0; 
   }
 
@@ -102,7 +102,6 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
 {
   static MX *A;
   long i, j, NUM, m, n;
-  double Re = 1.0;
 
   m   = dimp2(N); 
   n   = dim1(Z); 
@@ -110,8 +109,8 @@ void nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX
   initmx(*Ap, NUM+1, 50); A = *Ap; 
 
   for ( i = 1; i <= m; i++ ) for ( j = 1; j <= m; j++ ) {
-      mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j)/Re + 0.0*t*mx(AX,i,j);
-      mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j)/Re + 0.0*t*mx(AY,i,j);
+      mx(A,  i,   j) = mx(M,i,j) + t*mx(K,i,j) + t*mx(AX,i,j);
+      mx(A,m+i, m+j) = mx(M,i,j) + t*mx(K,i,j) + t*mx(AY,i,j);
     }
   for ( i = 1; i <= m; i++ ) for ( j = 1; j <= n; j++ ) {
       mx(A,    i,2*m+j) = -t*mx(Hx,i,j);
