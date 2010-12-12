@@ -9,6 +9,7 @@
 #define dimp2(N)         estiva_dimp2(N)
 #define rectmesh(Z,N) estiva_rectmesh(&Z,&N)
 #define pltp2(x,Z,N)  estiva_pltp2(x, Z, N)
+#define pltp1(x,Z,N)  estiva_pltp1(x, Z, N)
 #define forgammap2(i,label,Z,N)						\
   for( estiva_forqinit(estiva_forgammap2_init(Z,N,label),		\
 		       (void*)&estiva_forgammap2_p);			\
@@ -21,6 +22,7 @@ void estiva_femdelta(double **Sp, xyc *Z, nde *N);
 long estiva_dimp2(nde *N);
 void estiva_rectmesh(xyc **Zp, nde **Np);
 void estiva_pltp2(double *x, xyc * Z, nde *N);
+void estiva_pltp1(double *x, xyc * Z, nde *N);
 que *estiva_forgammap2_init(xyc *Z, nde *N, char *label);
 
 

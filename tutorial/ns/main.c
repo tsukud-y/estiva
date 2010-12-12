@@ -38,7 +38,7 @@ void boundary_condition(xyc *Z, nde *N, MX *A, double *b)
   forgammap2(i,"gamma",Z,N) mx(A,m+i,m+i) = 1.0;
   forgammap2(i,"gamma",Z,N) b[m+i] = 0.0; 
 
-  i = NUM;
+  i = NUM-20;
   for(j=1; j<=NUM; j++) mx(A,i,j) = 0.0;
   mx(A,i,i) = 1.0; 
   b[i] = 1.0; 
@@ -115,10 +115,9 @@ int main(int argc, char **argv)
   for ( k = 1; k <= 10; k++ ) {
     b_(b,Z,N,M,x);
     boundary_condition(Z,N,A,b);
-    pltmx(A);
     solver(A,x,b);
     for ( i = 1; i <= m * 2; i++ ) x[i] *= 40.0;
-    pltp2(x,Z,N);
+    pltp1(x,Z,N);
     for ( i = 1; i <= m * 2; i++ ) x[i] /= 40.0;
     sleep(5);
    }
