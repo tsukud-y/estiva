@@ -3195,6 +3195,7 @@ t_runc(alist *a)
 			b->uwrt = 1;
 		goto done;
 		}
+#undef _POSIX_SOURCE //tsukuda hack
 #ifdef _POSIX_SOURCE
 	tmpnam(nm);
 #else
