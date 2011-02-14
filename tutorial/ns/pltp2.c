@@ -99,7 +99,7 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
 
   fprintf(pp,"plot '-' title \"\" with lines\n");
   pltmsh(pp,Z,N);
-  fprintf(pp,"e\n");
+  fprintf(pp,"e\n\n");
   fflush(pp);
   fclose(pp);
 }
