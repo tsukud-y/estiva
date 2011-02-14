@@ -57,8 +57,9 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
   for (e=1; e<=dim1N; e++)
     foreach(n) &N[e].a, &N[e].b, &N[e].c, end {
       fprintf(pp,"set arrow %ld from %f,%f to %f,%f\n",arrow++,Z[n].x,Z[n].y,Z[n].x+u[n]*scale,Z[n].y+v[n]*scale);
-      if ( Z[n].label != NULL ) 
-	fprintf(pp,"set label \"%s\" at %f, %f;\n",Z[n].label, Z[n].x, Z[n].y);
+      if ( Z[n].label != NULL ) {
+	// fprintf(pp,"set label \"%s\" at %f, %f;\n",Z[n].label, Z[n].x, Z[n].y);
+      }
     }
 
 
@@ -71,16 +72,18 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
     if ( (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label)) ||
 
          (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label))  ) {
-      if (Z[N[e].b].label && Z[N[e].c].label) 
-	fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+      if (Z[N[e].b].label && Z[N[e].c].label) {
+	// fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+      }
     }
     m = N[e].B;
     x0 = (Z[N[e].c].x + Z[N[e].a].x)/2.0, y0 = (Z[N[e].c].y + Z[N[e].a].y)/2.0;
     fprintf(pp,"set arrow %ld from %f,%f to %f,%f\n",arrow++,x0,y0,x0+u[m]*scale,y0+v[m]*scale);
     if ( (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label)) ||
          (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label))  ) {
-      if (Z[N[e].c].label && Z[N[e].a].label)
-	fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+      if (Z[N[e].c].label && Z[N[e].a].label) {
+	// fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+      }
     }
 
     m = N[e].C;
@@ -88,8 +91,9 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
     fprintf(pp,"set arrow %ld from %f,%f to %f,%f\n",arrow++,x0,y0,x0+u[m]*scale,y0+v[m]*scale);
     if ( (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label)) ||
          (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label))  ) {
-      if (Z[N[e].a].label && Z[N[e].b].label)
-	fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+      if (Z[N[e].a].label && Z[N[e].b].label) {
+	// fprintf(pp,"set label \"%s\" at %f, %f;\n",label,x0,y0);
+      }
     }
   }
 
