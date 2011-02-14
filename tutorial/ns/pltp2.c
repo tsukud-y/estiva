@@ -8,6 +8,14 @@
 #include "estiva/ary.h"
 #include "estiva/op.h"
 
+static char *num2str(long n){
+  long i;
+  static char ret[100];
+  sprintf(ret,"00000000%ld",n);
+  i = strlen( ret );
+  
+  return &ret[i-8];
+}
 
 static void pltmsh(FILE *fp, xyc *Z, nde *N)
 {
@@ -36,8 +44,7 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
   static char filename[400];
   long arrow = 1;
 
-  //pp = popen("gnuplot","w");
-  sprintf(filename,"anime/%ld.gnuplot",sequence++);
+  sprintf(filename,"anime/%s.gnuplot",num2str(sequence++));
   pp = fopen(filename,"w");
 
 
