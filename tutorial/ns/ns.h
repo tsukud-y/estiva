@@ -12,7 +12,7 @@
 #define nsHX(HX,S,Z,N)        estiva_HX(&HX,S,Z,N)
 #define nsHY(HY,S,Z,N)        estiva_HY(&HY,S,Z,N)
 #define boundary_condition(Z,N,A,b) estiva_boundary_condition(Z,N,A,b)
-#define nsRhs(b,Z,N,M,x,t)    estiva_nsRhs(b,Z,N,M,x,t)
+#define nsRhs(b,M,x)          estiva_nsRhs(b,M,x)
 #define nsA(A,x,b,Z,N,K,M,Hx,Hy,AX,AY,t)  estiva_nsA(&A,x,b,Z,N,K,M,Hx,Hy,AX,AY,t)
 #define a(i)                  estiva_a(i) 
 #define b(i)                  estiva_b(i) 
@@ -56,7 +56,7 @@ double estiva_betaC(long j);
 double estiva_gammaC(long j);
 
 void   estiva_boundary_condition(xyc *Z, nde *N, MX *A, double *b);
-void   estiva_nsRhs(double *b, xyc *Z, nde *N, MX *M, double *x, double t);
+void   estiva_nsRhs(double *b, MX *M, double *x);
 void   estiva_nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy, MX *AX, MX *AY, double tau);
 void   setBCD(double b1, double b2, double c1, double c2, double s);  
 

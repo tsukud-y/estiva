@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     nsAX(AX,x,S,Z,N);
     nsAY(AY,x+m,S,Z,N);
     nsA(A,x,b,Z,N,K,M,Hx,Hy,AX,AY,t);
-    nsRhs(b,Z,N,M,x,t);
+    nsRhs(b,M,x);
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
     printf("kn - k = %ld\n",kn-k);
