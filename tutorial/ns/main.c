@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ns.h"
-#include "fem.h"
-
 #include "estiva/ary.h"
 #include "estiva/op.h"
 #include "estiva/solver.h"
+
+#include "fem.h"
+#include "ns.h"
+
 
 
 int main(int argc, char **argv)
@@ -28,10 +29,10 @@ int main(int argc, char **argv)
 
   femdelta(S,Z,N); 
   setZNS(Z,N,S);
-  genP2P2mx(&M,mij);
-  genP2P2mx(&K,kij);
-  genP2P1mx(&Hx,hxij);
-  genP2P1mx(&Hy,hyij);
+  genP2P2mx(M,mij);
+  genP2P2mx(K,kij);
+  genP2P1mx(Hx,hxij);
+  genP2P1mx(Hy,hyij);
 
   
   if ( defop("-kn") ) kn = atoi(getop("-kn"));

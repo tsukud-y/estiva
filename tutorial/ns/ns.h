@@ -29,6 +29,8 @@
 #define alphaC(j)             estiva_alphaC(j)
 #define  betaC(j)             estiva_betaC(j)
 #define gammaC(j)             estiva_gammaC(j)
+#define genP2P2mx(M,f)        estiva_genP2P2mx(&M,f)
+#define genP2P1mx(M,f)        estiva_genP2P1mx(&M,f)
 
 
 void   estiva_nsM(MX **Mp, double *S, nde *N);
@@ -57,6 +59,10 @@ void   estiva_boundary_condition(xyc *Z, nde *N, MX *A, double *b);
 void   estiva_nsRhs(double *b, xyc *Z, nde *N, MX *M, double *x, double t);
 void   estiva_nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy, MX *AX, MX *AY, double tau);
 void   setBCD(double b1, double b2, double c1, double c2, double s);  
+
+void estiva_genP2P2mx(MX **Mp, double (*func)(long i, long j));
+void estiva_genP2P1mx(MX **Mp, double (*func)(long i, long j));
+
 extern double Delta;
 double  mij(long i, long j);
 double  kij(long i, long j);

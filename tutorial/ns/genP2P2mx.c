@@ -16,7 +16,7 @@ void setZNS(xyc *Z, nde *N, double *S)
   Zg = Z; Ng = N; Sg = S;
 }
 
-void genP2P2mx(MX **Mp, double (*func)(long i, long j))
+void estiva_genP2P2mx(MX **Mp, double (*func)(long i, long j))
 {
   MX *M; long  a, b, c, A, B, C, e, m, n, I, J, i, j; double s;
   xyc *Z; nde *N; double *S;
@@ -39,7 +39,7 @@ void genP2P2mx(MX **Mp, double (*func)(long i, long j))
   }
 }
 
-void genP2P1mx(MX **Mp, double (*func)(long i, long j))
+void estiva_genP2P1mx(MX **Mp, double (*func)(long i, long j))
 {
   MX *M; long  a, b, c, A, B, C, e, m, n, I, J, i, j; double s;
   xyc *Z; nde *N; double *S;

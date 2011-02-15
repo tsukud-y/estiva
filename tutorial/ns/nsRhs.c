@@ -1,19 +1,9 @@
+#include <stdio.h>
+
+#include "estiva/ary.h"
+
 #include "ns.h"
 #include "fem.h"
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include "estiva/mesh.h"
-#include "estiva/ary.h"
-#include "estiva/op.h"
-#include "estiva/mx.h"
-#include "estiva/foreach.h"
-#include "estiva/que.h"
-#include "estiva/solver.h"
 
 
 void estiva_nsRhs(double *b, xyc *Z, nde *N, MX *M, double *x, double t)

@@ -1,19 +1,9 @@
-#include "ns.h"
-#include "fem.h"
-
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
-#include "estiva/mesh.h"
+
 #include "estiva/ary.h"
-#include "estiva/op.h"
-#include "estiva/mx.h"
-#include "estiva/foreach.h"
-#include "estiva/que.h"
-#include "estiva/solver.h"
+
+#include "fem.h"
+#include "ns.h"
 
 
 void estiva_nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy, MX *AX, MX *AY, double tau)
