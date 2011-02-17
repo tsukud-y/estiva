@@ -43,8 +43,6 @@ int main(int argc, char **argv)
     nsRhs(b,M,x);
     boundary_condition(Z,N,A,b);
     solver(A,x,b);
-    clearmx(AX);
-    clearmx(AY);
     printf("kn - k = %ld\n",kn-k);
     pltp2(x,Z,N);
    }

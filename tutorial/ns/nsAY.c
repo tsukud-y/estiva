@@ -64,6 +64,7 @@ void estiva_AY(MX **AYp, double *V, double *S, xyc *Z, nde *N)
   ary1(v,7);
 
   initmx(AY,dimp2(N)+1,28);
+  clearmx(AY);
 
   n = dim1(N);
   for ( e = 1; e <= n; e++ ) {
