@@ -24,13 +24,13 @@ int main(int argc, char **argv) {
   pp = popen("gnuplot","w");
   
   while (1) {
-    printf("sequencde = %ld\n",sequence);
-    sprintf(filename,"%s.gnuplot",num2str(sequence++));
+    printf("sequence = %ld\n",sequence);
+    sprintf(filename,"%s.gnuplot",num2str(sequence));
     fp = fopen(filename,"r");
     if ( NULL == fp ) return 0;
 
     fprintf(pp,"set terminal gif\n");
-    sprintf(cmd,"set output \"%s.gif\"\n",num2str(sequence));
+    sprintf(cmd,"set output \"%s.gif\"\n",num2str(sequence++));
     fprintf(pp,"%s",cmd);
     while ( EOF != (c = fgetc(fp)) ){
       fprintf(pp,"%c",c);
