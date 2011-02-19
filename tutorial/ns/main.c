@@ -39,12 +39,14 @@ int main(int argc, char **argv)
   for ( k = 1; k <= kn; k++ ) {
     nsAX(AX,x,S,Z,N);
     nsAY(AY,x+m,S,Z,N);
+    printf("A\n");
     nsA(A,x,b,Z,N,K,M,Hx,Hy,AX,AY,t);
     nsRhs(b,M,x);
     boundary_condition(Z,N,A,b);
+    printf("solver\n");
     solver(A,x,b);
-    printf("kn - k = %ld\n",kn-k);
     pltp2(x,Z,N);
+    printf("kn - k = %ld\n",kn-k);
    }
   return 0;
 }
