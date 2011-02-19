@@ -2478,10 +2478,10 @@ integer *incx;
     static doublereal cuthi = 1.304e19;
 
     /* Format strings */
-    static char fmt_30[] = "";
-    static char fmt_50[] = "";
-    static char fmt_70[] = "";
-    static char fmt_110[] = "";
+    //static char fmt_30[] = "";
+    //static char fmt_50[] = "";
+    //static char fmt_70[] = "";
+    //static char fmt_110[] = "";
 
     /* System generated locals */
     integer i__1;
@@ -2496,7 +2496,7 @@ integer *incx;
     static doublereal hitest, sum;
 
     /* Assigned format variables */
-    char *next_fmt;
+    //char *next_fmt;
 
     /* Parameter adjustments */
     --dx;
@@ -2552,7 +2552,7 @@ integer *incx;
 
 L10:
     next = 0;
-    next_fmt = fmt_30;
+    //next_fmt = fmt_30;
     sum = zero;
     i = 1;
     ix = 1;
@@ -2569,7 +2569,7 @@ L30:
 	goto L85;
     }
     next = 1;
-    next_fmt = fmt_50;
+    //next_fmt = fmt_50;
     xmax = zero;
 
 /*                        phase 1.  sum is zero */
@@ -2584,7 +2584,7 @@ L50:
 
 /*                                prepare for phase 2. */
     next = 2;
-    next_fmt = fmt_70;
+    //next_fmt = fmt_70;
     goto L105;
 
 /*                                prepare for phase 4. */
@@ -2592,7 +2592,7 @@ L50:
 L100:
     ix = j;
     next = 3;
-    next_fmt = fmt_110;
+    //next_fmt = fmt_110;
     sum = sum / dx[i] / dx[i];
 L105:
     xmax = (d__1 = dx[i], abs(d__1));

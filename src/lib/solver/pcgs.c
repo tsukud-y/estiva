@@ -214,7 +214,7 @@ static int pcgs(double *d, double *a, long *ia,
 	double *e, double *h, double *w, long *m, long *ier)
 {
   long dim1, i, j, k;
-  double y, c1, c2, c3, x1, x2, th, res, beta, alpha;
+  double y, c1=0.0, c2, c3, x1, x2, th, res=10000000.0, beta, alpha;
   ILUtype ilu;
 
   /* Parameter adjustments */

@@ -33,7 +33,7 @@ static double invert(Matrix A,Vector x,double tol,int n,int *itr)
   static Matrix U;
   static Vector y;
   static Vector s;
-  double c, d, xmin=0.0,lambda;
+  double c, d, xmin=0.0,lambda=10000000.0;
   int m, i;
 
   ary2(L,n+1,n+1);

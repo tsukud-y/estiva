@@ -145,10 +145,10 @@ static int degeneracy(int e1,int e2)
 
 void estiva_delaunay(xyc **Zo, nde **No)
      /* Delaunay(Z,N) estiva_Delaunay(&(Z),&(N)) */
-{ int i,n,a,A,z; double xmin,ymin,xmax,ymax,length;
+{ int i,a,n=1,A,z; double xmin,ymin,xmax,ymax,length;
   static char super_node[] = "super_node";
   static int *fN,*fNinv,*fZ,*fZinv;
-  Z= *Zo; n=1; z=dim1(Z); z -=3;
+  Z= *Zo; z=dim1(Z); z -=3;
 
   
   xmin = Z[1].x; ymin = Z[1].y;
@@ -220,7 +220,7 @@ void estiva_delaunay(xyc **Zo, nde **No)
   */
 
   ary1(fNinv,n+1); 
-  if(fNinv == NULL) fprintf(stderr,"Can't malloc()\n");
+  //if(fNinv == NULL) fprintf(stderr,"Can't malloc()\n");
   forall(1,i,dim1(fN)) fNinv[fN[i]]=i;
   forall(1,i,dim1(N)) foreach(A)&N[i].A,&N[i].B,&N[i].C,end A=fNinv[A];
 
