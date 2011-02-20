@@ -23,6 +23,7 @@ typedef struct {
 #define psolvemx(A,pivot,LU,D,x,b) estiva_psolvemx(A,pivot,LU,D,x,b)
 #define pltmx(A)                   estiva_pltmx(A)
 #define clearmx(A)                  estiva_clearmx(A)
+#define fornonzeromx(A,i,j) for(estiva_fornonzeromx_init(A);estiva_fornonzeromx_loop(A,&(i),&(j));)
 
 
 void    estiva_initmx(MX **Ap, long i, long j);
@@ -34,5 +35,7 @@ void    estiva_matvecmx(MX *A, double *alpha, double *x, double *beta, double *y
 void    estiva_psolvemx(MX *A, CRS *pivot, MX *LU, double *D, double *x, double *b);
 void    estiva_pltmx(MX *A);
 void    estiva_clearmx(MX *A);
+void    estiva_fornonzeromx_init(MX *A);
+int     estiva_fornonzeromx_loop(MX *A, long *Ip, long *Jp);
 
 #endif
