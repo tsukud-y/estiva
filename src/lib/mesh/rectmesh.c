@@ -12,13 +12,14 @@ void estiva_rectmesh(xyc **Zp, nde **Np)
 
   static que *q;
   double x, y, h;
+  long i, j;
   
   initq(q);
 
   h = 0.125;
   if ( defop("-h") ) h = atof(getop("-h"));
-  for ( x = 0.0; x <= 1.0; x += h)
-    for ( y = 0.0; y <= 1.0; y += h) {
+  for ( i = 0, x = 0.0; i <= 1.0/h; i++, x += h)
+    for ( j = 0, y = 0.0; j <= 1.0/h; j++, y += h) {
       
       if ( x == 0.0 || x == 1.0 || y == 0.0 || y == 1.0 ) {
 	if ( y == 1.0 && x != 0.0 && x != 1.0 )
