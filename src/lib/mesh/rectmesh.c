@@ -1,6 +1,6 @@
-#include "fem.h"
-
+#include <stdio.h>
 #include <stdlib.h>
+#include "estiva/mesh.h"
 #include "estiva/que.h"
 #include "estiva/op.h"
 

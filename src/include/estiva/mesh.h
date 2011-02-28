@@ -16,6 +16,7 @@ void estiva_xmesh(xyc *Z);
 void estiva_pushxyc(void *qp, double x, double y, char *label);
 void estiva_genmesh(void *qp, xyc **Zp, nde **Np);
 void estiva_p2(xyc *Z, nde *N);
+void estiva_rectmesh(xyc **Zp, nde **Np);
 
 #define fp2xyc(fp,Z)       estiva_fp2xyc(fp,&(Z))
 #define fp2mesh(fp,Z,N)    estiva_fp2mesh(fp,&(Z),&(N))
@@ -28,6 +29,6 @@ void estiva_p2(xyc *Z, nde *N);
 #define pushxyc(q,x,y,label)  estiva_pushxyc(&(q),x,y,label)
 #define genmesh(q,Z,N)        estiva_genmesh(&(q),&(Z),&(N))
 #define p2(Z,N)               estiva_p2(Z,N)
-
+#define rectmesh(Z,N)         estiva_rectmesh(&Z,&N)
 
 #endif

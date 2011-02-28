@@ -1,0 +1,31 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+RECTMESH(3)            ESTIVA ライブラリ関数マニュアル              RECTMESH(3)
+
+名称
+     rectmesh - 正方形領域格子の生成
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/mesh.h"
+
+     void
+     rectmesh(xyc* Z, nde* N);
+
+解説
+     rectmesh()ルーチンはメッシュジェネレーションを行います。
+
+     正方形領域の格子生成を行います。
+     P2-P1要素対応です。
+     境界線上に east, south, west, north, zeroのラベルが
+     適切に付加されます。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     xmesh(1)
