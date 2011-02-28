@@ -20,6 +20,7 @@ double estiva_a(long i){
   case 6: return  0.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -33,6 +34,7 @@ double estiva_b(long i){
   case 6: return  0.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -46,6 +48,7 @@ double estiva_c(long i){
   case 6: return  0.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -59,6 +62,7 @@ double estiva_d(long i){
   case 6: return  4.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -72,6 +76,7 @@ double estiva_e(long i){
   case 6: return  0.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -85,6 +90,7 @@ double estiva_f(long i){
   case 6: return  0.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -99,6 +105,7 @@ double estiva_alphaB(long j)
   case 6: return b(j)*B1 + c(j)*B2;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -114,6 +121,7 @@ double estiva_betaB(long j)
   case 6: return 2.0*e(j)*B1 + d(j)*B2;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -129,6 +137,7 @@ double estiva_gammaB(long j)
   case 6: return d(j)*B1 + 2.0*f(j)*B2;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -143,6 +152,7 @@ double estiva_alphaC(long j)
   case 6: return b(j)*C1 + c(j)*C2;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -158,6 +168,7 @@ double estiva_betaC(long j)
   case 6: return 2.0*e(j)*C1 + d(j)*C2;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -173,6 +184,7 @@ double estiva_gammaC(long j)
   case 6: return d(j)*C1 + 2.0*f(j)*C2;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -184,6 +196,7 @@ double estiva_ad(long j){
   case 3: return  1.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -194,6 +207,7 @@ double estiva_bd(long j){
   case 3: return -1.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
 
@@ -204,5 +218,7 @@ double estiva_cd(long j){
   case 3: return -1.0;
   default: abort();
   }
+  abort();
   return NAN;
 }
+

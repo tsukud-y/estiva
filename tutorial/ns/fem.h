@@ -24,6 +24,7 @@ void estiva_rectmesh(xyc **Zp, nde **Np);
 void estiva_pltp2(double *x, xyc * Z, nde *N);
 void estiva_pltp1(double *x, xyc * Z, nde *N);
 que *estiva_forgammap2_init(xyc *Z, nde *N, char *label);
+void setZNS(xyc *Z, nde *N, double *S);
 
 
 extern long *estiva_forgammap2_p, estiva_forgammap2_flag;

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "estiva/op.h"
 #include "estiva/ary.h"
@@ -54,5 +55,5 @@ void estiva_boundary_condition(xyc *Z, nde *N, MX *A, double *b)
   i = NUM;
   for(j=1; j<=NUM; j++) mx(A,i,j) = 0.0;
   mx(A,i,i) = 1.0;
-  b[i] = 1.0;
+  b[i] = 0.001;
 }
