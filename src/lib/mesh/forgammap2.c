@@ -1,16 +1,12 @@
-#include "fem.h"
-
 #include <stdio.h>
 #include <string.h>
 #include "estiva/que.h"
 #include "estiva/mesh.h"
 #include "estiva/ary.h"
 
+static long *estiva_forgammap2_p;
 
-long *estiva_forgammap2_p, estiva_forgammap2_flag;
-
-
-que *estiva_forgammap2_init(xyc *Z, nde *N, char *label)
+static que *estiva_forgammap2_init(xyc *Z, nde *N, char *label)
 {
   static que *q;
   long i, e, m, *p;
@@ -42,4 +38,18 @@ que *estiva_forgammap2_init(xyc *Z, nde *N, char *label)
     }
   }
   return q;
+}
+
+void estiva_forgammap2(xyc *Z, nde *N, char *label)
+{
+  estiva_forqinit(estiva_forgammap2_init(Z,N,label),
+		  (void*)&estiva_forgammap2_p);
+}
+
+int estiva_forgammap2_loop(long *ip)
+{
+  int flag;
+  flag = estiva_forq(((void*)&estiva_forgammap2_p));
+  *ip = *estiva_forgammap2_p;
+  return flag;
 }

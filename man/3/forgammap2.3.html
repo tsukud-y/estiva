@@ -1,0 +1,31 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FORGAMMAP2(3)         ESTIVA ライブラリ関数マニュアル             FORGAMMAP2(3)
+
+名称
+    forgammap2()  - 境界節点用 forマクロ(2次要素用)
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式	
+     #include "estiva/mesh.h"
+
+     forgammap2(long i, char *label, xyc *Z, nde *N) { ; ... ; }
+
+解説
+     forgammap2()マクロは 境界識別用のラベル(= label) のついた
+     境界節点を渡り、変数 i に逐次代入して、後に続く文のブロック
+     を実行します。
+     ここに Z は節点-座標対応表です。Nはp2要素用の要素-節点対応表です。
+     
+     forgammap2() マクロを用いることによって、境界条件の設定を
+     行うことが容易になります。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     xyc(3), nde(3), p2(3)
