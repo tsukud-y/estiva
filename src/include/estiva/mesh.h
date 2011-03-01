@@ -18,6 +18,8 @@ void estiva_genmesh(void *qp, xyc **Zp, nde **Np);
 void estiva_p2(xyc *Z, nde *N);
 void estiva_rectmesh(xyc **Zp, nde **Np);
 long estiva_dimp2(nde *N);
+void estiva_pltp2(double *x, xyc * Z, nde *N);
+
 
 #define fp2xyc(fp,Z)          estiva_fp2xyc(fp,&(Z))
 #define fp2mesh(fp,Z,N)       estiva_fp2mesh(fp,&(Z),&(N))
@@ -32,5 +34,7 @@ long estiva_dimp2(nde *N);
 #define p2(Z,N)               estiva_p2(Z,N)
 #define rectmesh(Z,N)         estiva_rectmesh(&Z,&N)
 #define dimp2(N)              estiva_dimp2(N)
+#define pltp2(x,Z,N)  estiva_pltp2(x, Z, N)
+
 
 #endif

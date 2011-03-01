@@ -1,0 +1,35 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+PLTP2(3)                ESTIVA ライブラリ関数マニュアル                PLTP2(3)
+
+名称
+     pltp2 - 流速データのプロット
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/mesh.h"
+
+     void
+     pltp2(double *x, xyc *Z, nde *N);
+
+解説
+     pltp2() 関数は gnuplot 形式のデータ出力をファイル 0???????.gnuplot
+     に対して行います。
+     ここに
+     x   ... プロットするデータ
+     Z   ... 節点-座標対応表
+     N   ... 要素-節点対応表(P2要素対応)
+
+
+     -plotscale ??.??  コマンドラインオプションを用いることに
+     より、流速ベクトルの長さを指定することができます。
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     ary1(3), xyc(3), nde(3)

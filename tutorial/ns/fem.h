@@ -6,7 +6,6 @@
 #include "estiva/que.h"
 
 #define femdelta(S,Z,N)  estiva_femdelta(&S,Z,N)
-#define pltp2(x,Z,N)  estiva_pltp2(x, Z, N)
 #define forgammap2(i,label,Z,N)						\
   for( estiva_forqinit(estiva_forgammap2_init(Z,N,label),		\
 		       (void*)&estiva_forgammap2_p);			\
@@ -16,7 +15,6 @@
        )
 
 void estiva_femdelta(double **Sp, xyc *Z, nde *N);
-void estiva_pltp2(double *x, xyc * Z, nde *N);
 que *estiva_forgammap2_init(xyc *Z, nde *N, char *label);
 void setZNS(xyc *Z, nde *N, double *S);
 
