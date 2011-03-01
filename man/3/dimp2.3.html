@@ -1,0 +1,28 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+DIMP2(3)              ESTIVA ライブラリ関数マニュアル                DIMP2(3)
+
+名称
+     dimp2 - P2メッシュの全節点数(頂点節点+中点節)を返す
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/mesh.h"
+
+     long
+     dimp2(nde *N);
+
+
+解説
+     dimp2()関数は、P2メッシュの全節点数(頂点節点+中点節)を返します。
+
+戻り値
+     dimp2(N)関数は、P2要素-節点対応表Nより，
+     全節点数(頂点節点+中点節)を返します。
+
+関連項目
+     nde(3), p2(3)
