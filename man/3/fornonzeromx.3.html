@@ -1,0 +1,31 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FORNONZEROMX(3)       ESTIVA ライブラリ関数マニュアル           FORNONZEROMX(3)
+
+名称
+    fornonzeromx()  - 疎行列非ゼロ成分 forマクロ
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式	
+     #include "estiva/mx.h"
+
+     fornonzeromx(MX *A, long i, long j) { ; ... ; }
+
+解説
+     fornonzeromx()マクロは 疎行列Aの非ゼロ成分をすべて渡って、
+      i,j に逐次代入して、後に続く文のブロック
+     を実行します。
+     
+     fornonzeromx() マクロを用いることによって、行列の加算等が
+     高速に実現できます。
+     
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     mx(3)
