@@ -7,14 +7,7 @@
 #include "estiva/ary.h"
 #include "estiva/mx.h"
 
-
-//                                   a1    a2    a3    a4    a5    a6
-static double a[] = { 0.0,          0.0,  0.0,  1,0,  0.0,  0.0,  0.0};
-static double b[] = { 0.0,         -1.0,  0.0, -3.0,  0.0,  4.0,  0.0};
-static double c[] = { 0.0,          0.0, -1.0, -3.0,  4.0,  0.0,  0.0};
-static double d[] = { 0.0,          0.0,  0.0,  4.0, -4.0, -4.0,  4.0};
-static double e[] = { 0.0,          2.0,  0.0,  2.0,  0.0, -4.0,  0.0};
-static double f[] = { 0.0,          0.0,  2.0,  2.0, -4.0,  0.0,  0.0};
+#include "estiva/TaylorHood.h"
 
 
 static double ayij(long i, long j, double *v, double C1, double C2, double C3)
@@ -22,33 +15,33 @@ static double ayij(long i, long j, double *v, double C1, double C2, double C3)
   double ayij, Av, Bv, Cv, Dv, Ev, Fv, alphaCj, betaCj, gammaCj;
   long k;
 
-  for (Av = 0.0, k = 1; k <= 6; k++) Av += a[k]*v[k];
-  for (Bv = 0.0, k = 1; k <= 6; k++) Bv += b[k]*v[k];
-  for (Cv = 0.0, k = 1; k <= 6; k++) Cv += c[k]*v[k];
-  for (Dv = 0.0, k = 1; k <= 6; k++) Dv += d[k]*v[k];
-  for (Ev = 0.0, k = 1; k <= 6; k++) Ev += e[k]*v[k];
-  for (Fv = 0.0, k = 1; k <= 6; k++) Fv += f[k]*v[k];
+  for (Av = 0.0, k = 1; k <= 6; k++) Av += a(k)*v[k];
+  for (Bv = 0.0, k = 1; k <= 6; k++) Bv += b(k)*v[k];
+  for (Cv = 0.0, k = 1; k <= 6; k++) Cv += c(k)*v[k];
+  for (Dv = 0.0, k = 1; k <= 6; k++) Dv += d(k)*v[k];
+  for (Ev = 0.0, k = 1; k <= 6; k++) Ev += e(k)*v[k];
+  for (Fv = 0.0, k = 1; k <= 6; k++) Fv += f(k)*v[k];
 
-  alphaCj =     b[j]*C1 +     c[j]*C2;
-  betaCj  = 2.0*e[j]*C1 +     d[j]*C2;
-  gammaCj =     d[j]*C1 + 2.0*f[j]*C2;
+  alphaCj =     b(j)*C1 +     c(j)*C2;
+  betaCj  = 2.0*e(j)*C1 +     d(j)*C2;
+  gammaCj =     d(j)*C1 + 2.0*f(j)*C2;
 
   ayij =
-    + 420.0 * (a[i]*Av                              ) * (3.0*alphaCj +     betaCj +     gammaCj)
-    + 105.0 * (a[i]*Bv + b[i]*Av                    ) * (4.0*alphaCj + 2.0*betaCj +     gammaCj)
-    + 105.0 * (a[i]*Cv + c[i]*Av                    ) * (4.0*alphaCj +     betaCj + 2.0*gammaCj)
-    +  21.0 * (a[i]*Dv + d[i]*Av + b[i]*Cv + c[i]*Bv) * (5.0*alphaCj + 2.0*betaCj + 2.0*gammaCj)
-    +  42.0 * (a[i]*Ev + e[i]*Av + b[i]*Bv          ) * (5.0*alphaCj + 3.0*betaCj +     gammaCj)
-    +  42.0 * (a[i]*Fv + f[i]*Av + c[i]*Cv          ) * (5.0*alphaCj +     betaCj + 3.0*gammaCj)
-    +   7.0 * (b[i]*Dv + d[i]*Bv + c[i]*Ev + e[i]*Cv) * (6.0*alphaCj + 3.0*betaCj + 2.0*gammaCj)
-    +   7.0 * (b[i]*Fv + f[i]*Bv + c[i]*Dv + d[i]*Cv) * (6.0*alphaCj + 2.0*betaCj + 3.0*gammaCj)
-    +  21.0 * (b[i]*Ev + e[i]*Bv                    ) * (6.0*alphaCj + 4.0*betaCj +     gammaCj)
-    +  21.0 * (c[i]*Fv + f[i]*Cv                    ) * (6.0*alphaCj +     betaCj + 4.0*gammaCj)
-    +   3.0 * (d[i]*Ev + e[i]*Dv                    ) * (7.0*alphaCj + 4.0*betaCj + 2.0*gammaCj)
-    +   3.0 * (d[i]*Fv + f[i]*Dv                    ) * (7.0*alphaCj + 2.0*betaCj + 4.0*gammaCj)
-    +   2.0 * (e[i]*Fv + f[i]*Ev + d[i]*Dv          ) * (7.0*alphaCj + 3.0*betaCj + 3.0*gammaCj)
-    +  12.0 * (e[i]*Ev                              ) * (7.0*alphaCj + 5.0*betaCj +     gammaCj)
-    +  12.0 * (f[i]*Fv                              ) * (7.0*alphaCj +     betaCj + 5.0*gammaCj)
+    + 420.0 * (a(i)*Av                              ) * (3.0*alphaCj +     betaCj +     gammaCj)
+    + 105.0 * (a(i)*Bv + b(i)*Av                    ) * (4.0*alphaCj + 2.0*betaCj +     gammaCj)
+    + 105.0 * (a(i)*Cv + c(i)*Av                    ) * (4.0*alphaCj +     betaCj + 2.0*gammaCj)
+    +  21.0 * (a(i)*Dv + d(i)*Av + b(i)*Cv + c(i)*Bv) * (5.0*alphaCj + 2.0*betaCj + 2.0*gammaCj)
+    +  42.0 * (a(i)*Ev + e(i)*Av + b(i)*Bv          ) * (5.0*alphaCj + 3.0*betaCj +     gammaCj)
+    +  42.0 * (a(i)*Fv + f(i)*Av + c(i)*Cv          ) * (5.0*alphaCj +     betaCj + 3.0*gammaCj)
+    +   7.0 * (b(i)*Dv + d(i)*Bv + c(i)*Ev + e(i)*Cv) * (6.0*alphaCj + 3.0*betaCj + 2.0*gammaCj)
+    +   7.0 * (b(i)*Fv + f(i)*Bv + c(i)*Dv + d(i)*Cv) * (6.0*alphaCj + 2.0*betaCj + 3.0*gammaCj)
+    +  21.0 * (b(i)*Ev + e(i)*Bv                    ) * (6.0*alphaCj + 4.0*betaCj +     gammaCj)
+    +  21.0 * (c(i)*Fv + f(i)*Cv                    ) * (6.0*alphaCj +     betaCj + 4.0*gammaCj)
+    +   3.0 * (d(i)*Ev + e(i)*Dv                    ) * (7.0*alphaCj + 4.0*betaCj + 2.0*gammaCj)
+    +   3.0 * (d(i)*Fv + f(i)*Dv                    ) * (7.0*alphaCj + 2.0*betaCj + 4.0*gammaCj)
+    +   2.0 * (e(i)*Fv + f(i)*Ev + d(i)*Dv          ) * (7.0*alphaCj + 3.0*betaCj + 3.0*gammaCj)
+    +  12.0 * (e(i)*Ev                              ) * (7.0*alphaCj + 5.0*betaCj +     gammaCj)
+    +  12.0 * (f(i)*Fv                              ) * (7.0*alphaCj +     betaCj + 5.0*gammaCj)
     ;
   return ayij/1260.0;
 }

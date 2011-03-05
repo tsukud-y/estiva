@@ -1,16 +1,16 @@
-#include "ns.h"
+#include "estiva/TaylorHood.h"
 
 #include <math.h>
 #include <stdlib.h>
 
 static double B1, B2, C1, C2;
-double Delta;
+double estiva_TaylorHood_Delta;
 
 void setBCD(double b1, double b2, double c1, double c2, double s) {
   B1 = b1; B2 = b2; C1 = c1; C2 = c2, Delta = s;
 }
 
-double estiva_a(long i){
+double estiva_TaylorHood_a(long i){
   switch(i) {
   case 1: return  0.0;
   case 2: return  0.0;
@@ -24,7 +24,7 @@ double estiva_a(long i){
   return NAN;
 }
 
-double estiva_b(long i){
+double estiva_TaylorHood_b(long i){
   switch(i) {
   case 1: return -1.0;
   case 2: return  0.0;
@@ -38,7 +38,7 @@ double estiva_b(long i){
   return NAN;
 }
 
-double estiva_c(long i){
+double estiva_TaylorHood_c(long i){
   switch(i) {
   case 1: return  0.0;
   case 2: return -1.0;
@@ -52,7 +52,7 @@ double estiva_c(long i){
   return NAN;
 }
 
-double estiva_d(long i){
+double estiva_TaylorHood_d(long i){
   switch(i) {
   case 1: return  0.0;
   case 2: return  0.0;
@@ -66,7 +66,7 @@ double estiva_d(long i){
   return NAN;
 }
 
-double estiva_e(long i){
+double estiva_TaylorHood_e(long i){
   switch(i) {
   case 1: return  2.0;
   case 2: return  0.0;
@@ -80,7 +80,7 @@ double estiva_e(long i){
   return NAN;
 }
 
-double estiva_f(long i){
+double estiva_TaylorHood_f(long i){
   switch(i) {
   case 1: return  0.0;
   case 2: return  2.0;
@@ -94,7 +94,7 @@ double estiva_f(long i){
   return NAN;
 }
 
-double estiva_alphaB(long j)
+double estiva_TaylorHood_alphaB(long j)
 {
   switch(j){
   case 1: 
@@ -110,7 +110,7 @@ double estiva_alphaB(long j)
 }
 
 
-double estiva_betaB(long j)
+double estiva_TaylorHood_betaB(long j)
 {
   switch(j){
   case 1: 
@@ -126,7 +126,7 @@ double estiva_betaB(long j)
 }
 
 
-double estiva_gammaB(long j)
+double estiva_TaylorHood_gammaB(long j)
 {
   switch(j){
   case 1: 
@@ -141,7 +141,7 @@ double estiva_gammaB(long j)
   return NAN;
 }
 
-double estiva_alphaC(long j)
+double estiva_TaylorHood_alphaC(long j)
 {
   switch(j){
   case 1: 
@@ -157,7 +157,7 @@ double estiva_alphaC(long j)
 }
 
 
-double estiva_betaC(long j)
+double estiva_TaylorHood_betaC(long j)
 {
   switch(j){
   case 1: 
@@ -173,7 +173,7 @@ double estiva_betaC(long j)
 }
 
 
-double estiva_gammaC(long j)
+double estiva_TaylorHood_gammaC(long j)
 {
   switch(j){
   case 1: 
@@ -189,7 +189,7 @@ double estiva_gammaC(long j)
 }
 
 
-double estiva_ad(long j){
+double estiva_TaylorHood_ad(long j){
   switch(j) {
   case 1: return  0.0;
   case 2: return  0.0;
@@ -200,7 +200,7 @@ double estiva_ad(long j){
   return NAN;
 }
 
-double estiva_bd(long j){
+double estiva_TaylorHood_bd(long j){
   switch(j) {
   case 1: return  1.0;
   case 2: return  0.0;
@@ -211,7 +211,7 @@ double estiva_bd(long j){
   return NAN;
 }
 
-double estiva_cd(long j){
+double estiva_TaylorHood_cd(long j){
   switch(j) {
   case 1: return  0.0;
   case 2: return  1.0;
