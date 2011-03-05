@@ -1,0 +1,28 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+</head><body><pre>
+
+FEMDELTA(3)           ESTIVA ライブラリ関数マニュアル               FEMDELTA(3)
+
+名称
+     femdelta - mesh形式のデータから、三角形の要素群の面積の計算
+
+ライブラリ
+     ESTIVA ライブラリ (libestiva, -lestiva)
+
+書式
+     #include "estiva/mesh.h"
+
+     void
+     femdelta(double* S, xyc* Z, nde* N);
+
+解説
+     femdelta()ルーチンは節点-座標対応表(Z),要素-節点対応表(N)
+     より、各三角形要素の面積を計算して、配列Sに格納します。
+
+
+戻り値
+     戻り値はありません。
+
+関連項目
+     xyc2msh(1), xmesh(1), fp2xyc(3)

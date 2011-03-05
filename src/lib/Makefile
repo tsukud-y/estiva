@@ -15,7 +15,8 @@ SRCS = ary/ary.c esolver/esolver.c esolver/maxesolver.c \
 	std/std.c mesh/fp2xyc.c mesh/delaunay.c mesh/fprintmesh.c \
 	op/ofp.c mesh/xmesh.c mesh/pushxyc.c mesh/genmesh.c \
 	mx/pltmx.c mesh/p2.c mx/clearmx.c mx/fornonzeromx.c \
-	mesh/rectmesh.c mesh/dimp2.c mesh/pltp2.c mesh/forgammap2.c
+	mesh/rectmesh.c mesh/dimp2.c mesh/pltp2.c mesh/forgammap2.c \
+	mesh/femdelta.c
 
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I../include
