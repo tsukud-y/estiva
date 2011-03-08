@@ -9,7 +9,7 @@ void   estiva_AY(MX **AYp, double *V, double *S, xyc *Z, nde *N);
 int main(int argc, char **argv)
 {
   static xyc *Z; static nde *N; 
-  static MX *A, *K, *M, *Hx, *Hy, *Ax, *Ay; static double *x, *b, *S;
+  static MX *A, *K, *M, *Hx, *Hy, *Ax, *Ay; static double *x, *b;
   long   k, kn = 1, m, n, NUM;
   double t = 0.001;
 
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
   ary1(x,NUM+1); 
   ary1(b,NUM+1);
 
-  S = setmesh(Z,N);
+  setmesh(Z,N);
 
   TaylorHood_M(M,16);
   TaylorHood_K(K,12);
@@ -32,8 +32,8 @@ int main(int argc, char **argv)
 
   if ( defop("-kn") ) kn = atoi(getop("-kn"));
   for ( k = 1; k <= kn; k++ ) {
-    nsAX(Ax,x,S,Z,N);
-    nsAY(Ay,x+m,S,Z,N);
+    TaylorHood_Ax(Ax,x,24);
+    TaylorHood_Ay(Ay,x+m,24);
     printf("A\n");
     nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,t,50);
     nsRhs(b,M,x);
