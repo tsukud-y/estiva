@@ -19,7 +19,8 @@ SRCS = ary/ary.c esolver/esolver.c esolver/maxesolver.c \
 	mesh/femdelta.c TaylorHood/TaylorHood.c TaylorHood/TaylorHood_K.c \
 	TaylorHood/TaylorHood_M.c TaylorHood/TaylorHood_Hx.c \
 	TaylorHood/TaylorHood_Hy.c TaylorHood/genP2P2mx.c \
-	TaylorHood/TaylorHood_Ax.c TaylorHood/TaylorHood_Ay.c 
+	TaylorHood/TaylorHood_Ax.c TaylorHood/TaylorHood_Ay.c \
+	mx/zerofillrow.c
 
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I../include

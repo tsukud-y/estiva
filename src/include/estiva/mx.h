@@ -13,19 +13,6 @@ typedef struct {
   double *val, *pivots;
 } CRS;
 
-
-#define initmx(A,m,n)         estiva_initmx(&A,m,n)
-#define transmx(AT,A)         estiva_transmx(&AT,A)
-#define clonemx(AT,A)         estiva_clonemx(&AT,A)
-#define mulmx(t,A,x)          estiva_mulmx(&t,A,x)
-#define mx(A,i,j)           (*estiva_mx(A,i,j))
-#define matvecmx(A,alpha,x,beta,y) estiva_matvecmx(A,alpha,x,beta,y)
-#define psolvemx(A,pivot,LU,D,x,b) estiva_psolvemx(A,pivot,LU,D,x,b)
-#define pltmx(A)                   estiva_pltmx(A)
-#define clearmx(A)                  estiva_clearmx(A)
-#define fornonzeromx(A,i,j) for(estiva_fornonzeromx_init(A);estiva_fornonzeromx_loop(A,&(i),&(j));)
-
-
 void    estiva_initmx(MX **Ap, long i, long j);
 void    estiva_transmx(MX **ATp, MX *A);
 void    estiva_clonemx(MX **ATp, MX *A);
@@ -37,5 +24,18 @@ void    estiva_pltmx(MX *A);
 void    estiva_clearmx(MX *A);
 void    estiva_fornonzeromx_init(MX *A);
 int     estiva_fornonzeromx_loop(MX *A, long *Ip, long *Jp);
+void    estiva_zerofillrow(MX *A, long i);
+
+#define initmx(A,m,n)              estiva_initmx(&A,m,n)
+#define transmx(AT,A)              estiva_transmx(&AT,A)
+#define clonemx(AT,A)              estiva_clonemx(&AT,A)
+#define mulmx(t,A,x)               estiva_mulmx(&t,A,x)
+#define mx(A,i,j)                (*estiva_mx(A,i,j))
+#define matvecmx(A,alpha,x,beta,y) estiva_matvecmx(A,alpha,x,beta,y)
+#define psolvemx(A,pivot,LU,D,x,b) estiva_psolvemx(A,pivot,LU,D,x,b)
+#define pltmx(A)                   estiva_pltmx(A)
+#define clearmx(A)                 estiva_clearmx(A)
+#define fornonzeromx(A,i,j) for(estiva_fornonzeromx_init(A);estiva_fornonzeromx_loop(A,&(i),&(j));)
+#define zerofillrow(A,i)           estiva_zerofillrow(A,i)
 
 #endif
