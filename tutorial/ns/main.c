@@ -1,19 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "estiva/ary.h"
-#include "estiva/op.h"
-#include "estiva/solver.h"
-
-#include "fem.h"
 #include "ns.h"
 
+void   estiva_AX(MX **AXp, double *U, double *S, xyc *Z, nde *N);
+void   estiva_AY(MX **AYp, double *V, double *S, xyc *Z, nde *N);
+#define nsAX(AX,U,S,Z,N)      estiva_AX(&AX,U,S,Z,N)
+#define nsAY(AY,V,S,Z,N)      estiva_AY(&AY,V,S,Z,N)
 
 
 int main(int argc, char **argv)
 {
   static xyc *Z; static nde *N; 
-  static MX *A, *K, *M, *Hx, *Hy, *AX, *AY; static double *x, *b, *S;
+  static MX *A, *K, *M, *Hx, *Hy, *Ax, *Ay; static double *x, *b, *S;
   long   k, kn = 1, m, n, NUM;
   double t = 0.001;
 
@@ -27,22 +23,21 @@ int main(int argc, char **argv)
   ary1(x,NUM+1); 
   ary1(b,NUM+1);
 
-  femdelta(S,Z,N); 
-  setZNS(Z,N,S);
-  genP2P2mx(M,mij);
-  genP2P2mx(K,kij);
-  genP2P1mx(Hx,hxij);
-  genP2P1mx(Hy,hyij);
+  S = setmesh(Z,N);
 
-  
+  TaylorHood_M(M,16);
+  TaylorHood_K(K,12);
+  TaylorHood_Hx(Hx,5);
+  TaylorHood_Hy(Hy,5);
+
   if ( defop("-kn") ) kn = atoi(getop("-kn"));
   for ( k = 1; k <= kn; k++ ) {
-    nsAX(AX,x,S,Z,N);
-    nsAY(AY,x+m,S,Z,N);
+    nsAX(Ax,x,S,Z,N);
+    nsAY(Ay,x+m,S,Z,N);
     printf("A\n");
-    nsA(A,x,b,Z,N,K,M,Hx,Hy,AX,AY,t);
+    nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,t,50);
     nsRhs(b,M,x);
-    boundary_condition(Z,N,A,b);
+    boundary_condition(A,b);
     printf("solver\n");
     solver(A,x,b);
     pltp2(x,Z,N);

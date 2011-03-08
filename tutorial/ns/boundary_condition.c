@@ -1,18 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "estiva/op.h"
-#include "estiva/ary.h"
-
-#include "fem.h"
 #include "ns.h"
 
 
-void estiva_boundary_condition(xyc *Z, nde *N, MX *A, double *b)
+void estiva_boundary_condition(MX *A, double *b)
 {
   static double velocity = 0.1;
   long i, j, NUM, m, n;
+  static xyc *Z; static nde *N; static double *S;
+
+  getZNS(Z,N,S);
   m = dimp2(N); n = dim1(Z); NUM = m*2+n;
 
   for ( i = 1; i <= n; i++ ) if ( Z[i].label && !strcmp(Z[i].label,"zero") ) {

@@ -6,7 +6,7 @@
 static double B1, B2, C1, C2;
 double estiva_TaylorHood_Delta;
 
-void setBCD(double b1, double b2, double c1, double c2, double s) {
+void estiva_setBCD(double b1, double b2, double c1, double c2, double s) {
   B1 = b1; B2 = b2; C1 = c1; C2 = c2, Delta = s;
 }
 

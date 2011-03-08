@@ -1,7 +1,6 @@
 #include "estiva/TaylorHood.h"
 
-
-double mij(long i, long j)
+static double mij(long i, long j)
 {
   return  (Delta/180.0)*
     (
@@ -15,4 +14,8 @@ double mij(long i, long j)
      + 3.0  * (  d(i)*e(j) + e(i)*d(j) + d(i)*f(j) + f(i)*d(j)                                                  )
      +12.0  * (  e(i)*e(j) + f(i)*f(j)                                                                          )
      );
+}
+
+void estiva_TaylorHood_M(MX **M, long w) {
+  genP2P2mx(*M,mij,w);
 }

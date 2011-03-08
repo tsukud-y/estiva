@@ -1,20 +1,17 @@
-#include <stdio.h>
-
-#include "estiva/ary.h"
-
-#include "fem.h"
 #include "ns.h"
 
 
-void estiva_nsA(MX **Ap, double *x, double *b, xyc *Z, nde *N, MX *K, MX *M, MX *Hx, MX *Hy, MX *Ax, MX *Ay, double tau)
+void estiva_nsA(MX **Ap, double *x, double *b, MX *K, MX *M, MX *Hx, MX *Hy, MX *Ax, MX *Ay, double tau, long w)
 {
   static MX *A;
   long   i, j, NUM, m, n;
+  static xyc *Z; static nde *N; static double *S;
 
+  getZNS(Z,N,S);
   m   = M->m;
   n   = dim1(Z);
   NUM = m*2+n;
-  initmx(*Ap, NUM+1, 50); A = *Ap;
+  initmx(*Ap, NUM+1, w); A = *Ap;
   clearmx(A);
 
   fornonzeromx(M,i,j) {

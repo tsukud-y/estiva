@@ -1,7 +1,4 @@
-#include <stdio.h>
-
-#include "estiva/mesh.h"
-#include "estiva/mx.h"
+#include "ns.h"
 
 
 void estiva_nsRhs(double *b, MX *M, double *x)
