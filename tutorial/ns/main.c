@@ -1,17 +1,12 @@
 #include "ns.h"
 
-void   estiva_AX(MX **AXp, double *U, double *S, xyc *Z, nde *N);
-void   estiva_AY(MX **AYp, double *V, double *S, xyc *Z, nde *N);
-#define nsAX(AX,U,S,Z,N)      estiva_AX(&AX,U,S,Z,N)
-#define nsAY(AY,V,S,Z,N)      estiva_AY(&AY,V,S,Z,N)
-
 
 int main(int argc, char **argv)
 {
   static xyc *Z; static nde *N; 
   static MX *A, *K, *M, *Hx, *Hy, *Ax, *Ay; static double *x, *b;
-  long   k, kn = 1, m, n, NUM;
-  double t = 0.001;
+  long   k, kn = 100, m, n, NUM;
+  double tau = 0.001;
 
   initop(argc,argv);
   rectmesh(Z,N);
@@ -35,7 +30,7 @@ int main(int argc, char **argv)
     TaylorHood_Ax(Ax,x,24);
     TaylorHood_Ay(Ay,x+m,24);
     printf("A\n");
-    nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,t,50);
+    nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,tau,50);
     nsRhs(b,M,x);
     boundary_condition(A,b);
     printf("solver\n");

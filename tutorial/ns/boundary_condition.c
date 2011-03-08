@@ -3,7 +3,7 @@
 
 void estiva_boundary_condition(MX *A, double *b)
 {
-  static double velocity = 0.1;
+  static double velocity = 100.0;
   long i, j, NUM, m, n;
   static xyc *Z; static nde *N; static double *S;
 
