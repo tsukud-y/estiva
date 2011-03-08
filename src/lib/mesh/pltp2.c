@@ -42,6 +42,7 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
   static char filename[400];
   long arrow = 1;
 
+  system("mkdir -p anime");
   sprintf(filename,"anime/%s.gnuplot",num2str(sequence++));
   pp = fopen(filename,"w");
 
