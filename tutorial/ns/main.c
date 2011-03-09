@@ -20,15 +20,15 @@ int main(int argc, char **argv)
 
   setmesh(Z,N);
 
-  TaylorHood_M(M,16);
-  TaylorHood_K(K,12);
-  TaylorHood_Hx(Hx,5);
-  TaylorHood_Hy(Hy,5);
+  TaylorHood_M(M,26);
+  TaylorHood_K(K,22);
+  TaylorHood_Hx(Hx,15);
+  TaylorHood_Hy(Hy,15);
 
   if ( defop("-kn") ) kn = atoi(getop("-kn"));
   for ( k = 1; k <= kn; k++ ) {
-    TaylorHood_Ax(Ax,x,24);
-    TaylorHood_Ay(Ay,x+m,24);
+    TaylorHood_Ax(Ax,x,34);
+    TaylorHood_Ay(Ay,x+m,34);
     printf("A\n");
     nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,tau,50);
     nsRhs(b,M,x);

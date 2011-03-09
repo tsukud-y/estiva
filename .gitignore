@@ -6,6 +6,7 @@ ID
 *.o
 *.gnuplot
 a.out
+a.out.core
 src/bin/unestiva/unestiva
 src/bin/xmesh/xmesh
 src/bin/xmsh/xmsh
