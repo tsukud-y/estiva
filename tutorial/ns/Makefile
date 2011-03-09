@@ -16,3 +16,7 @@ run: all
 
 clean: ;
 	rm -f ./a.out ./a.out.core $(OBJS)
+
+allclean: clean
+	(cd ../../src; make clean)
+	rm -rf ./anime
