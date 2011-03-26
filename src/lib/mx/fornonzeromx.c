@@ -1,7 +1,7 @@
 #include "estiva/mx.h"
 
 
-void estiva_fornonzeromx_init(MX *A){
+void estiva_fornonzeromx(MX *A){
   mx(A,1,1) = mx(A,1,1);
 }
 
