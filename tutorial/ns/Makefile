@@ -11,7 +11,11 @@ all: $(OBJS)
 	$(CC) $(OBJS) -Wall -L${SRC}/lib -lestiva -lm
 
 run: all
-	./a.out -plotscale 0.005
+	./a.out -plotscale 0.001 -n 16
+	(cd anime; cat *.gnuplot | gnuplot)
+
+large: all
+	./a.out -plotscale 0.001 -kn 500 -n 50
 	(cd anime; cat *.gnuplot | gnuplot)
 
 clean: ;
