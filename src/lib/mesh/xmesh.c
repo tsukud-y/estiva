@@ -22,7 +22,7 @@ static void pltmsh(FILE *fp, xyc *Z, nde *N)
 }
 
 
-void sleep_forever(void) 
+static void sleep_forever(void) 
 {
   sleep(60*3);
 }

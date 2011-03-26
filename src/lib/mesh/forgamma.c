@@ -6,7 +6,7 @@
 
 static int count=0;
 
-void estiva_initgamma(void)
+void estiva_forgamma(void)
 { count = 0;}
 
 static int neq(char *str1, char *str2)
@@ -16,7 +16,7 @@ static int neq(char *str1, char *str2)
   return strcmp(str1,str2);
 }
 
-int estiva_gamma(xyc* Z,int *p,char *str)
+int estiva_forgamma_loop(xyc* Z,int *p,char *str)
 { 
   if(dim1(Z) < ++count) return 0;
   
