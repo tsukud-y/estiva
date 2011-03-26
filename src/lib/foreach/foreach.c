@@ -70,6 +70,6 @@ int estiva_foreach(int fsize,void *f0,...)
   if(fn!=NULL){ estiva_cp(fn,f0,fsize,fsize); n(f0)++; return 1;}
   free(f(f0)); R(f0,NULL); return 0;
 }
-void *estiva_end()
+void *estiva_foreachend()
      /* end estiva_end())) */
 { return NULL;}
