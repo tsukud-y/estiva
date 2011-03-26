@@ -40,5 +40,7 @@ void estiva_femdelta(double **Sp, xyc *Z, nde *N);
 #define forgammap2(i,label,Z,N)						\
   for ( estiva_forgammap2(Z,N,label); estiva_forgammap2_loop(&(i));)
 #define femdelta(S,Z,N)       estiva_femdelta(&S,Z,N)
+#define forgammap1(i,NAME,Z)                                            \
+  for ( estiva_forgammap1(NAME,Z); estiva_forgammap1_loop(&(i));)
 
 #endif

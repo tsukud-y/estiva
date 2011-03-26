@@ -1,6 +1,5 @@
 #include "ns.h"
 
-
 void estiva_boundary_condition(MX *A, double *b)
 {
   static double velocity = 1000.0;
@@ -10,7 +9,7 @@ void estiva_boundary_condition(MX *A, double *b)
   getZNS(Z,N,S);
   m = dimp2(N); n = dim1(Z); NUM = m*2+n;
 
-  for ( i = 1; i <= n; i++ ) if ( Z[i].label && !strcmp(Z[i].label,"zero") ) {
+  forgammap1(i,"zero",Z) {
       zerofillrow(A,i);
       zerofillrow(A,m+i);
       mx(A,i,i)     = 1.0;
