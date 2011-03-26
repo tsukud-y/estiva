@@ -54,7 +54,7 @@ void estiva_pltp2(double *x, xyc * Z, nde *N)
 
   dim1N = dim1(N);
   for (e=1; e<=dim1N; e++)
-    foreach(n) &N[e].a, &N[e].b, &N[e].c, end {
+    foreach(n) &N[e].a, &N[e].b, &N[e].c, foreachend {
       fprintf(pp,"set arrow %ld from %f,%f to %f,%f\n",arrow++,Z[n].x,Z[n].y,Z[n].x+u[n]*scale,Z[n].y+v[n]*scale);
       if ( Z[n].label != NULL ) {
 	// fprintf(pp,"set label \"%s\" at %f, %f;\n",Z[n].label, Z[n].x, Z[n].y);

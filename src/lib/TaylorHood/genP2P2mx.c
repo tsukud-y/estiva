@@ -40,9 +40,9 @@ void estiva_genP2P2mx(MX **Mp, double (*func)(long i, long j), long w)
     a=N[e].a; b=N[e].b; c=N[e].c; A=N[e].A; B=N[e].B; C=N[e].C; s=S[e];
     setBCD((Z[b].y-Z[c].y)/(2.0*s), (Z[c].y-Z[a].y)/(2.0*s), (Z[c].x-Z[b].x)/(2.0*s), (Z[a].x-Z[c].x)/(2.0*s), s);
     i=1; 
-    foreach(I)&a,&b,&c,&A,&B,&C,end {
+    foreach(I)&a,&b,&c,&A,&B,&C,foreachend {
       j=1;
-      foreach(J)&a,&b,&c,&A,&B,&C,end {
+      foreach(J)&a,&b,&c,&A,&B,&C,foreachend {
         mx(M,I,J) += func(i,j);
         j++;
       }
@@ -63,9 +63,9 @@ void estiva_genP2P1mx(MX **Mp, double (*func)(long i, long j), long w)
     a=N[e].a; b=N[e].b; c=N[e].c; A=N[e].A; B=N[e].B; C=N[e].C; s=S[e];
     setBCD((Z[b].y-Z[c].y)/(2.0*s), (Z[c].y-Z[a].y)/(2.0*s), (Z[c].x-Z[b].x)/(2.0*s), (Z[a].x-Z[c].x)/(2.0*s), s);
     i=1; 
-    foreach(I)&a,&b,&c,&A,&B,&C,end {
+    foreach(I)&a,&b,&c,&A,&B,&C,foreachend {
       j=1;
-      foreach(J)&a,&b,&c,end {
+      foreach(J)&a,&b,&c,foreachend {
         mx(M,I,J) += func(i,j);
         j++;
       }

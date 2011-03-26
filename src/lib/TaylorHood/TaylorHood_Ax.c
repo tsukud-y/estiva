@@ -62,9 +62,9 @@ void estiva_TaylorHood_Ax(MX **AXp, double *U, long w)
     a = N[e].a; b = N[e].b; c = N[e].c; A = N[e].A; B = N[e].B; C = N[e].C;
     delta = S[e];
     i = 0;
-    foreach(I) &a, &b, &c, &A, &B, &C, end {
+    foreach(I) &a, &b, &c, &A, &B, &C, foreachend {
       ++i; j=0;
-      foreach(J) &a, &b, &c, &A, &B, &C, end {
+      foreach(J) &a, &b, &c, &A, &B, &C, foreachend {
 	B1 = Z[b].y - Z[c].y; B1 /= 2.0*delta;
 	B2 = Z[c].y - Z[a].y; B2 /= 2.0*delta;
 	B3 = Z[a].y - Z[b].y; B3 /= 2.0*delta;
