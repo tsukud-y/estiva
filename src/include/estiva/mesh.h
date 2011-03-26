@@ -4,14 +4,14 @@
 typedef struct{ double x, y; char *label;} xyc;
 typedef struct{ int a,b,c,A,B,C;} nde;
 
-void estiva_fp2xyc(FILE *fp, xyc **Zp);
-void estiva_fp2mesh(FILE* fp, xyc **Zp, nde **Np);
-void estiva_plt(FILE *fp, xyc *Mid, xyc *Z, nde *N, double *u);
+void estiva_fp2xyc(void *fp, xyc **Zp);
+void estiva_fp2mesh(void* fp, xyc **Zp, nde **Np);
+void estiva_plt(void *fp, xyc *Mid, xyc *Z, nde *N, double *u);
 void *estiva_np1(xyc *Z, nde *N);
 void estiva_initgamma(void);
 int  estiva_gamma(xyc* Z,int *p,char *str);
 void estiva_delaunay(xyc **Zo, nde **No);
-void estiva_fprintmesh(FILE *fp, xyc *Z, nde *N);
+void estiva_fprintmesh(void *fp, xyc *Z, nde *N);
 void estiva_xmesh(xyc *Z);
 void estiva_pushxyc(void *qp, double x, double y, char *label);
 void estiva_genmesh(void *qp, xyc **Zp, nde **Np);
@@ -22,6 +22,8 @@ void estiva_pltp2(double *x, xyc * Z, nde *N);
 void estiva_forgammap2(xyc *Z, nde *N, char *label);
 int  estiva_forgammap2_loop(long *ip);
 void estiva_femdelta(double **Sp, xyc *Z, nde *N);
+void estiva_forgammap1(char *NAME, xyc *Z);
+int  estiva_forgammap1_loop(long *ip);
 
 #define fp2xyc(fp,Z)          estiva_fp2xyc(fp,&(Z))
 #define fp2mesh(fp,Z,N)       estiva_fp2mesh(fp,&(Z),&(N))

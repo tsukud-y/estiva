@@ -13,8 +13,10 @@ static char *label(xyc *Z,int i)
   return Z[i].label==NULL? normal:Z[i].label;
 }
 
-void estiva_fprintmesh(FILE *fp, xyc *Z, nde *N)
+void estiva_fprintmesh(void *vfp, xyc *Z, nde *N)
 {
+  FILE *fp;
+  fp = vfp;
   int i;
   fprintf(fp,"<xyc>\n");
   forall(1,i,dim1(Z))

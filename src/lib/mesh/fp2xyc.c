@@ -42,9 +42,11 @@ static void estiva_FILE_cp(FILE *fp,FILE *out)
   while(EOF !=(c=getc(fp))) putc(c,out);
 }     
 
-void estiva_fp2xyc(FILE *fp, xyc **Zp)
+void estiva_fp2xyc(void *vfp, xyc **Zp)
 /* fp2xyc(fp) estiva_fp2xyc(fp) */
 { static xyc *Z; int i,z; FILE *tfp;
+  FILE *fp;
+  fp = vfp;
   
   FILE_cp(fp,(tfp=tmpfile())); rewind(tfp);
   z=0; forFILE(tfp)if(S(1)!=NULL&&S(2)!=NULL)z++; rewind(tfp);

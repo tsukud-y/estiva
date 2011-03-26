@@ -4,12 +4,14 @@
 #include <estiva/ary.h>
 #include <estiva/mesh.h>
 
-void estiva_fp2mesh(FILE* fp, xyc** Zp, nde** Np)
+void estiva_fp2mesh(void* vfp, xyc** Zp, nde** Np)
 {
+  FILE *fp;
   static xyc* Z; static nde* N;
   char buf1000[1000], buf200[200];
   int i, j, m=0, n=0, state = 1;
-  
+  fp = vfp;  
+
 
   while(fgets(buf1000,999,fp)) switch(state){
 

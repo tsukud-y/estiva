@@ -193,8 +193,11 @@ static void estiva_pltuv(FILE *fp, xyc *Mid, double *u, double *v)
   fflush(fp);
 }
 
-void estiva_plt(FILE *fp, xyc *Mid, xyc *Z, nde *N, double *u)
+void estiva_plt(void *vfp, xyc *Mid, xyc *Z, nde *N, double *u)
 {
+  FILE *fp;
+  fp = vfp;
+
   if (defop("-conta")) {
   
     if ( dim1(N) == dim1(u) )
