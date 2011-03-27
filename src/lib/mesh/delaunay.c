@@ -187,8 +187,8 @@ void estiva_delaunay(xyc **Zo, nde **No)
     N_set(e1,a,i,c,e0,B, e2);
     N_set(e2,a,b,i,e0,e1, C);
     
-    foreach(a)&N[B].A,&N[B].B,&N[B].C,foreachend if(a==e0) a=e1;
-    foreach(a)&N[C].A,&N[C].B,&N[C].C,foreachend if(a==e0) a=e2;
+    foreach(a,&N[B].A,&N[B].B,&N[B].C) if(a==e0) a=e1;
+    foreach(a,&N[C].A,&N[C].B,&N[C].C) if(a==e0) a=e2;
     
     initq(q);
     push(q,e0); push(q,e1); push(q,e2); 
@@ -201,9 +201,9 @@ void estiva_delaunay(xyc **Zo, nde **No)
   forall(1,i,dim1(N)){
     if(Z[N[i].a].label==NULL||Z[N[i].b].label==NULL||Z[N[i].c].label==NULL)
       continue;
-    foreach(A)&N[i].A,&N[i].B,&N[i].C,foreachend 
-      foreach(a)&N[A].A,&N[A].B,&N[A].C,foreachend if(a==i)a=0;
-    foreach(a)&N[i].a,&N[i].b,&N[i].c,&N[i].A,&N[i].B,&N[i].C,foreachend a=0;
+    foreach(A,&N[i].A,&N[i].B,&N[i].C)
+      foreach(a,&N[A].A,&N[A].B,&N[A].C) if(a==i) a=0;
+    foreach(a,&N[i].a,&N[i].b,&N[i].c,&N[i].A,&N[i].B,&N[i].C) a=0;
   }
 
   n=0;forall(1,i,dim1(N))if(N[i].a!=0) n++;
@@ -222,7 +222,7 @@ void estiva_delaunay(xyc **Zo, nde **No)
   ary1(fNinv,n+1); 
   //if(fNinv == NULL) fprintf(stderr,"Can't malloc()\n");
   forall(1,i,dim1(fN)) fNinv[fN[i]]=i;
-  forall(1,i,dim1(N)) foreach(A)&N[i].A,&N[i].B,&N[i].C,foreachend A=fNinv[A];
+  forall(1,i,dim1(N)) foreach(A,&N[i].A,&N[i].B,&N[i].C) A=fNinv[A];
 
 
   ary1(fN,0); 
@@ -230,9 +230,11 @@ void estiva_delaunay(xyc **Zo, nde **No)
   ary1(fNinv,0); /* error something wrong! */
 
 
-  z=0; ary1(fZ,dim1(Z)+1); forall(1,i,dim1(N)) 
-    foreach(a)&N[i].a,&N[i].b,&N[i].c,foreachend if(fZ[a]==0)fZ[a]= ++z;
-  forall(1,i,dim1(N)) foreach(a)&N[i].a,&N[i].b,&N[i].c,foreachend a=fZ[a];
+  z=0; ary1(fZ,dim1(Z)+1); 
+  forall(1,i,dim1(N)) 
+    foreach(a,&N[i].a,&N[i].b,&N[i].c) if(fZ[a]==0)fZ[a]= ++z;
+  forall(1,i,dim1(N)) 
+    foreach(a,&N[i].a,&N[i].b,&N[i].c) a=fZ[a];
   finv(fZinv,fZ,z);
   { static xyc *Z1;
     ary1(Z1,z+1); forall(1,i,dim1(Z1)) cp(Z[fZinv[i]],Z1[i]);

@@ -30,14 +30,14 @@ void estiva_p2(xyc *Z, nde *N)
   e = dim1(N);
 
   for(i=1;i<=e;i++)
-    foreach(m)&N[i].A,&N[i].B,&N[i].C,foreachend
+    foreach(m,&N[i].A,&N[i].B,&N[i].C)
       m = -m;
 
   n=dim1(Z)+1;
   for(i=1;i<=e;i++)
-    foreach(m)&N[i].A,&N[i].B,&N[i].C,foreachend
+    foreach(m,&N[i].A,&N[i].B,&N[i].C)
       if(m<=0){
-        foreach(u)&N[-m].A,&N[-m].B,&N[-m].C,foreachend if(u== -i) u=n;
+        foreach(u,&N[-m].A,&N[-m].B,&N[-m].C) if(u== -i) u=n;
         m=n++;
       }
   
