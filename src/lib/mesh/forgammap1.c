@@ -1,32 +1,35 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "estiva/mesh.h"
 #include "estiva/ary.h"
+#include "estiva/std.h"
 
-static long n, i;
-static char *NAME;
-static xyc *Z;
+#define y(x) (*(long *)f(x))
 
-void estiva_forgammap1(char *NAMEp, xyc *Zp)
+void estiva_forgammap1(long *x)
 {
-  Z = Zp;
-  n = dim1(Z);
-  i = 1;
-  NAME = NAMEp;
+  if ( &y(x) == NULL ) Rnew(x, long); 
+  if ( &y(x) == NULL ) abort();
+  y(x) = 1;
 }
 
-
-int estiva_forgammap1_loop(long *ip)
+int estiva_forgammap1_loop(long *x, char *NAME, xyc *Z)
 {
-  while ( i <= n ) {
-    if (Z[i].label && !strcmp(Z[i].label,NAME) ) {
-      *ip = i;
-      i++;
+  long  n;
+  n = dim1(Z);
+
+  while ( y(x) <= n ) {
+    if (Z[y(x)].label && !strcmp(Z[y(x)].label,NAME) ) {
+      *x = y(x);
+      y(x)++;
       return 1;
     }
     else {
-      i++;
+      y(x)++;
     }
   }
+  
+  Rdestroy(x);
   return 0;
 }
