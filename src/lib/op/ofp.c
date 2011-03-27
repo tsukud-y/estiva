@@ -2,7 +2,7 @@
 #include "estiva/op.h"
 
 
-FILE *estiva_ofp(void)
+void *estiva_ofp(void)
 {
   FILE *fp;
 

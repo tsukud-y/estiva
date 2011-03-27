@@ -40,7 +40,7 @@ static void cp_fp(FILE* in, FILE* out)
 }
 
 
-FILE *estiva_stdfp(void)
+void *estiva_stdfp(void)
 {
   FILE *fp;
   int i = argc;
