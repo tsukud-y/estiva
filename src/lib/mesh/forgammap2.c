@@ -42,14 +42,14 @@ static que *estiva_forgammap2_init(xyc *Z, nde *N, char *label)
 
 void estiva_forgammap2(xyc *Z, nde *N, char *label)
 {
-  estiva_forqinit(estiva_forgammap2_init(Z,N,label),
+  estiva_forq(estiva_forgammap2_init(Z,N,label),
 		  (void*)&estiva_forgammap2_p);
 }
 
 int estiva_forgammap2_loop(long *ip)
 {
   int flag;
-  flag = estiva_forq(((void*)&estiva_forgammap2_p));
+  flag = estiva_forq_loop(((void*)&estiva_forgammap2_p));
   *ip = *estiva_forgammap2_p;
   return flag;
 }

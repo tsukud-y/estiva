@@ -46,13 +46,13 @@ static que **estiva_p(void **e)
 
 #define p(e)  (*estiva_p(e))
 
-void estiva_forqinit(que *q, void **e)
+void estiva_forq(que *q, void **e)
 {
   if (f(e) == NULL) R(e,malloc(sizeof(void *)));
   p(e) = q;
 }
 
-int estiva_forq(void **e)
+int estiva_forq_loop(void **e)
 {
   if ( p(e)->elem == NULL ) { 
     free(f(e)); 
