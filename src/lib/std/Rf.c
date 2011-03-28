@@ -58,7 +58,7 @@ void *estiva_std_f(void *x)
   return y_array[where(x)];
 }
 
-void estiva_std_Rnew(void *x,size_t size)
+static void estiva_std_Rnew(void *x,size_t size)
 {
   if( f(x) == NULL )
     R(x,calloc(1,size));
@@ -72,7 +72,7 @@ void estiva_std_Rdestroy(void *x)
   R(x, NULL);
 }
 
-void *estiva_std_f2(size_t size, void *x)
+void *estiva_std_f2(long size, void *x)
 {
   estiva_std_Rnew(x, size);
   return estiva_std_f(x);
