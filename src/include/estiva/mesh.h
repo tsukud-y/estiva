@@ -22,7 +22,7 @@ void    estiva_forgamma(void);
 int     estiva_forgamma_loop(xyc* Z,int *p,char *str);
 void    estiva_forgammap1(long *ip);
 int     estiva_forgammap1_loop(long *ip, char *NAME, xyc *Z);
-void    estiva_forgammap2(xyc *Z, nde *N, char *label);
+void    estiva_forgammap2(long *ip, xyc *Z, nde *N, char *label);
 int     estiva_forgammap2_loop(long *ip);
 
 #define delaunay(Z,N)                 estiva_delaunay(&(Z),&(N)) 
@@ -44,6 +44,6 @@ int     estiva_forgammap2_loop(long *ip);
 #define forgammap1(i,NAME,Z)						\
   for ( estiva_forgammap1(&(i));      estiva_forgammap1_loop(&(i),NAME,Z);)
 #define forgammap2(i,label,Z,N)						\
-  for ( estiva_forgammap2(Z,N,label); estiva_forgammap2_loop(&(i));)
+  for ( estiva_forgammap2(&(i),Z,N,label); estiva_forgammap2_loop(&(i));)
 
 #endif

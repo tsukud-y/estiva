@@ -60,7 +60,7 @@ void *estiva_std_f(void *x)
 
 void estiva_std_Rnew(void *x,size_t size)
 {
-  R(x,malloc(size));
+  R(x,calloc(1,size));
 }
 
 void estiva_std_Rdestroy(void *x)

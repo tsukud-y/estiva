@@ -1,22 +1,23 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include "estiva/que.h"
 #include "estiva/mesh.h"
 #include "estiva/ary.h"
+#include "estiva/std.h"
+#include "estiva/que.h"
 
-static long *estiva_forgammap2_p;
+#define y(x) (*(que**)f(x))
 
-static que *estiva_forgammap2_init(xyc *Z, nde *N, char *label)
+void estiva_forgammap2(long *x, xyc *Z, nde *N, char *label)
 {
-  static que *q;
-  long i, e, m, *p;
+  long v, e, m;
+  if (&y(x) == NULL) Rnew(x,void*);
+  if (&y(x) == NULL) abort();
+  initq(y(x));
 
-  initq(q);
-  forq(q,p) pop(q,p);
-
-  for (i=1; i<=dim1(Z); i++) {
-    if (Z[i].label && !strcmp(Z[i].label,label)){
-      push(q,i);
+  for (v=1; v<=dim1(Z); v++) {
+    if (Z[v].label && !strcmp(Z[v].label,label)){
+      push(y(x),v);
     }
   }
 
@@ -24,32 +25,27 @@ static que *estiva_forgammap2_init(xyc *Z, nde *N, char *label)
     m = N[e].A;
     if ( (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label)) ||
          (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label))  ) {
-      if (Z[N[e].b].label && Z[N[e].c].label) push(q,m);
+      if (Z[N[e].b].label && Z[N[e].c].label) push(y(x),m);
     }
     m = N[e].B;
     if ( (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label)) ||
          (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label))  ) {
-      if (Z[N[e].c].label && Z[N[e].a].label) push(q,m);
+      if (Z[N[e].c].label && Z[N[e].a].label) push(y(x),m);
     }
     m = N[e].C;
     if ( (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label)) ||
          (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label))  ) {
-      if (Z[N[e].a].label && Z[N[e].b].label) push(q,m);
+      if (Z[N[e].a].label && Z[N[e].b].label) push(y(x),m);
     }
   }
-  return q;
 }
 
-void estiva_forgammap2(xyc *Z, nde *N, char *label)
+int estiva_forgammap2_loop(long *x)
 {
-  estiva_forq(estiva_forgammap2_init(Z,N,label),
-		  (void*)&estiva_forgammap2_p);
-}
-
-int estiva_forgammap2_loop(long *ip)
-{
-  int flag;
-  flag = estiva_forq_loop(((void*)&estiva_forgammap2_p));
-  *ip = *estiva_forgammap2_p;
-  return flag;
+  if( y(x)->elem ) { 
+    pop(y(x),*x);
+    return 1;
+  }
+  Rdestroy(x);
+  return 0;
 }
