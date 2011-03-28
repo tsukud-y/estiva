@@ -17,5 +17,8 @@ void  estiva_std_Rdestroy(void *x);
 #define    f(x)       estiva_std_f(x)
 #define Rnew(x,type)  estiva_std_Rnew(x,sizeof(type))
 #define Rdestroy(x)   estiva_std_Rdestroy(x)
+#define static_new(type,x)   Rnew(x,type)
+#define static_bind(type,x)  (*(type*)f(x))
+#define static_free(x)       Rdestroy(x)
 
 #endif 

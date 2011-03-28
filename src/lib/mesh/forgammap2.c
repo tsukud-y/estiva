@@ -6,18 +6,17 @@
 #include "estiva/std.h"
 #include "estiva/que.h"
 
-#define y(x) (*(que**)f(x))
+#define q static_bind(que*, x)
 
 void estiva_forgammap2(long *x, xyc *Z, nde *N, char *label)
 {
   long v, e, m;
-  if (&y(x) == NULL) Rnew(x,void*);
-  if (&y(x) == NULL) abort();
-  initq(y(x));
+  static_new(que*, x);
+  initq(q);
 
   for (v=1; v<=dim1(Z); v++) {
     if (Z[v].label && !strcmp(Z[v].label,label)){
-      push(y(x),v);
+      push(q,v);
     }
   }
 
@@ -25,27 +24,27 @@ void estiva_forgammap2(long *x, xyc *Z, nde *N, char *label)
     m = N[e].A;
     if ( (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label)) ||
          (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label))  ) {
-      if (Z[N[e].b].label && Z[N[e].c].label) push(y(x),m);
+      if (Z[N[e].b].label && Z[N[e].c].label) push(q,m);
     }
     m = N[e].B;
     if ( (Z[N[e].c].label && !strcmp(Z[N[e].c].label, label)) ||
          (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label))  ) {
-      if (Z[N[e].c].label && Z[N[e].a].label) push(y(x),m);
+      if (Z[N[e].c].label && Z[N[e].a].label) push(q,m);
     }
     m = N[e].C;
     if ( (Z[N[e].a].label && !strcmp(Z[N[e].a].label, label)) ||
          (Z[N[e].b].label && !strcmp(Z[N[e].b].label, label))  ) {
-      if (Z[N[e].a].label && Z[N[e].b].label) push(y(x),m);
+      if (Z[N[e].a].label && Z[N[e].b].label) push(q,m);
     }
   }
 }
 
 int estiva_forgammap2_loop(long *x)
 {
-  if( y(x)->elem ) { 
-    pop(y(x),*x);
+  if( q->elem ) { 
+    pop(q,*x);
     return 1;
   }
-  Rdestroy(x);
+  static_free(x);
   return 0;
 }
