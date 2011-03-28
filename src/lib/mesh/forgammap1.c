@@ -5,31 +5,25 @@
 #include "estiva/ary.h"
 #include "estiva/std.h"
 
-#define y(x) (*(long *)f(x))
+#define n static_bind(long,x)
 
 void estiva_forgammap1(long *x)
 {
-  if ( &y(x) == NULL ) Rnew(x, long); 
-  if ( &y(x) == NULL ) abort();
-  y(x) = 1;
+  n = 1;
 }
 
-int estiva_forgammap1_loop(long *x, char *NAME, xyc *Z)
+int estiva_forgammap1_loop(long *x, char *name, xyc *Z)
 {
-  long  n;
-  n = dim1(Z);
-
-  while ( y(x) <= n ) {
-    if (Z[y(x)].label && !strcmp(Z[y(x)].label,NAME) ) {
-      *x = y(x);
-      y(x)++;
+  while ( n <= dim1(Z) ) {
+    if (Z[n].label && !strcmp(Z[n].label, name) ) {
+      *x = n;
+      n++;
       return 1;
     }
     else {
-      y(x)++;
+      n++;
     }
   }
-  
-  Rdestroy(x);
+  static_free(x);
   return 0;
 }

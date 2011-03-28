@@ -72,3 +72,8 @@ void estiva_std_Rdestroy(void *x)
   R(x, NULL);
 }
 
+void *estiva_std_f2(size_t size, void *x)
+{
+  estiva_std_Rnew(x, size);
+  return estiva_std_f(x);
+}

@@ -165,54 +165,45 @@ void stokesRhs(double *b, xyc *Mid, nde *N,MX *M,double t,double *Fx,double *Fy,
 
 static void boundary_condition(nde *N, xyc *Mid, MX *A, double *b)
 {
-  long NUM;
-  int i, j, m, n;
+  long NUM, i, j, m, n;
   m = dim1(Mid);
   n = dim1(N);
   NUM = 2*m+n;
 
-  forgamma(Mid,i,"j1"){
-    for(j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+  forgammap1(i,"j1",Mid){
+    zerofillrow(A,i);
     mx(A,i,i) = 1.0;
     b[i] = 0.0;
   }
-
-  forgamma(Mid,i,"j2"){
-    for(j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+  forgammap1(i,"j2",Mid){
+    zerofillrow(A,i);
     mx(A,i,i) = 1.0;
     b[i]   = 0.1;
-
-    for(j=1;j<=NUM;j++) mx(A,i+m,j) = 0.0;
+    zerofillrow(A,i+m);
     mx(A,i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
-
-  forgamma(Mid,i,"j3"){
-    for(j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+  forgammap1(i,"j3",Mid){
+    zerofillrow(A,i);
     mx(A,i,i) = 1.0;
     b[i]   = 0.0;
   }
-  forgamma(Mid,i,"j4"){
-    for(j=1;j<=NUM;j++) mx(A,i+m,j) = 0.0;
+  forgammap1(i,"j4",Mid){
+    zerofillrow(A,i+m);
     mx(A,i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
-
-  forgamma(Mid,i,"ki"){
-    for(j=1;j<=NUM;j++) mx(A,i,j) = 0.0;
+  forgammap1(i,"ki",Mid){
+    zerofillrow(A,i);
     mx(A,i,i) = 1.0;
     b[i] = 0.0;
-
-    for(j=1;j<=NUM;j++) mx(A,i+m,j) = 0.0;
+    zerofillrow(A,i+m);
     mx(A,i+m,i+m) = 1.0;
     b[i+m]     = 0.0;
   }
-
-  
-  for(j=1;j<=NUM;j++) mx(A,2*m+1,j) = 0.0;
-  mx(A,2*m+1,2*m+1) = 1.0;
-  b[2*m+1] = 0.0;
-
+  zerofillrow(A,NUM-30);
+  mx(A,NUM-30,NUM-30) = 1.0;
+  b[NUM-30] = 0.0001;
 }
 
 
@@ -242,9 +233,6 @@ int main(int argc, char** argv)
 
   M  = M__(Mid,N,S);
   K  = K__(Mid,Z,N,S);
-  for(i=1;i<=m;i++) {
-    for(j=1;j<=m;j++)if(mx(K,i,j)!=0.0) printf("%d %d %f\n",i,j,mx(K,i,j));
-  }
   Hx = Hx__(Mid,Z,N);
   Hy = Hy__(Mid,Z,N);
 

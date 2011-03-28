@@ -3,22 +3,20 @@
 #include "estiva/que.h"
 #include "estiva/std.h"
 
-#define y(x) (*(que**)f(x))
+#define p static_bind(que*,x)
 
 void estiva_forq(que *q, void **x)
 {
-  if (&y(x) == NULL) Rnew(x,void*);
-  if (&y(x) == NULL) abort();
-  y(x) = q;
+  p = q;
 }
 
 int estiva_forq_loop(void **x)
 {
-  if ( y(x)->elem == NULL ) { 
-    Rdestroy(x);
+  if ( p->elem == NULL ) { 
+    static_free(x);
     return 0; 
   }
-  *x = *(void**)y(x)->elem;
-  y(x) = y(x)->next;
+  *x = *(void**)p->elem;
+  p = p->next;
   return 1;
 }

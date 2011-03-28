@@ -5,14 +5,13 @@
 #include "estiva/ary.h"
 #include "estiva/std.h"
 
+#define n static_bind(int,x)
+
 int estiva_foreach(int xsize, void *x, ...)
 { 
   va_list ap;
   void *xi, *xn;
   int i; 
-#define n \
-  static_bind(int,x)
-  static_new(int,x); 
 
   va_start(ap,x); 
   xi = x;
@@ -22,7 +21,7 @@ int estiva_foreach(int xsize, void *x, ...)
   va_end(ap); 
   
   memcpy(xi,x,xsize);
-
+  
   if ( xn != NULL ) { 
     memcpy(x,xn,xsize);
     n++; 

@@ -11,7 +11,6 @@
 void estiva_forgammap2(long *x, xyc *Z, nde *N, char *label)
 {
   long v, e, m;
-  static_new(que*, x);
   initq(q);
 
   for (v=1; v<=dim1(Z); v++) {
