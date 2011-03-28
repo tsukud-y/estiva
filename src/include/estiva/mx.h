@@ -23,6 +23,7 @@ void    estiva_pltmx(MX *A);
 void    estiva_psolvemx(MX *A,CRS *pivot,MX *LU,double *D,double *x,double *b);
 void    estiva_transmx(MX **ATp, MX *A);
 void    estiva_zerofillrow(MX *A, long i);
+void    estiva_slimupmx(MX **Ap, MX *A);
 void    estiva_fornonzeromx(MX *A);
 int     estiva_fornonzeromx_loop(MX *A, long *Ip, long *Jp);
 
@@ -36,6 +37,7 @@ int     estiva_fornonzeromx_loop(MX *A, long *Ip, long *Jp);
 #define psolvemx(A,pivot,LU,D,x,b)   estiva_psolvemx(A,pivot,LU,D,x,b)
 #define transmx(AT,A)                estiva_transmx(&AT,A)
 #define zerofillrow(A,i)             estiva_zerofillrow(A,i)
+#define slimupmx(As,A)               estiva_slimupmx(&As,A)
 #define fornonzeromx(A,i,j)						\
   for ( estiva_fornonzeromx(A);      estiva_fornonzeromx_loop(A,&(i),&(j));)
 
