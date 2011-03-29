@@ -3,8 +3,8 @@
 #include "estiva/ary.h"
 #include "estiva/std.h"
 
-static int top, limit = 1;
-static void **x_array, **y_array;
+static int top=0, limit = 1000;
+static void *x_array[1000], *y_array[1000];
 
 static void set(int i, void *x, void *y)
 {
@@ -54,7 +54,7 @@ void estiva_std_R(void *x, void *y)
 
 void *estiva_std_f(void *x)
 { 
-  ary1(x_array,limit); ary1(y_array,limit);
+  //ary1(x_array,limit); ary1(y_array,limit);
   return y_array[where(x)];
 }
 
