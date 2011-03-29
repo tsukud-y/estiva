@@ -11,7 +11,7 @@ all: $(OBJS)
 	$(CC) $(OBJS) -Wall -L${SRC}/lib -lestiva -lm
 
 run: all
-	./a.out -plotscale 0.001 -n 10 -solver bicg -v
+	./a.out -plotscale 0.001 -n 10 -solver cgs -v
 	(cd anime; cat *.gnuplot | gnuplot)
 
 large: all
