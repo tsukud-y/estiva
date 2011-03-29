@@ -134,8 +134,8 @@ static int bicg_(long *n, double *bp, double *xp, double *work,
   ary1(q,work_dim1);    
   ary1(qtld,work_dim1);
 
-  ary1(x,work_dim1);
-  ary1(b,work_dim1);
+  ary1(x,work_dim1+1);
+  ary1(b,work_dim1+1);
 
   forall(0,i,work_dim1) x[i] = xp[i+1];
   forall(0,i,work_dim1) b[i] = bp[i+1];
