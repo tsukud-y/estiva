@@ -1,312 +1,195 @@
 #include <stdio.h>
-#include <estiva/ary.h>
-#include <estiva/mx.h>
-#include <estiva/solver.h>
-
-typedef long*    I_  ;
-typedef long**   I__ ;
-typedef double*  D_  ;
-typedef double** D__ ;
-
-#define D_  static D_
-#define D__ static D__
-#define I_  static I_
-#define I__ static I__
-
-static int count_NL(void *pA, long N)
-{
-  long i, j, k, NL ;
-
-  for(NL=0, i=1; i<=N; i++){
-    for(k=0, j=1; j<=N; j++) if(mx(pA,i,j) != 0.0) k++;
-    if(NL<k) NL = k;
-  }
-  return NL;
-}
-
-static int pcgs();
-
-int estiva_pcgssolver(void* pA, double* x, double* b)
-{
-
-  /* (i)  引数の型と種類                                                */
-  D_     D, B         ;/*    D  一次元配列 D(N), B(N)                   */
-  D__    A            ;/*    D  二次元配列 A(N1, 2 * NL)                */
-  I__    IA           ;/*    I  二次元配列 IA(N1, 2 * NL)               */
-  D_     R            ;/*    D  一次元配列 R(N)                         */
-  long   NL, N1, N, ITR, IER                                            ;
-  double EPS, S                                                         ;
-  D_     X, DD, P, Q  ;/*    D  一次元配列で, 要素は 0〜N               */
-  I_     M            ;/*    I  一次元配列  M(2 * N)  作業用            */
-
-  /*--    DからRまでと, EPSからSまでの引数は, サブルーチンPCGと同じ   --*/  
-
-  D_     R0, E, H     ;/*    D  一次元配列  要素数はN                   */
-  D_     W            ;/*    D  一次元配列  W(0:N)                      */
-  
-  long   i, j, k      ;
-  
-  N   = dim1(b)       ;
-  NL  = count_NL(pA,N);
-  
-  ary1(  D, N   )         ;
-  ary2(  A, 2*NL, N+2*NL );
-  ary2( IA, 2*NL, N+2*NL );
-  ary1(  R, N+1 )         ;
-  ary1(  X, N+1 )         ;  ary1( DD, N+1 );  ary1( P, N+1 );  ary1( Q, N+1 ); 
-  ary1(  M, 2*N )         ;
-
-  ary1( R0, N   )         ;  ary1(  E, N   );  ary1( H, N   );
-  ary1(  W, N+1 )         ;
-  
-
-  /* (ii) 主プログラム → サブルーチン                                  */
-  /*      サブルーチンをCALLするときには, つぎの値を与える.             */
-  /*  D   : 配列Dの第1〜第n位置に行列Aの対角要素を入れておく            */
-  /*  N   : 行列Aの行数を入れておく.                                    */
-  /*  N1  : 配列Aの行数を入れておく. N1≧N+2*NL でないといけない.       */
-  /*  NL  : 行列Aの各行における非ゼロ要素数の最大値を入れておく.        */
-  /*  B   : 連立一次方程式の右辺を入れておく.                           */
-  /* EPS  : 収束判定置を入れておく. ふつうは 1.×10^(-7)                */
-  /* ITR  : 打切りまでの最大繰返し回数を入れておく.                     */
-
-  /*--    D, N, N1, NL, B, EPS, ITR については, サブルーチンPCGと同じ --*/
-
-  /*  A   : 配列Aの各行1〜NL要素は, 行列Aの下三角部分の各行の非ゼロ     */
-  /*        要素を入れる. また, 各行のNL+1〜2*NL要素は, 上三角部分      */
-  /*        の各行の非ゼロ要素を入れる. ただし, 各行の対角要素は配列Dに */
-  /*        入れる.                                                     */
-  /* IA   : 配列Aに入れた要素の列番号を, 対応する位置に入れておく.      */
-  /*  S   : LUCGS法のとき 0., MLUCG法のときσ(>0)を入れておく.          */  
-
-  for(i=1; i<=N; i++) D[i-1] = mx(pA,i,i); 
-
-  for(i=1; i<=N; i++)for(k=0, j=1; j<i; j++)if(mx(pA,i,j) != 0.0){
-    A[k][i-1]  = mx(pA,i,j)  ;
-    IA[k][i-1] = j       ;
-    k++                  ;
-  }
-
-  for(i=1; i<=N; i++)for(k=NL, j=i+1; j<=N; j++)if(mx(pA,i,j) != 0.0){
-    A[k][i-1]  = mx(pA,i,j) ;
-    IA[k][i-1] = j       ;
-    k++                  ;
-  }
-      
-
-  N1  =  N+2*NL;
-
-  B   = &b[1]  ;
-  EPS = 1.0e-7 ;
-  ITR = N      ;
-  S   = 0.     ;
-  
-  /* (a) リンクの方法                                                   */
-  /* CALL PCGS(D,A,IA,N,N1,NL,B,EPS,ITR,S,X,DD,P,Q,R,R0,E,H,W,M,IER)    */
-
-  pcgs(D,A[0],IA[0],&N,&N1,&NL,B,&EPS,&ITR,
-			    &S,X,DD,P,Q,R,R0,E,H,W,M,&IER);
-
-  B   = &x[1]  ;
-  for(i=0; i<N; i++) B[i] = X[i+1];
-  printf("ITR = %ld\n",ITR);
-  return IER;
-}
-
-
 #include <math.h>
-#define A(i,j)        a[(i)+(j)*dim1]
-#define IA(i,j)       ia[(i)+(j)*dim1]
-#define forloopL(i,j) for ((j) = 1; (j) <= m[(i)]; (j)++) 
-#define forloopU(i,j) for ((j) = *nl + 1; (j) <= *nl + m[*n + (i)]; (j)++) 
-#define forall(i)     for ((i) = 1; (i) <= *n; (i)++)
-#define mulAij(x)     A(i,j) * (x)[IA(i,j)]
+#include "estiva/ary.h"
+#include "estiva/mx.h"
+#include "estiva/op.h"
+#include "estiva/solver.h"
+#include "estiva/std.h"
 
-typedef struct {
-  long  *ia, *n, *nl, *m, dim1;
-  double *a, *d, *dd, *q, *x, *r, *b, *r0, *p, *e, *c1p;
-} ILUtype;
-
-typedef long * longp;
-typedef double * doublep;
-
-static void ILU(ILUtype ilu)
+static void cpy(double *src, double *dst)
 {
-  long   i, j, k, nn, dim1=ilu.dim1;
-  double c, ss, sw;
-  
-  longp ia=ilu.ia, n=ilu.n, nl=ilu.nl, m=ilu.m;
-  doublep a=ilu.a, d=ilu.d, dd=ilu.dd, q=ilu.q, x=ilu.x,
-    r=ilu.r, b=ilu.b, r0=ilu.r0, p=ilu.p, e=ilu.e;
-  
-  dd[1] = 1.0 / d[1];
-
-  for (i = 2; i <= *n; i++) {
-    ss = d[i];
-    for (k = 1; k <= m[i]; k++) {
-      nn = IA(i,k);
-      for (j = *nl + 1; j <= *nl + m[nn+*n]; j++) 
-	if (IA(nn,j) == i) ss -= A(i,k) * A(nn,j) * dd[nn];
-    }
-    dd[i] = 1.0 / ss;
-  }
-  
-  forall(i) {
-    q[i] = d[i] * x[i];
-    forloopL(i,j) q[i] += mulAij(x);
-    forloopU(i,j) q[i] += mulAij(x);
-  }
-  
-  forall(i) r[i] = b[i] - q[i];
-  
-  forall(i) {
-    forloopL(i,j) r[i] -= mulAij(r);
-    r[i] *= dd[i];
-  }
-  
-  for (i = *n; i >= 1; i--) {
-    sw = 0.0;
-    forloopU(i,j) sw += mulAij(r);
-    r[i] -= dd[i] * sw;
-  }
-  
-  c = 0.0;
-  forall(i) {
-    r0[i] = p[i] = e[i] = r[i];
-    c += r[i] * r[i];
-  }
-  
-  *(ilu.c1p) = c;
+  long i;
+  forall (0, i, dim1(dst) ) dst[i] = src[i];
 }
 
-
-static void presolve(ILUtype ilu, double *q, double *p)
+static int addvec(double da, double *dx,  double *dy)
 {
-  long i, j, dim1=ilu.dim1;
+  long i;
+  forall (0, i, dim1(dy) ) dy[i] += da * dx[i];
+  return 0;
+}
+
+static double dotvec(double *dx, double *dy)
+{
+  double tmp = 0.0;
+  long i;
+  forall (0, i, dim1(dy) ) tmp += dy[i] * dx[i];  
+  return tmp;
+}
+
+static double L2(double *dx)
+{
+  double sum = 0.0;
+  long i;
+  forall (0, i, dim1(dx) ) sum += dx[i]*dx[i];
+  return sqrt(sum);
+}
+
+static void matvec(MX *A, double alpha, double *p, double beta, double *q)
+{
+  long i, j, m, n, J;
+  mx(A,1,1) = mx(A,1,1);
+
+  m = A->m;
+  n = A->n;
+  forall (0, i, m) q[i] = 0.0;
+
+  forall (0, i, m-1) forall(0, j, n-1) {
+      J = A->IA[i][j];
+      if (J != 0) q[i+1] += A->A[i][j]*p[J];
+    }
+}
+
+static void presolve(MX *A, double *dd, double *q)
+{
   double sw;
+  long   i, j, n, J, An;
 
-  longp   nl=ilu.nl, n=ilu.n, m=ilu.m, ia=ilu.ia;
-  doublep d=ilu.d, dd=ilu.dd, a=ilu.a;
+  mx(A,1,1) = mx(A,1,1);
+  n  = dim1(q);
+  An = A->n;
 
-  forall(i) {
-    q[i] = d[i] * p[i];
-    forloopL(i,j) q[i] += mulAij(p);
-    forloopU(i,j) q[i] += mulAij(p);
+  forall (1, i, n) {
+    forall (0, j, An-1) {
+      J = A->IA[i-1][j];
+      if ( J != 0 && i > J ) 
+	q[i] -= A->A[i-1][j]*q[J];
+    }
+    q[i] *= dd[i];
   }
-  
-  forall(i) {
-    forloopL(i,j) q[i] -= mulAij(q);
-    q[i] = dd[i] * q[i];
-  }
-  
-  for (i = *n; i >= 1; i--) {
+  for (i=n; i>0; i--) {
     sw = 0.0;
-    forloopU(i,j) sw += mulAij(q);
+    forall (0, j, An-1) {
+      J = A->IA[i-1][j];
+      if ( J != 0 && i < J )
+	sw += A->A[i-1][j]*q[J];
+    }
     q[i] -= dd[i] * sw;
   }
 }
 
-
-static int pcgs(double *d, double *a, long *ia, 
-	long *n, long *n1, long *nl, double *b, double *eps, 
-	long *itr, double *s, double *x, double *dd, 
-	double *p, double *q, double *r, double *r0, 
-	double *e, double *h, double *w, long *m, long *ier)
+static int success(long k)
 {
-  long dim1, i, j, k;
-  double y, c1=0.0, c2, c3, x1, x2, th, res=10000000.0, beta, alpha;
-  ILUtype ilu;
+  if ( defop("-v") ) printf("itr = %ld\n",k);
+  return 0;
+}
 
-  /* Parameter adjustments */
-  m--; h--; e--; r0--; b--; d--;
-  ia -= (1+*n1);
-  a  -= (1+*n1);
-  dim1 = *n1;
+static void phase(int i)
+{
+}
 
-  /* Function Body */
-  *ier = 0;
+static double *formula(double *z, char eq, 
+		       double *x, char plus, double a, double *y)
+{
+  cpy(x,z);
+  if ( plus == '+' )
+    addvec(a,y,z);
+  else
+    addvec(-a,y,z);
+  return z;
+}
 
-  if (*n1 < *n || *s < 0.0) { *ier = 2; return 0; }
+static void ILU(MX *A, double *d, double *dd, double *b)
+{
+  double ss;
+  long   i, k, n, K, An;
 
-  th = 1.0;
-  if (*s > 0.0 && *s < 1.0) { th = *s; *s = 1.0; }
+  mx(A,1,1) = mx(A,1,1);
 
-  for (i = 1; i <= *n << 1; i++) m[i] = 0;
+  An = A->n;
+  n  = dim1(b);
 
-  forall(i) {
-    dd[i] = 0.0;
-    for (j = 1; j <= *nl; j++)            if (IA(i,j) != 0) m[i]++;
-    for (j = *nl + 1; j <= *nl << 1; j++) if (IA(i,j) != 0) m[i + *n]++;
-  }
-
-
-  dd[0] = x[0] = p[0] = q[0] = r[0] = w[0] = 0.0;
-  
-
-/*  Incomplete LU Decomposition */
-
-  ilu.ia=ia, ilu.n=n, ilu.nl=nl, ilu.m=m, ilu.dim1=dim1;
-  ilu.a=a, ilu.d=d, ilu.dd=dd, ilu.q=q, ilu.x=x,
-    ilu.r=r, ilu.b=b, ilu.r0=r0, ilu.p=p, ilu.e=e, ilu.c1p=&c1;
-
-  ILU(ilu);
-
-/*  Iteraton Phase */
-
-    for (k = 1; k <= *itr; k++) {
-
-      presolve(ilu,q,p);
-
-      c2 = 0.0;
-      forall(i) c2 += q[i] * r0[i];
-      
-      if (c2 == 0.0) { *ier = 3; *itr = k; goto finish; }
-
-      alpha = c1 / c2; c3 = x1 = x2 = 0.0;
-	
-      forall(i) h[i] = e[i] - alpha * q[i];
-      forall(i) w[i] = e[i] + h[i];
-	
-      presolve(ilu,q,w);
-      
-      forall(i) {
-	y       = x[i];
-	r[i]   -= alpha * q[i];
-	x[i]   += alpha * w[i];
-	c3     += r[i] * r0[i];
-	x1     += y * y;
-	x2     += (x[i]-y) * (x[i]-y);
-      }
-      
-      if (x1 != 0.0) {
-	res = sqrt(x2 / x1);
-	if (res <= *eps) {
-	  *itr = k;
-	  *ier = 0;
-	  goto finish;
-	}
-      }
-
-      if (c1 == 0.0) {
-	*ier = 4;
-	*itr = k;
-	goto finish;
-      }
-
-      beta = c3 / c1;
-      c1 = c3;
-
-      forall(i) {
-	e[i] = r[i] + beta * h[i];
-	p[i] = e[i] + beta * (h[i] + beta * p[i]);
+  dd[1] = 1.0 / d[1];
+  forall (2, i, n) {
+    ss = d[i];
+    forall ( 0, k, An-1) {
+      K = A->IA[i-1][k];
+      if ( K != 0 && i > K ) {
+	ss -= A->A[i-1][k] * mx(A,K,i) * dd[K];
       }
     }
-    *ier = 1;
-    
-finish:
-    *eps = res;
+    dd[i] = 1.0 / ss;
+  }
+}
 
-    if (th != 1.0) *s = th;
+int estiva_pcgssolver(void *A, double *xk, double *b)
+{
+  static double *d, *dd, *ek, *ek1, *hk1, *pk, *pk1, *q, *r0, *rk, *rk1, 
+    *w, *xk1, *xk1_xk;
+  double c1, c2, c3, alphak, betak, epsilon = 1.0e-7;
+  long   i, k, n;
 
-    return 0;
+  n = dim1(b);
+
+  ary1(d  ,n+1);
+  ary1(dd ,n+1);
+  ary1(ek ,n+1);
+  ary1(ek1,n+1);
+  ary1(hk1,n+1);
+  ary1(pk ,n+1);
+  ary1(pk1,n+1);
+  ary1(q  ,n+1);
+  ary1(r0 ,n+1);
+  ary1(rk ,n+1);
+  ary1(rk1,n+1);
+  ary1(w  ,n+1);
+  ary1(xk1,n+1);
+  ary1(xk1_xk,n+1);
+
+  forall (1, i, n) d[i] = mx(A,i,i);   
+  ILU(A,d,dd,b);
+  matvec(A,1.0,xk,0.0,q);
+  formula( rk, '=', b, '-', 1.0,q);
+  presolve(A,dd,rk);
+  cpy(rk,r0);
+  cpy(rk,ek);
+  cpy(rk,pk);
+  c1 = dotvec(r0,r0);
+
+  forall (1, k, n) {
+    phase(1); {
+      matvec(A, 1.0, pk, 0.0, q);
+      presolve(A,dd,q);
+      c2 = dotvec(q,r0);
+      alphak = c1 / c2;
+    }
+    phase(2); {
+      formula( hk1, '=', ek,'-',alphak,q);
+      formula( w,   '=', ek,'+',1.0,hk1); 
+    }
+    phase(3); {
+      matvec(A, 1.0, w, 0.0, q);
+      presolve(A,dd,q);
+    }
+    phase(4); {
+      formula( rk1, '=', rk,'-',alphak,q);
+      formula( xk1, '=', xk,'+',alphak,w);
+      c3 = dotvec(rk1,r0);
+    }
+    phase(5); {
+      formula( xk1_xk, '=', xk1,'-',1.0,xk);
+      if ( L2(xk1_xk)/L2(xk) < epsilon ) return success(k);
+    }
+    phase(6); {
+      betak = c3 / c1;
+      c1 = c3;
+      formula( ek1, '=', rk1,'+',betak,hk1);
+      formula( pk1, '=', ek1,'+',betak, formula( w, '=', hk1,'+',betak,pk));
+    }
+    cpy(ek1,ek);
+    cpy(pk1,pk);
+    cpy(rk1,rk);
+    cpy(xk1,xk);
+  }
+  return 1;
 }
