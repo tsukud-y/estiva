@@ -1,73 +1,107 @@
 #include <stdio.h>
 #include <string.h>
-#include <estiva/ary.h>
-#include <estiva/mx.h>
-#include <estiva/precond.h>
-#include <estiva/solver.h>
-#include <estiva/op.h>
+#include "estiva/ary.h"
+#include "estiva/mx.h"
+#include "estiva/op.h"
+#include "estiva/solver.h"
+#include "estiva/std.h"
 
-
-static MX *A, *AT, *LU, *LUT;
-static double *D;
-static CRS pivot, pivotT;
+static MX *A;
+static double *DD;
 static int bicgstab_();
 
+int ILUdecomposition(void *Ap, double *dd)
+{
+  static MX *A;
+  static double *d;
+  double ss;
+  long   i, k, n, K, An;
+
+  A = Ap;
+  mx(A,1,1) = mx(A,1,1);
+  n  = A->m;
+  An = A->n;
+
+  ary1(d,n+1);
+
+  forall (1, i, n) d[i] = mx(A,i,i);
+
+  dd[1] = 1.0 / d[1];
+  forall (2, i, n) {
+    ss = d[i];
+    forall ( 0, k, An-1) {
+      K = A->IA[i-1][k];
+      if ( K != 0 && i > K ) {
+        ss -= A->A[i-1][k] * mx(A,K,i) * dd[K];
+      }
+    }
+    dd[i] = 1.0 / ss;
+  }
+  return 0;
+}
+
+int psolveILU(void *Ap, double *dd, double *q, double *b)
+{
+  static MX *A;
+  double sw;
+  long   i, j, n, J, An;
+  
+  A = Ap;
+  mx(A,1,1) = mx(A,1,1);
+  n  = A->m; 
+  An = A->n;
+
+  forall (0,i,n) q[i] = b[i];
+  q--;
+
+  forall (1, i, n) {
+    forall (0, j, An-1) {
+      J = A->IA[i-1][j];
+      if ( J != 0 && i > J ) 
+        q[i] -= A->A[i-1][j]*q[J];
+    }
+    q[i] *= dd[i];
+  }
+  for (i=n; i>0; i--) {
+    sw = 0.0;
+    forall (0, j, An-1) {
+      J = A->IA[i-1][j];
+      if ( J != 0 && i < J )
+        sw += A->A[i-1][j]*q[J];
+    }
+    q[i] -= dd[i] * sw;
+  }
+  return 0;
+}
+
 static int matvec(double *alpha, double *x, double *beta, double *y)
-{ matvecmx(A, alpha, x, beta, y); return 0; }
+{
+  matvecmx(A, alpha, x, beta, y); 
+  return 0;
+}
 
 static int psolve(double *x, double *b)
-{ psolvemx(A,&pivot,LU,D,x,b); return 0; }
+{ 
+  return psolveILU(A,DD,x,b);
+}
 
-
-int estiva_bicgstabsolver(void* pA, double* x, double* b)
+int estiva_bicgstabsolver(void *Ap, double *x, double *b)
 {
+  static double *work;
+  double resid = 1.0e-7;
   long int n,ldw,iter,info, i; 
-  static double *work, resid;
 
-   A = pA;
-   transmx(AT,A);
+   A = Ap;
+   n = ldw = iter = dim1(b);
+   ary1(DD,n+1);
+   ary1(work,n*7);
+   forall ( 0, i, n ) x[i] = b[i];
 
-
-   if ( !strcmp(getop("-precond"),"ILU") ) {
-     //ary1(pivot,A->m+1);
-     //ary1(pivotT,A->m+1);
-
-     LU = NULL;
-     clonemx(LU,A);
-     ILU((void*)&pivot,LU);
-
-     LUT = NULL;
-     clonemx(LUT,AT);
-     ILU((void*)&pivotT,LUT);
-   }
-
-   n = dim1(b);
-
-   ary1(D,n+1);
-   for(i=0;i<n;i++) 
-     if (mx(A,i+1,i+1) == 0.0) D[i] = 1.0;
-     else                      D[i] = 1.0/mx(A,i+1,i+1);
-
-   ary1(work,n*7+1);
-   ldw = n;
-   iter = 100 * n;
-   resid = 0.0000001;
-
-   for ( i=0; i<n; i++ ) x[i] = b[i];
-
-   /*
-   cgs_(&n, &b[1], &x[1], &work[1],
-	 &ldw, &iter, &resid, matvec, psolve, &info);
-   */
-
-  bicgstab_(&n, &b[1], &x[1], &work[1],
-	 &ldw, &iter, &resid, matvec, psolve, &info);
-
-
-
-   printf("iter = %ld\n",iter);
-
-   return iter;
+   ILUdecomposition(A,DD);
+   bicgstab_(&n, b+1, x+1, work, &ldw, &iter, &resid, 
+	     matvec, psolve, &info);
+   printf("bicgstab iter = %ld\n",iter);
+   return 0;
 }
 
 
@@ -221,8 +255,8 @@ typedef struct Namelist Namelist;
 
 #define abs(x) ((x) >= 0 ? (x) : -(x))
 #define dabs(x) (doublereal)abs(x)
-#define min(a,b) ((a) <= (b) ? (a) : (b))
-#define max(a,b) ((a) >= (b) ? (a) : (b))
+//#define min(a,b) ((a) <= (b) ? (a) : (b))
+//#define max(a,b) ((a) >= (b) ? (a) : (b))
 #define dmin(a,b) (doublereal)min(a,b)
 #define dmax(a,b) (doublereal)max(a,b)
 
@@ -818,23 +852,22 @@ static int bicgstab_(n, b, x, work, ldw, iter, resid, matvec, psolve, info)
 
     /* Local variables */
     static doublereal beta;
-    extern doublereal ddot_();
-    static integer phat, shat;
-    extern doublereal getbreak_();
-    static integer rtld;
-    static doublereal omegatol, bnrm2;
-    extern doublereal dnrm2_();
-    static integer p, r, s, t;
-    static doublereal alpha;
-    static integer v;
-    extern /* Subroutine */ int dscal_();
-    static doublereal omega;
-    extern /* Subroutine */ int dcopy_();
-    static integer maxit;
-    extern /* Subroutine */ int daxpy_();
-    static doublereal rhotol, rho, tol, rho1;
 
-    printf("hello Bi-CGSTAB\n");
+
+
+
+    static doublereal omegatol, bnrm2;
+
+
+    static doublereal alpha;
+
+
+    static doublereal omega;
+
+    static integer maxit;
+
+    static doublereal rhotol, rho, tol, rho1;
+    static double *r, *rtld, *p, *v, *t, *phat, *shat, *s;
 
     /* Parameter adjustments */
     work_dim1 = *ldw;
@@ -864,14 +897,14 @@ static int bicgstab_(n, b, x, work, ldw, iter, resid, matvec, psolve, info)
 
 /*     Alias workspace columns. */
 
-    r = 1;
-    rtld = 2;
-    p = 3;
-    v = 4;
-    t = 5;
-    phat = 6;
-    shat = 7;
-    s = 1;
+    ary1(r,work_dim1+1);
+    ary1(rtld,work_dim1+1);
+    ary1(p,work_dim1+1);
+    ary1(v,work_dim1+1);
+    ary1(t,work_dim1+1);
+    ary1(phat,work_dim1+1);
+    ary1(shat,work_dim1+1);
+    ary1(s,work_dim1+1);
 
 /*     Set parameter tolerances. */
 
@@ -880,14 +913,14 @@ static int bicgstab_(n, b, x, work, ldw, iter, resid, matvec, psolve, info)
 
 /*     Set initial residual. */
 
-    dcopy_(n, &b[1], &c__1stab, &work[r * work_dim1 + 1], &c__1stab);
+    dcopy_(n, &b[1], &c__1stab, r, &c__1stab);
     if (dnrm2_(n, &x[1], &c__1stab) != 0.) {
-	(*matvec)(&c_b5, &x[1], &c_b6, &work[r * work_dim1 + 1]);
-	if (dnrm2_(n, &work[r * work_dim1 + 1], &c__1stab) <= tol) {
+	(*matvec)(&c_b5, &x[1], &c_b6, r);
+	if (dnrm2_(n, r , &c__1stab) <= tol) {
 	    goto L30;
 	}
     }
-    dcopy_(n, &work[r * work_dim1 + 1], &c__1stab, &work[rtld * work_dim1 + 1], &
+    dcopy_(n, r , &c__1stab, rtld  , &
 	    c__1stab);
 
     bnrm2 = dnrm2_(n, &b[1], &c__1stab);
@@ -903,8 +936,8 @@ L10:
 
     ++(*iter);
 
-    rho = ddot_(n, &work[rtld * work_dim1 + 1], &c__1stab, &work[r * work_dim1 + 
-	    1], &c__1stab);
+    rho = ddot_(n, rtld   , &c__1stab, r
+	   , &c__1stab);
     if (abs(rho) < rhotol) {
 	goto L25;
     }
@@ -914,57 +947,57 @@ L10:
     if (*iter > 1) {
 	beta = rho / rho1 * (alpha / omega);
 	d__1 = -omega;
-	daxpy_(n, &d__1, &work[v * work_dim1 + 1], &c__1stab, &work[p * work_dim1 
-		+ 1], &c__1stab);
-	dscal_(n, &beta, &work[p * work_dim1 + 1], &c__1stab);
-	daxpy_(n, &c_b6, &work[r * work_dim1 + 1], &c__1stab, &work[p * work_dim1 
-		+ 1], &c__1stab);
+	daxpy_(n, &d__1, v   , &c__1stab, p
+		, &c__1stab);
+	dscal_(n, &beta, p   , &c__1stab);
+	daxpy_(n, &c_b6, r   , &c__1stab, p 
+		, &c__1stab);
     } else {
-	dcopy_(n, &work[r * work_dim1 + 1], &c__1stab, &work[p * work_dim1 + 1], &
+	dcopy_(n, r   , &c__1stab, p   , &
 		c__1stab);
     }
 
 /*        Compute direction adjusting vector PHAT and scalar ALPHA. */
 
-    (*psolve)(&work[phat * work_dim1 + 1], &work[p * work_dim1 + 1]);
-    (*matvec)(&c_b6, &work[phat * work_dim1 + 1], &c_b25, &work[v * work_dim1 
-	    + 1]);
-    alpha = rho / ddot_(n, &work[rtld * work_dim1 + 1], &c__1stab, &work[v * 
-	    work_dim1 + 1], &c__1stab);
+    (*psolve)(phat   , p   );
+    (*matvec)(&c_b6, phat   , &c_b25, v 
+	    );
+    alpha = rho / ddot_(n, rtld   , &c__1stab, v 
+	     , &c__1stab);
 
 /*        Early check for tolerance. */
 
     d__1 = -alpha;
-    daxpy_(n, &d__1, &work[v * work_dim1 + 1], &c__1stab, &work[r * work_dim1 + 1]
+    daxpy_(n, &d__1, v   , &c__1stab, r 
 	    , &c__1stab);
-    dcopy_(n, &work[r * work_dim1 + 1], &c__1stab, &work[s * work_dim1 + 1], &
+    dcopy_(n, r   , &c__1stab, s  , &
 	    c__1stab);
-    if (dnrm2_(n, &work[s * work_dim1 + 1], &c__1stab) <= tol) {
-	daxpy_(n, &alpha, &work[phat * work_dim1 + 1], &c__1stab, &x[1], &c__1stab);
-	*resid = dnrm2_(n, &work[s * work_dim1 + 1], &c__1stab) / bnrm2;
+    if (dnrm2_(n, s   , &c__1stab) <= tol) {
+	daxpy_(n, &alpha, phat   , &c__1stab, &x[1], &c__1stab);
+	*resid = dnrm2_(n, s   , &c__1stab) / bnrm2;
 	goto L30;
     } else {
 
 /*           Compute stabilizer vector SHAT and scalar OMEGA. */
 
-	(*psolve)(&work[shat * work_dim1 + 1], &work[s * work_dim1 + 1]);
-	(*matvec)(&c_b6, &work[shat * work_dim1 + 1], &c_b25, &work[t * 
-		work_dim1 + 1]);
-	omega = ddot_(n, &work[t * work_dim1 + 1], &c__1stab, &work[s * work_dim1 
-		+ 1], &c__1stab) / ddot_(n, &work[t * work_dim1 + 1], &c__1stab, &
-		work[t * work_dim1 + 1], &c__1stab);
+	(*psolve)(shat   , s   );
+	(*matvec)(&c_b6, shat   , &c_b25, t 
+		 );
+	omega = ddot_(n, t   , &c__1stab, s   
+		, &c__1stab) / ddot_(n, t   , &c__1stab, 
+		t   , &c__1stab);
 
 /*           Compute new solution approximation vector X. */
 
-	daxpy_(n, &alpha, &work[phat * work_dim1 + 1], &c__1stab, &x[1], &c__1stab);
-	daxpy_(n, &omega, &work[shat * work_dim1 + 1], &c__1stab, &x[1], &c__1stab);
+	daxpy_(n, &alpha, phat  , &c__1stab, &x[1], &c__1stab);
+	daxpy_(n, &omega, shat   , &c__1stab, &x[1], &c__1stab);
 
 /*           Compute residual R, check for tolerance. */
 
 	d__1 = -omega;
-	daxpy_(n, &d__1, &work[t * work_dim1 + 1], &c__1stab, &work[r * work_dim1 
-		+ 1], &c__1stab);
-	*resid = dnrm2_(n, &work[r * work_dim1 + 1], &c__1stab) / bnrm2;
+	daxpy_(n, &d__1, t   , &c__1stab, r  
+		, &c__1stab);
+	*resid = dnrm2_(n,r  , &c__1stab) / bnrm2;
 	if (*resid <= tol) {
 	    goto L30;
 	}
