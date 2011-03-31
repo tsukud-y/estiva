@@ -1,84 +1,77 @@
-#include <stdio.h>
-#include <string.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "estiva/ary.h"
 #include "estiva/mx.h"
 #include "estiva/op.h"
-#include "estiva/precond.h"
 #include "estiva/solver.h"
 #include "estiva/std.h"
 
 
-static MX *A, *AT, *LU, *LUT;
-static double *D;
-static CRS pivot, pivotT;
-static int bicg_();
 
-static int matvec(double alpha, double *x, double beta, double *y)
-{ 
-  matvecmx(A, &alpha, x, &beta, y); 
-  return 0;
-}
-
-static int matvectrans(double alpha, double *x, double beta, double *y)
-{ 
-  matvecmx(AT, &alpha, x, &beta, y); 
-  return 0;
-}
-
-static int psolve(double *x, double *b)
-{ 
-  psolvemx(A,&pivot,LU,D,x,b);
-  return 0; 
-}
-
-static int psolvetrans(double *x, double *b)
-{ 
-  psolvemx(AT,&pivotT,LUT,D,x,b);  
-  return 0;
-}
-
-int estiva_bicgsolver(void* Ap, double* x, double* b)
+static void ILUdecomposition(MX *A, double *dd, double *b)
 {
-  long i, n, ldw, iter, info;
-  static double *work, resid;
+  static double *d;
+  double ss;
+  long   i, k, n, K, An;
 
-  n     = dim1(b);
-  ldw   = n;
-  iter  = 100 * n;
-  resid = 0.0000001;
+  if (A->m != dim1(b)) { b++; printf("Warrning\n"); abort(); }
+  mx(A,1,1) = mx(A,1,1);
+  n  = A->m;
+  An = A->n;
 
-  ary1(D,n+1);
-  ary1(work,n*6+1);
+  ary1(d,n+1);
 
-  slimupmx(A,Ap);
-  transmx(AT,A);
+  forall (1, i, n) d[i] = mx(A,i,i);
 
-  if ( !strcmp(getop("-precond"),"ILU") ) {
-    clonemx(LU,A);   
-    ILU(&pivot,LU);
-    clonemx(LUT,AT); 
-    ILU(&pivotT,LUT);
+  dd[1] = 1.0 / d[1];
+  forall (2, i, n) {
+    ss = d[i];
+    forall ( 0, k, An-1) {
+      K = A->IA[i-1][k];
+      if ( K != 0 && i > K ) {
+        ss -= A->A[i-1][k] * mx(A,K,i) * dd[K];
+      }
+    }
+    dd[i] = 1.0 / ss;
   }
-  
-  forall(0,i,n-1)
-    if (mx(A,i+1,i+1) == 0.0) {
-      D[i] = 1.0;
-    }
-    else {
-      D[i] = 1.0/mx(A,i+1,i+1);
-    }
-  
-  forall(0,i,n-1) x[i] = b[i];
-  
-  bicg_(&n, b, x, &work[1],
-	 &ldw, &iter, &resid, matvec, matvectrans, psolve, psolvetrans, &info);
-  
-  if ( defop("-v") ) printf("iter = %ld\n",iter);
-
-  return iter;
 }
 
+static void presolve(MX *A, double *dd, double *q)
+{
+  double sw;
+  long   i, j, n, J, An;
+
+  if (A->m != dim1(q)) { q++; printf("Warrning\n"); abort(); }
+  mx(A,1,1) = mx(A,1,1);
+  n  = A->m; 
+  An = A->n;
+
+  forall (1, i, n) {
+    forall (0, j, An-1) {
+      J = A->IA[i-1][j];
+      if ( J != 0 && i > J ) 
+        q[i] -= A->A[i-1][j]*q[J];
+    }
+    q[i] *= dd[i];
+  }
+  for (i=n; i>0; i--) {
+    sw = 0.0;
+    forall (0, j, An-1) {
+      J = A->IA[i-1][j];
+      if ( J != 0 && i < J )
+        sw += A->A[i-1][j]*q[J];
+    }
+    q[i] -= dd[i] * sw;
+  }
+}
+
+static int matvec(MX *A,double alpha, double *x, double beta, double *y)
+{ 
+  matvecmx(A, &alpha, &x[1], &beta, &y[1]); 
+  return 0;
+}
 
 static int addvec(double da, double *dx,  double *dy)
 {
@@ -89,18 +82,15 @@ static int addvec(double da, double *dx,  double *dy)
 
 static double dotvec(double *dx, double *dy)
 {
-  double tmp = 0.0;
+  double sum = 0.0;
   long i;
-  forall(0,i,dim1(dy)) tmp += dy[i] * dx[i];  
-  return tmp;
+  forall(0,i,dim1(dy)) sum += dy[i] * dx[i];  
+  return sum;
 }
 
 static double L2(double *dx)
 {
-  double sum = 0.0;
-  long i;
-  forall(0,i,dim1(dx)) sum += dx[i]*dx[i];
-  return sqrt(sum);
+  return sqrt(dotvec(dx,dx));
 }
 
 static void cpy(double *src, double *dst)
@@ -109,81 +99,81 @@ static void cpy(double *src, double *dst)
   forall(0,i,dim1(dst)) dst[i] = src[i];
 }
 
-static int bicg_(long *n, double *bp, double *xp, double *work, 
-		 long *ldw, long *iter, double *resid, 
-		 int (*matvec)(), int (*matvectrans)(), 
-		 int (*psolve)(), int (*psolvetrans)(), long *info)
+static double *formula(double *z, char eq, 
+                       double *x, char plus, double a, double *y)
 {
-  static double *p, *ptld, *q, *qtld, *r, *rtld, *z, *ztld, *x, *b;
-  static double alpha, beta, bnrm2, rho, rho1, rhotol, tol;
-  static long   maxit;
-  long   work_dim1,i;
+  cpy(x,z);
+  if ( plus == '+' )
+    addvec(a,y,z);
+  else
+    addvec(-a,y,z);
+  return z;
+}
+
+
+int estiva_bicgsolver(void *Ap, double *x, double *b)
+{
+  static MX *A, *AT;
+  static double *p, *ptld, *q, *qtld, *r, *rtld, *z, *ztld, *dd;
+  double alpha, beta, bnrm2, rho, rho1=1.0;
+  long   n, itr;
+  n = dim1(b);
+
+  ary1(r   ,n+1);
+  ary1(rtld,n+1);
+  ary1(z   ,n+1);
+  ary1(ztld,n+1);
+  ary1(p   ,n+1);
+  ary1(ptld,n+1);
+  ary1(q   ,n+1);    
+  ary1(qtld,n+1);
+  ary1(dd,  n+1);
+
+  slimupmx(A,Ap);
+  transmx(AT,A);
+  cpy(b,x);
   
-  work_dim1   = *ldw;
-  *info       = 0;
-  maxit       = *iter;
-  tol         = *resid;
-  *iter       = 0;
-
-  ary1(r,work_dim1);
-  ary1(rtld,work_dim1);
-  ary1(z,work_dim1);
-  ary1(ztld,work_dim1);
-  ary1(p,work_dim1);
-  ary1(ptld,work_dim1);
-  ary1(q,work_dim1);    
-  ary1(qtld,work_dim1);
-
-  ary1(x,work_dim1+1);
-  ary1(b,work_dim1+1);
-
-  forall(0,i,work_dim1) x[i] = xp[i+1];
-  forall(0,i,work_dim1) b[i] = bp[i+1];
-  
-  rhotol = 0.00000000000000000000000000000001232595164407830945955825883254353483864385054857848444953560829162597656250;
+  ILUdecomposition(A,dd,b);
   
   cpy(b,r);
   if (L2(x) != 0.0) {
-    matvec(-1.0, x, 1.0, r);
-    if (L2(r) <= tol) {
+    matvec(A,-1.0, x, 1.0, r);
+    if (L2(r) <= 1.0e-7) {
       return 0;
     }
   }
   cpy(r,rtld);
   bnrm2 = L2(b);
   if (bnrm2 == 0.0) bnrm2 = 1.0;
-  while ( (*iter)++ < maxit ) {
-    psolve(z, r);
-    psolvetrans(ztld, rtld);
+
+  forall (1, itr, n) {
+    cpy(r,z);
+    presolve(A,dd,z);
+    cpy(rtld,ztld);
+    presolve(AT,dd,ztld);
     rho = dotvec(z, rtld);
-    if ( fabsl(rho) < rhotol ) {
-      *info = -10;
-      return 0;
-    }
-    if (*iter > 1) {
-      beta = rho / rho1;
-      addvec(beta, p, z);
-      addvec(beta, ptld, ztld);
+    if ( fabsl(rho) < 1.2e-31 ) break;
+    if (itr == 1) {
       cpy(z,p);
       cpy(ztld,ptld);
     } else {
+      beta = rho / rho1;
+      formula(z, '=', z, '+', beta,p );
       cpy(z,p);
+      formula(ztld, '=', ztld, '+', beta,ptld );
       cpy(ztld,ptld);
     }
-    matvec(1.0, p, 0.0, q);
-    matvectrans(1.0, ptld, 0.0, qtld);
+    matvec(A, 1.0, p, 0.0, q);
+    matvec(AT,1.0, ptld, 0.0, qtld);
     alpha = rho / dotvec(ptld,q);
-    addvec( alpha, p, x);
-    addvec(-alpha, q, r);
-    *resid = L2(r) / bnrm2;
-    if (*resid <= tol) break;
-    addvec(-alpha, qtld,rtld);
+    formula(    x, '=', x,    '+', alpha,p    );
+    formula(    r, '=', r,    '-', alpha,q    );
+    formula( rtld, '=', rtld, '-', alpha,qtld );
+
+    if (L2(r)/bnrm2 <= 1.0e-7) break;
+
     rho1 = rho;
   }
-
-  forall(0,i,work_dim1) xp[i] = x[i-1];
-  forall(0,i,work_dim1) bp[i] = b[i-1];
-  
-  *info = 1;
+  if ( defop("-v") ) printf("itr = %ld\n",itr);
   return 0;
 }
