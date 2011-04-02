@@ -71,7 +71,7 @@ double *estiva_matvecvec(void *Apointer, double alpha, double *p,
 
 
   if ( m == dim1vec ) {
-    forall (0, i, dim1vec) q[i] = 0.0;
+    forall (0, i, m) q[i] = 0.0;
     forall (0, i, m-1) forall(0, j, n-1) {
       J = A->IA[i][j];
       if (J != 0) q[i+1] += A->A[i][j]*p[J];
@@ -176,7 +176,7 @@ void fprintvec(FILE *fp, double *x)
 static double psc98(MX *A, double *x, double *b)
 {
   static double *L;
-  ary1(L,A->m);
+  ary1(L,A->m+1);
   matvecvec(A,1.0,x,0.0,L);
   return Linf(addformula( L, '=', L, '-',1.0,b));
 }
