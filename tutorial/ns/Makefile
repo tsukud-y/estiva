@@ -8,7 +8,7 @@ OBJS = $(SRCS:.c=.o)
 
 all: $(OBJS)
 	(cd ../../src; make)
-	$(CC) $(OBJS) -Wall -L${SRC}/lib -lestiva -lm
+	$(CC) $(OBJS) -Wall -L${SRC}/lib -L/usr/local/lib -lestiva -lm -lefence
 
 run: all
 	./a.out -plotscale 0.001 -n 10 -v -solver cgs

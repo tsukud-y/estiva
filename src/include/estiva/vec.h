@@ -13,6 +13,7 @@ double  estiva_Linf(double *x);
 double *estiva_matvecvec(void *A, double al, double *p,	double be, double *q);
 int     estiva_phase(int i);
 double *estiva_psolvevec(void *Apointer, double *q);
+double *estiva_scalvec(double da,double *dx);
 void    estiva_setveclength(long n);
 int     estiva_stopcondition(void *A, double *x, double *b);
 int     estiva_success(long k);
@@ -28,6 +29,7 @@ int     estiva_success(long k);
 #define matvecvec(A,alpha,p,beta,q) estiva_matvecvec(A,alpha,p,beta,q)
 #define phase(i)                    estiva_phase(i)
 #define psolvevec(A,q)              estiva_psolvevec(A,q)
+#define scalvec(da,dx)              estiva_scalvec(da,dx)
 #define setveclength(n)             estiva_setveclength(n)
 #define stopcondition(A,x,b)        estiva_stopcondition(A,x,b)
 #define success(k)                  estiva_success(k)

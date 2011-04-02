@@ -204,3 +204,32 @@ int estiva_phase(int i)
   return 0;
 }
 
+double *estiva_scalvec(double da, double *dx)
+{
+  long i__2, n;
+  static long i, m, mp1;
+  n = dim1vec;
+  --dx;
+  m = n % 5;
+  if (m == 0) {
+    goto L40;
+  }
+  i__2 = m;
+  for (i = 1; i <= i__2; ++i) {
+    dx[i] = da * dx[i];
+  }
+  if (n < 5) {
+    return 0;
+  }
+ L40:
+  mp1 = m + 1;
+  i__2 = n;
+  for (i = mp1; i <= i__2; i += 5) {
+    dx[i] = da * dx[i];
+    dx[i + 1] = da * dx[i + 1];
+    dx[i + 2] = da * dx[i + 2];
+    dx[i + 3] = da * dx[i + 3];
+    dx[i + 4] = da * dx[i + 4];
+  }
+  return dx+1;
+}
