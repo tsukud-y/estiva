@@ -66,24 +66,13 @@ double *estiva_matvecvec(void *Apointer, double alpha, double *p,
   A = Apointer;
   m = A->m;
   n = A->n;
-
   mx(A,1,1) = mx(A,1,1);
 
-
   if ( m == dim1vec ) {
-    forall (0, i, m) q[i] = 0.0;
-    forall (0, i, m-1) forall(0, j, n-1) {
-      J = A->IA[i][j];
-      if (J != 0) q[i+1] += A->A[i][j]*p[J];
-    }
+    matvecmx(A,&alpha,p+1,&beta,q+1);
   } else {
-    forall (0, i, dim1vec) q[i] = 0.0;
-    forall (0, i, m-1) forall(0, j, n-1) {
-      J = A->IA[i][j];
-      if (J != 0) q[i] += A->A[i][j]*p[J-1];
-    }
+    matvecmx(A,&alpha,p,&beta,q);
   }
-
   return q;
 }
 

@@ -8,64 +8,6 @@
 #include "estiva/std.h"
 #include "estiva/vec.h"
 
-#if 0
-int estiva_stopcondition(void *A, double *x, double *b);
-int estiva_success(long k);
-double estiva_epsilon(void);
-int estiva_phase(int i);
-
-#define stopcondition(A,x,b) estiva_stopcondition(A,x,b)
-#define success(k)           estiva_success(k)
-#define epsilon()            estiva_epsilon()
-#define phase(i)             estiva_phase(i)
-
-static double psc98(MX *A, double *x, double *b)
-{
-  static double *L;
-  ary1(L,A->m);
-  matvecvec(A,1.0,x,0.0,L);
-  return Linf(addformula( L, '=', L, '-',1.0,b));
-}
-
-int estiva_stopcondition(void *Apointer, double *x, double *b)
-{
-  MX *A;
-  A = Apointer;
-  if ( defop("-psc98") ) {
-    double norm;
-    norm = psc98(A,x,b);
-    if ( defop("-v") ) printf("%e\n",norm);
-    if ( norm < 1.0e-8 ) return 1;
-    else return 0;
-  }	  
-  return 1;
-}
-
-int estiva_success(long k)
-{
-  if ( defop("-v") ) {
-    if (defop("-epsilon")) printf("epsilon = %e\n",epsilon());
-    printf("itr = %ld\n",k);
-  }
-  return 0;
-}
-
-double estiva_epsilon(void)
-{
-  double eps = 1.0e-7;
-
-  if ( defop("-epsilon") ) {
-    eps= atof(getop("-epsilon"));
-  }
-  return eps;
-}
-
-int estiva_phase(int i)
-{
-  return 0;
-}
-#endif
-
 int estiva_pcgssolver(void *Apointer, double *xk, double *b)
 {
   static double *ek, *ek1, *hk1, *pk, *pk1, *q, *r0, *rk, *rk1, *w, *xk1, *xk1_xk;
