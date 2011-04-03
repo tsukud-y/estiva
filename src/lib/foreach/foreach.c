@@ -19,8 +19,8 @@ int estiva_foreach(int xsize, void *x, ...)
     xi = va_arg(ap, void *);
   xn = va_arg(ap,void *);
   va_end(ap); 
-  
-  memcpy(xi,x,xsize);
+
+  if ( xi != x ) memcpy(xi,x,xsize);
   
   if ( xn != NULL ) { 
     memcpy(x,xn,xsize);

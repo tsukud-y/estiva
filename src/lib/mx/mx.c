@@ -8,7 +8,7 @@
 
 void estiva_initmx(MX **Ap, long i, long j){
   MX *T;
-  if(*Ap == NULL) *Ap = calloc(1,sizeof(MX));
+  if(*Ap == NULL) ary1(*Ap,1); //*Ap = calloc(1,sizeof(MX));
   T = *Ap;
   T->m = i-1;
   T->n = j-1;

@@ -39,11 +39,34 @@ long estiva_dim2(void* v)
   return r->dim2;
 }
 
+static void *pointer_array[1024];
+static long array_index;
+
+static void freefunc(void)
+{
+  long i;
+  for (i=0; i<array_index; i++) free(pointer_array[i]);
+}
+
+static void atexit_free(void)
+{
+  static int init;
+  if ( init == 0 ) {
+    init = 1;    
+    atexit(freefunc);
+  }
+  if ( array_index > 1000 ) { printf("Too many ary\n"); abort(); }
+}
+
 static void* alloc(size_t n)
 {
   void *p;
   p = calloc(1,n);
-  if(p != NULL) return p;
+  if(p != NULL) {
+    pointer_array[array_index++] = p;
+    atexit_free();
+    return p;
+  }
   else{
     fprintf(stderr,"ary(): Can't alloc memory!\n");
     abort();

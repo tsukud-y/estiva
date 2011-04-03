@@ -209,10 +209,11 @@ void estiva_delaunay(xyc **Zo, nde **No)
   n=0;forall(1,i,dim1(N))if(N[i].a!=0) n++;
   ary1(fN,n+1); n=0;forall(1,i,dim1(fN)){ while(N[n].a==0)n++; fN[i]=n++;}
 
-  { static nde *N1;
+  { static nde *N1, *N0;
+    static xyc *Z1, *Z0;
     ary1(N1,dim1(fN)+1); forall(1,i,dim1(N1)) cp(N[fN[i]],N1[i]);
-    ary1(N, dim1(fN)+1); forall(1,i,dim1(N))  cp(N1[i],N[i]);
-  }
+    ary1(N0, dim1(fN)+1); forall(1,i,dim1(N0))  cp(N1[i],N0[i]);
+
 
   /*
   finv(fNinv,fN,dim1(N)); 
@@ -222,27 +223,29 @@ void estiva_delaunay(xyc **Zo, nde **No)
   ary1(fNinv,n+1); 
   //if(fNinv == NULL) fprintf(stderr,"Can't malloc()\n");
   forall(1,i,dim1(fN)) fNinv[fN[i]]=i;
-  forall(1,i,dim1(N)) foreach(A,&N[i].A,&N[i].B,&N[i].C) A=fNinv[A];
+  forall(1,i,dim1(N0)) foreach(A,&N0[i].A,&N0[i].B,&N0[i].C) A=fNinv[A];
 
 
-  ary1(fN,0); 
+  //ary1(fN,); 
 
-  ary1(fNinv,0); /* error something wrong! */
+  //ary1(fNinv,0); /* error something wrong! */
 
 
   z=0; ary1(fZ,dim1(Z)+1); 
-  forall(1,i,dim1(N)) 
-    foreach(a,&N[i].a,&N[i].b,&N[i].c) if(fZ[a]==0)fZ[a]= ++z;
-  forall(1,i,dim1(N)) 
-    foreach(a,&N[i].a,&N[i].b,&N[i].c) a=fZ[a];
+  forall(1,i,dim1(N0)) 
+    foreach(a,&N0[i].a,&N0[i].b,&N0[i].c) if(fZ[a]==0)fZ[a]= ++z;
+  forall(1,i,dim1(N0)) 
+    foreach(a,&N0[i].a,&N0[i].b,&N0[i].c) a=fZ[a];
   finv(fZinv,fZ,z);
-  { static xyc *Z1;
-    ary1(Z1,z+1); forall(1,i,dim1(Z1)) cp(Z[fZinv[i]],Z1[i]);
-    ary1(Z,z+1);  forall(1,i,dim1(Z))  cp(Z1[i],Z[i]);
-  }
-  ary1(fZ,0); ary1(fZinv,0);
+  
+  ary1(Z1,z+1); forall(1,i,dim1(Z1)) cp(Z[fZinv[i]],Z1[i]);
+  ary1(Z0,z+1);  forall(1,i,dim1(Z0))  cp(Z1[i],Z0[i]);
 
-  cp(Z,*Zo); cp(N,*No);
+  //ary1(fZ,0); ary1(fZinv,0);
+
+  cp(Z0,*Zo); cp(N0,*No);
+   
+  }
 }
 
 #ifdef dela

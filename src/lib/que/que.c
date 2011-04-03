@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "estiva/ary.h"
 #include "estiva/que.h"
+
 
 void estiva_initq(que **q)
 {
-  if ( *q == NULL ) *q = calloc(1,sizeof(que));
+  if ( *q == NULL ) ary1(*q,1); //*q = calloc(1,sizeof(que));
 }
 
 
