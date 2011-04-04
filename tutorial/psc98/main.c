@@ -23,17 +23,21 @@ int main(int argc, char **argv){
   for ( i=1; i<=n; i++) {
     genmat(i,JA,AA,&B);
     for ( j=0; j<9; j++) if (JA[j] != -1){
-	mx(A,i,JA[j]) = AA[j]; 
-	b[i] = B;
+	if( JA[j] < -1 || n < JA[j] ) {
+	} else {
+	  printf("%ld\n",JA[j]);
+	  mx(A,i,JA[j]) = AA[j]; 
+	  b[i] = B;
+	}
     }
   }
-#if 0
+  printf("hello\n");
+
   if (!defop("--mpi"))
     mpisolver(A,x,b);
   else
-#endif
     solver(A,x,b);
 
   chkval(stdout,n,&x[1]);
-  //sendcommand(999);
+  sendcommand(999);
 }
