@@ -21,7 +21,7 @@ SRCS = ary/ary.c esolver/esolver.c esolver/maxesolver.c \
 	TaylorHood/TaylorHood_Hy.c TaylorHood/genP2P2mx.c \
 	TaylorHood/TaylorHood_Ax.c TaylorHood/TaylorHood_Ay.c \
 	mx/zerofillrow.c mesh/forgammap1.c std/Rf.c mx/slimupmx.c \
-	vec/vec.c
+	vec/vec.c solver/matvecmpi.c solver/mpisolver.c
 
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I../include
