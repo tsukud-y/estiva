@@ -24,7 +24,7 @@ SRCS = ary/ary.c esolver/esolver.c esolver/maxesolver.c \
 	vec/vec.c solver/matvecmpi.c solver/mpisolver.c
 
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -I../include
+CFLAGS = -I../include -I/usr/local/include -I/opt/mpich2/include
 CPPFLAGS = -Wall -g -O2
 
 RM := /bin/rm

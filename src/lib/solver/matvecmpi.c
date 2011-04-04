@@ -5,7 +5,7 @@
 #include "estiva/op.h"
 #include "estiva/vec.h"
 #include "estiva/std.h"
-#include "/opt/mpich2/include/mpi.h"
+#include "mpi.h"
 #include "estiva/solver.h"
 
 static long dim1vec;

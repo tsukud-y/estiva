@@ -173,8 +173,8 @@ int estiva_stopcondition(void *Apointer, double *x, double *b)
   if ( defop("-psc98") ) {
     double norm;
     norm = psc98(A,x,b);
-    if ( defop("-v") ) printf("%e\n",norm);
-    if ( norm < 1.0e-8 ) return 1;
+    if ( defop("-v") ) fprintf(stderr,"%e\n",norm);
+    if ( norm < 1.0e-5 ) return 1;
     else return 0;
   }       
   return 1;

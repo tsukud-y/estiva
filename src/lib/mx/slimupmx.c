@@ -16,7 +16,7 @@ void estiva_slimupmx(MX **M, MX *A)
 	maxw = max(maxw,w++);
       }
 
-  initmx((*M),A->m+1,maxw);
+  initmx((*M),A->m+1,maxw+1);
 
   for(i=1;i<= A->m;i++) for(j=0; j< A->n; j++) {
       J = A->IA[i-1][j];

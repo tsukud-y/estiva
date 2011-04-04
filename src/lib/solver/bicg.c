@@ -16,7 +16,8 @@ int estiva_bicgsolver(void *Apointer, double *x, double *b)
   double alpha, beta, bnrm2, rho, rho1=1.0;
   long   n, itr;
 
-  slimupmx(A,Apointer);
+  A = Apointer;
+
   transmx(AT,A);
   ILUdecomp(A);
   n = A->m;

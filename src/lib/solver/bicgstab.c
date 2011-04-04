@@ -121,7 +121,7 @@ static int bicgstab_(n, b, x, work, ldw, iter, resid, matvec, psolve, info)
     cpvec(b+1,r);
     if (L2(&x[1]) != 0.) {
 	(*matvec)(&c_b5, &x[1], &c_b6, r);
-	if (L2(r) <= tol) {
+	if (L2(r) <= tol && stopcondition(A,x,b)) {
 	    goto L30;
 	}
     }
@@ -139,7 +139,7 @@ L10:
 /*     Perform BiConjugate Gradient Stabilized iteration. */
 
     ++(*iter);
-
+    if ( defop("-v") ) fprintf(stderr,"iter = %d\n",*iter);
 
     rho = dotvec(rtld, r);
     if (fabsl(rho) < rhotol) {
