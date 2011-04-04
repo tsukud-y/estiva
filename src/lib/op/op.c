@@ -6,9 +6,14 @@
 static int argc;
 static char **argv;
 
-void estiva_initop(int pargc, char **pargv)
+int    *estiva_pargc;
+char ***estiva_pargv;
+
+void estiva_initop(int *pargc, char ***pargv)
 {
-  argc = pargc; argv = pargv;
+  argc = *pargc; argv = *pargv;
+  estiva_pargc = pargc;
+  estiva_pargv = pargv;
 }
 
 int estiva_defop(char *str)
