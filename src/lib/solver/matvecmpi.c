@@ -5,7 +5,7 @@
 #include "estiva/op.h"
 #include "estiva/vec.h"
 #include "estiva/std.h"
-#include "/usr/local/include/mpi.h"
+#include "/opt/mpich2/include/mpi.h"
 #include "estiva/solver.h"
 
 static long dim1vec;
@@ -113,7 +113,7 @@ static void slave(int p)
   
   while ( 1 ) {
     MPI_Bcast(&command, 1, MPI_LONG, 0, MPI_COMM_WORLD);
-    if (command == 1) { recvmx((void*)&A);  ;}
+    if (command == 1) { recvmx((void*)&A);}
     if (command == 2) {
       ary1(x,A->m);
       ary1(y,A->m);
@@ -122,15 +122,9 @@ static void slave(int p)
       matvecvec(A,1.0,x,0.0,y);
       returnvec(y);
     }
-    if (command == 999) exit(0);
+    if (command == 999) {MPI_Finalize(); exit(0);}
   }
 }
-
-static void estiva_finalize(void)
-{
-  MPI_Finalize();
-}
-
 
 static int mpisolverinit(void)
 {
@@ -140,7 +134,6 @@ static int mpisolverinit(void)
   if ( init == 0 ){
     init = 1;
     MPI_Init(estiva_pargc, estiva_pargv);
-    atexit(estiva_finalize);
     MPI_Comm_rank(MPI_COMM_WORLD,&p);
     if ( p != 0 ) {slave(p); exit(0);}
   }
@@ -151,6 +144,7 @@ long estiva_sendcommand(long command)
 {
   mpisolverinit();
   MPI_Bcast(&command, 1, MPI_LONG, 0, MPI_COMM_WORLD);
+  if ( command == 999) { MPI_Finalize(); exit(0);}
   return command;
 }
 

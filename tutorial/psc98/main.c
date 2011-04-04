@@ -27,11 +27,13 @@ int main(int argc, char **argv){
 	b[i] = B;
     }
   }
+#if 0
   if (!defop("--mpi"))
     mpisolver(A,x,b);
   else
+#endif
     solver(A,x,b);
 
   chkval(stdout,n,&x[1]);
-  sendcommand(999);
+  //sendcommand(999);
 }

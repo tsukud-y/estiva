@@ -12,7 +12,7 @@
 int mpisolver(void *Apointer, double *xk, double *b)
 {
   static double *ek, *ek1, *hk1, *pk, *pk1, *q, *r0, *rk, *rk1, *w, *xk1, *xk1_xk;
-  MX *A;
+  static MX *A;
   double c1, c2, c3, alphak, betak;
   long   k, n;
 
