@@ -24,12 +24,14 @@ SOLVER(3)              ESTIVA ライブラリ関数マニュアル              SOLVER(3)
      指定することが出来ます。initop()関数による引数データの
      イニシャライズが必要です。
      
-     -solver bicg       ...  BiCG法
-     -solver gauss      ...  ガウスの消去法
-     -solver blu        ...  帯LU分解
-     -solver cgs        ...  CGS法 
-     -solver bicgstab   ...  BiCGstab法
-     指定なし (pcgs)    ...  前処理付き双共役勾配法(デフォルト)
+     -solver pcgs       ... 前処理付き双共役勾配法(デフォルト)
+     -solver bicg       ... BiCG法
+     -solver gauss      ... ガウスの消去法
+     -solver blu        ... 帯LU分解
+     -solver cgs        ... CGS法 
+     -solver bicgstab   ... BiCGstab法
+     -solver qmr        ... QMR法
+     指定なし (qmr)
 
 戻り値
      戻り値はありません。
