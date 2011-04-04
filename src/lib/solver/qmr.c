@@ -6,8 +6,7 @@
 #include "estiva/std.h"
 #include "estiva/vec.h"
 #include "estiva/op.h"
-#undef min
-#undef max
+#include "estiva/std.h"
 
 static MX *A, *AT;
 
@@ -111,14 +110,14 @@ int estiva_qmrsolver(void *Ap, double *x, double *b)
 	-lf2c -lm   (in that order)
 */
 
-#include "/usr/local/include/f2c.h"
+//#include "/usr/local/include/f2c.h"
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static doublereal c_b5 = -1.;
-static doublereal c_b6 = 0.;
-static doublereal c_b44 = 1.;
+static int c__1 = 1;
+static double c_b5 = -1.;
+static double c_b6 = 0.;
+static double c_b44 = 1.;
 
 /*  -- Iterative template routine --
 *     Univ. of Tennessee and Oak Ridge National Laboratory
@@ -141,7 +140,7 @@ static doublereal c_b44 = 1.;
 *  Arguments
 *  =========
 *
-*  N       (input) INTEGER.
+*  N       (input) INT.
 *          On entry, the dimension of the matrix.
 *          Unchanged on exit.
 *
@@ -157,10 +156,10 @@ static doublereal c_b44 = 1.;
 *  WORK    (workspace) DOUBLE PRECISION array, dimension (LDW,4).
 *          Workspace for residual, direction vector, etc.
 *
-*  LDW     (input) INTEGER
+*  LDW     (input) INT
 *          The leading dimension of the array WORK. LDW >= max(1,N).
 *
-*  ITER    (input/output) INTEGER
+*  ITER    (input/output) INT
 *          On input, the maximum iterations to be performed.
 *          On output, actual number of iterations performed.
 *
@@ -240,7 +239,7 @@ static doublereal c_b44 = 1.;
 *         The preconditioner is passed into the routine in a common block.
 *
 *
-*  INFO    (output) INTEGER
+*  INFO    (output) INT
 *
 *          =  0: Successful exit. Iterated approximate solution returned.
 *
@@ -278,36 +277,36 @@ static doublereal c_b44 = 1.;
 int qmr_(n, b, x, work, ldw, iter, resid, matvec, 
 	matvectrans, psolveq, psolvetransq, info)
 
-   integer *n, *ldw, *iter, *info;
-   doublereal *b, *x, *work, *resid;
+   int *n, *ldw, *iter, *info;
+   double *b, *x, *work, *resid;
    int (*matvec) (), (*matvectrans) (), (*psolveq) (), (*psolvetransq) ();
 {
     /* System generated locals */
-    integer work_dim1, work_offset;
-    doublereal d__1, d__2;
+    int work_dim1, work_offset;
+    double d__1, d__2;
 
     /* Builtin functions */
     double sqrt();
 
     /* Local variables */
-    static doublereal beta;
-    extern doublereal ddot_();
-    static integer ptld;
-    extern doublereal getbreak_();
-    static integer vtld, wtld, ytld, ztld;
-    static doublereal gammatol, deltatol, bnrm2;
-    extern doublereal dnrm2_();
-    static integer d, p, q, r, s;
-    static doublereal gamma;
-    static integer v, w, y, z;
-    static doublereal delta;
+    static double beta;
+    extern double ddot_();
+    static int ptld;
+    extern double getbreak_();
+    static int vtld, wtld, ytld, ztld;
+    static double gammatol, deltatol, bnrm2;
+    extern double dnrm2_();
+    static int d, p, q, r, s;
+    static double gamma;
+    static int v, w, y, z;
+    static double delta;
     extern /* Subroutine */ int dscal_();
-    static doublereal theta;
+    static double theta;
     extern /* Subroutine */ int dcopy_();
-    static integer maxit;
-    static doublereal c1;
+    static int maxit;
+    static double c1;
     extern /* Subroutine */ int daxpy_();
-    static doublereal xitol, gamma1, theta1, xi, epstol, rhotol, eta, eps, 
+    static double xitol, gamma1, theta1, xi, epstol, rhotol, eta, eps, 
 	    rho, tol, betatol, rho1;
 
     /* Parameter adjustments */
