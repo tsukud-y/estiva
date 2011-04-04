@@ -18,6 +18,7 @@ void *estiva_distmx(void *Apointer)
   static long   *IA;
   long n, i, j, p, w;
 
+
   MPI_Comm_size(MPI_COMM_WORLD,&np);
   np--;
 
@@ -25,16 +26,17 @@ void *estiva_distmx(void *Apointer)
   mx(A,1,1) = mx(A,1,1);
   n = A->m;
   w = A->n;
-  ary1(AA,n);
-  ary1(IA,n);
+  ary1(AA,n+1);
+  ary1(IA,n+1);
   dim1vec = n;
 
   for (p = 1; p<=np; p++) {
     MPI_Send(&w,1,MPI_LONG,p, 999, MPI_COMM_WORLD);
     MPI_Send(&n,1,MPI_LONG,p  ,1000,  MPI_COMM_WORLD);
   }
+
   forall (1,p,np) forall(0, j, w-1) {
-    forall(0, i, n) { 
+    forall(0, i, n-1) { 
       if ( (p-1)*n/np  <= i && i < p*n/np ) {
 	AA[i] = A->A[i][j];
 	IA[i] = A->IA[i][j];

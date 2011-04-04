@@ -46,7 +46,7 @@ int estiva_pcgssolver(void *Apointer, double *xk, double *b)
   cpvec(rk,pk);
   c1 = dotvec(r0,r0);
 
-  forall (1, k, max(n/10,1000)) {
+  forall (1, k, n) {
     phase(1); {
       matvecvec(A, 1.0, pk, 0.0, q);
       psolvevec(A,q);

@@ -90,7 +90,7 @@ double *estiva_psolvevec(void *Apointer, double *q)
   forall (1, i, n) {
     forall (0, j, An-1) {
       J = A->IA[i-1][j];
-      if ( J != 0 && i > J ) q[i] -= A->A[i-1][j]*q[J];
+      if ( i > J && J > 0) q[i] -= A->A[i-1][j]*q[J];
     }
     q[i] *= DD[i];
   }
@@ -98,7 +98,7 @@ double *estiva_psolvevec(void *Apointer, double *q)
     sw = 0.0;
     forall (0, j, An-1) {
       J = A->IA[i-1][j];
-      if ( J != 0 && i < J ) sw += A->A[i-1][j]*q[J];
+      if ( i < J && 0 < J ) sw += A->A[i-1][j]*q[J];
     }
     q[i] -= DD[i] * sw;
   }
@@ -141,7 +141,7 @@ double *estiva_ILUdecomp(void *Apointer)
     ss = d[i];
     forall ( 0, k, An-1) {
       K = A->IA[i-1][k];
-      if ( K != 0 && i > K ) {
+      if ( i > K && 0 < K) {
 	ss -= A->A[i-1][k] * mx(A,K,i) * DD[K];
       }
     }

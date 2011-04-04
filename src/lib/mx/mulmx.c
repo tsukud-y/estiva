@@ -17,6 +17,6 @@ void estiva_mulmx(double **tp, MX *A, double *x){
 
   for(i=0; i< m; i++) for(j=0; j< n; j++) {
       J = A->IA[i][j];
-      if (J != 0) t[i] += A->A[i][j]*x[J-1];
+      if (0<J) t[i] += A->A[i][j]*x[J-1];
   }
 }

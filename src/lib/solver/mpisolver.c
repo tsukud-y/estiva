@@ -16,11 +16,10 @@ int mpisolver(void *Apointer, double *xk, double *b)
   double c1, c2, c3, alphak, betak;
   long   k, n;
 
-
   A = Apointer;
   n = A->m;
   ILUdecomp(A);
-  
+
   sendcommand(1);
   distmx(A);
 
