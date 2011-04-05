@@ -262,7 +262,7 @@ L10:
     daxpy_(n, &d__1, &work[q * work_dim1 + 1], &c__1, &work[r * work_dim1 + 1]
 	    , &c__1);
     *resid = dnrm2_(n, &work[r * work_dim1 + 1], &c__1) / bnrm2;
-    if (*resid <= tol) {
+    if (*resid <= tol && psc98condition(&x[1],&b[1])) {
 	goto L30;
     }
     if (*iter == maxit) {
