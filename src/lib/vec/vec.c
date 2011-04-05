@@ -150,14 +150,6 @@ double *estiva_ILUdecomp(void *Apointer)
   return DD;
 }
 
-void fprintvec(FILE *fp, double *x)
-{
-  long i;
-  forall(0,i,dim1vec) fprintf(fp,"%e\n",x[i]);
-  fclose(fp);
-}
-
-
 static double psc98(MX *A, double *x, double *b)
 {
   static double *L;

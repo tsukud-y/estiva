@@ -17,6 +17,7 @@ double *estiva_scalvec(double da,double *dx);
 void    estiva_setveclength(long n);
 int     estiva_stopcondition(void *A, double *x, double *b);
 int     estiva_success(long k);
+int     estiva_fprintvec(double *b, char *name);
 
 #define addformula(z,eq,x,plus,a,y) estiva_addformula(z,eq,x,plus,a,y)
 #define addvec(da,dx,dy)            estiva_addvec(da,dx,dy)
@@ -33,5 +34,6 @@ int     estiva_success(long k);
 #define setveclength(n)             estiva_setveclength(n)
 #define stopcondition(A,x,b)        estiva_stopcondition(A,x,b)
 #define success(k)                  estiva_success(k)
+#define fprintvec(b)                estiva_fprintvec(b,#b)
 
 #endif
