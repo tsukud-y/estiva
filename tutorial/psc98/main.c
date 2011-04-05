@@ -5,6 +5,13 @@
 #include "estiva/solver.h"
 #include "estiva/std.h"
 
+static void fprintmx(FILE *fp,MX *A)
+{
+  long i, j;
+  fornonzeromx(A,i,j) fprintf(fp,"%ld %ld %e\n",i,j,mx(A,i,j));
+  fclose(fp);
+}
+
 int main(int argc, char **argv){
   static MX *A;
   static int *JA;
@@ -36,6 +43,7 @@ int main(int argc, char **argv){
 	}
     }
   }
+  fprintmx(fopen("foo","w"),A);
 
   if (!defop("--mpi"))
     mpisolver(A,x,b);
