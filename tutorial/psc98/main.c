@@ -19,6 +19,8 @@ static void fprintvec(FILE *fp, double *b)
   fclose(fp);
 }
 
+int genmat();
+
 int main(int argc, char **argv){
   static MX *A;
   static int *JA;

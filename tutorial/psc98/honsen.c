@@ -176,57 +176,57 @@ static double
 trand1(i)
     int i;
 {
-    unsigned long t = 2 * i + 1;
+    unsigned int t = 2 * i + 1;
     t *= 48828125;
     t *= 48828125;
     t *= 48828125;
-    return .5 * (double)t / (double)(unsigned long)0x80000000;
+    return .5 * (double)t / (double)(unsigned int)0x80000000;
 }
 
 static double
 trand2(i)
     int i;
 {
-    unsigned long t = 2 * i + 1;
+    unsigned int t = 2 * i + 1;
     t *= 1812433253;
     t *= 1812433253;
     t *= 1812433253;
-    return .5 * (double)t / (double)(unsigned long)0x80000000;
+    return .5 * (double)t / (double)(unsigned int)0x80000000;
 }
 
 static double
 trand3(i)
     int i;
 {
-    unsigned long t = 2 * i + 1;
+    unsigned int t = 2 * i + 1;
     t *= 1566083941;
     t *= 1566083941;
     t *= 1566083941;
-    return .5 * (double)t / (double)(unsigned long)0x80000000;
+    return .5 * (double)t / (double)(unsigned int)0x80000000;
 }
 
 static double
 trand4(i)
     int i;
 {
-    unsigned long t = 2 * i + 1;
+    unsigned int t = 2 * i + 1;
     t *= 69069;
     t *= 69069;
     t *= 69069;
     t *= 69069;
     t *= 69069;
-    return .5 * (double)t / (double)(unsigned long)0x80000000;
+    return .5 * (double)t / (double)(unsigned int)0x80000000;
 }
 
 static double
 trand5(i)
     int i;
 {
-    unsigned long t = 2 * i + 1;
+    unsigned int t = 2 * i + 1;
     t *= 1664525;
     t *= 1664525;
     t *= 1664525;
-    return .5 * (double)t / (double)(unsigned long)0x80000000;
+    return .5 * (double)t / (double)(unsigned int)0x80000000;
 }
 
 
