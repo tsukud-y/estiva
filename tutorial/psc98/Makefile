@@ -16,6 +16,9 @@ all: ;
 5: ;
 	export PSC98=5; time ./a.out -solver $(SOLVER) --mpi -psc98
 
+run: 1 2 3 4 5
+
+
 allclean: ;
 	(cd ../../src/lib; make clean)
 
