@@ -40,7 +40,7 @@ int estiva_qmrsolver(void *A, double *x, double *b)
 	-lf2c -lm   (in that order)
 */
 
-#include "/usr/local/include/f2c.h"
+#include "estiva/f2c.h"
 
 /* Table of constant values */
 

@@ -10,6 +10,7 @@ int estiva_cgssolver(void *A, double *x, double *b);
 int estiva_bicgstabsolver(void *A, double *x, double *b);
 int estiva_pcgssolver(void *A, double *x, double *b);    
 int estiva_qmrsolver(void *A, double *x, double *b);
+int estiva_cgsolver(void *A, double *x, double *b);
 
 int estiva_solver(void *A, double *x, double *b)
 {
@@ -20,5 +21,6 @@ int estiva_solver(void *A, double *x, double *b)
   if (!strcmp(getop("-solver"),"cgs") )   return estiva_cgssolver(A,x,b);
   if (!strcmp(getop("-solver"),"bicgstab"))return estiva_bicgstabsolver(A,x,b);
   if (!strcmp(getop("-solver"),"qmr"))     return estiva_qmrsolver(A,x,b);
+  if (!strcmp(getop("-solver"),"cg"))      return estiva_cgsolver(A,x,b);
   return estiva_qmrsolver(A,x,b);
 }

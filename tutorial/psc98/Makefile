@@ -1,7 +1,8 @@
-SOLVER = qmr
+SOLVER = cg
 
 all: ;
-	mpicc -I../../src/include main.c yosen.c -L../../src/lib -lestiva -lm 
+	(cd ../../src/lib/; make)
+	mpicc -I../../src/include main.c yosen.c  -L../../src/lib -lestiva -lm 
 
 0: ;
 	export PSC98=0; time ./a.out -solver $(SOLVER) --mpi -psc98 
@@ -21,6 +22,6 @@ run: 1 2 3 4 5
 
 allclean: ;
 	(cd ../../src/lib; make clean)
+	rm -f ./a.out ./a.out.core
 
-lib: ;
-	(cd ../../src/lib/; make)
+
