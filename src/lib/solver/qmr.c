@@ -6,100 +6,29 @@
 #include "estiva/std.h"
 #include "estiva/vec.h"
 #include "estiva/op.h"
+#include "estiva/eblas.h"
 #undef min
 #undef max
 
-static MX *A, *AT;
+int qmr_();
 
-static int matvec(double *alpha, double *x, double *beta, double *y)
+int estiva_qmrsolver(void *A, double *x, double *b)
 {
-  matvecmx(A, alpha, x, beta, y); 
-  return 0;
-}
-
-static int matvectrans(double *alpha, double *x, double *beta, double *y)
-{
-  matvecmx(AT, alpha, x, beta, y); 
-  return 0;
-}
-
-static int psolveq(double *x, double *b, char *str, int L)
-{ 
-  if (!strcmp(str,"LEFT") ) {
-    cpvec(b,x);
-    return 0;
-  }
-  cpvec(b,x);
-  psolvevec(A,x);
-  return 0;
-}
-
-static int psolvetransq(double *x, double *b, char *str, int L)
-{ 
-  if (!strcmp(str,"LEFT") ) {
-    cpvec(b,x);
-    return 0;
-  }
-  cpvec(b,x);
-  psolvevec(AT,x);
-  return 0;
-}
-
-static int daxpy_(int *n, double *alpha, double *x, int *c1, double *y, int *c2)
-{
-  setveclength(*n);
-  addvec(*alpha,x,y);
-  return 0;
-}
-
-static int dcopy_(int *n,double  *b, int *c__1, double *r, int *c__2)
-{
-  setveclength(*n);
-  cpvec(b,r);
-  return 0;
-}
-
-static double ddot_(int *n, double *z, int *c__1, double *y, int *c__2)
-{
-  setveclength(*n);
-  return dotvec(z,y);
-} 
-
-static double dnrm2_(int *n, double *x, int *c__1)
-{
-  setveclength(*n);
-  return L2(x);
-}
-
-
-static int dscal_(int *n, double *d__1, double *v, int *c__1)
-{
-  int i;
-  setveclength(*n);
-  forall(0,i,*n-1) v[i] *= *d__1;
-  return 0;
-}
-
-static double getbreak_(void)
-{
-  return 1.2e-31;
-}
-
-extern int qmr_();
-int estiva_qmrsolver(void *Ap, double *x, double *b)
-{
+  static MX *AT;
   static double *work;
   long n, ldw, iter, info, i;
   double resid = 1.0e-7;
-  A = Ap;
+
   transmx(AT,A);
+  setAmx(A);
+  setATmx(AT);
   ldw = iter =n = dim1(b);
   ary1(work,n*11);
   setveclength(n);
   forall (0, i, n ) x[i] = b[i];
   ILUdecomp(A);
-  qmr_(&n,b+1,x+1,work,&ldw,&iter,&resid,matvec,
-       matvectrans, psolveq, psolvetransq,&info);
+  qmr_(&n,b+1,x+1,work,&ldw,&iter,&resid,estiva_matvec,
+       estiva_matvectrans, estiva_psolveq, estiva_psolvetransq,&info);
   if (defop("-v")) fprintf(stderr, "qmr iter = %ld\n",iter);
 
   return 0;
@@ -291,22 +220,22 @@ int qmr_(n, b, x, work, ldw, iter, resid, matvec,
 
     /* Local variables */
     static doublereal beta;
-    extern doublereal ddot_();
+
     static integer ptld;
-    extern doublereal getbreak_();
+
     static integer vtld, wtld, ytld, ztld;
     static doublereal gammatol, deltatol, bnrm2;
-    extern doublereal dnrm2_();
+
     static integer d, p, q, r, s;
     static doublereal gamma;
     static integer v, w, y, z;
     static doublereal delta;
-    extern /* Subroutine */ int dscal_();
+
     static doublereal theta;
-    extern /* Subroutine */ int dcopy_();
+
     static integer maxit;
     static doublereal c1;
-    extern /* Subroutine */ int daxpy_();
+
     static doublereal xitol, gamma1, theta1, xi, epstol, rhotol, eta, eps, 
 	    rho, tol, betatol, rho1;
 

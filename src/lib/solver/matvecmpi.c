@@ -115,8 +115,10 @@ static void slave(int p)
   
   while ( 1 ) {
     MPI_Bcast(&command, 1, MPI_LONG, 0, MPI_COMM_WORLD);
-    if (command == 1) { recvmx((void*)&A);}
-    if (command == 2) {
+    if (command == 1) { 
+      recvmx((void*)&A);
+    }
+    else if (command == 2 && A != NULL) {
       ary1(x,A->m);
       ary1(y,A->m);
       setveclength(A->m);
@@ -124,7 +126,9 @@ static void slave(int p)
       matvecvec(A,1.0,x,0.0,y);
       returnvec(y);
     }
-    if (command == 999) {MPI_Finalize(); exit(0);}
+    else if (command == 999) {
+      MPI_Finalize(); exit(0);
+    }
   }
 }
 

@@ -139,7 +139,7 @@ L10:
 /*     Perform BiConjugate Gradient Stabilized iteration. */
 
     ++(*iter);
-    if ( defop("-v") ) fprintf(stderr,"iter = %d\n",*iter);
+    if ( defop("-v") ) fprintf(stderr,"iter = %ld\n",*iter);
 
     rho = dotvec(rtld, r);
     if (fabsl(rho) < rhotol) {
