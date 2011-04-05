@@ -95,3 +95,16 @@ double estiva_getbreak_(void)
 {
   return 1.2e-31;
 }
+
+int estiva_psolve(double *x, double *b)
+{
+  setveclength(A->m);
+  cpvec(b,x);
+  psolvevec(A,x);
+  return 0;
+}
+
+int estiva_psc98condition(double *x, double *b)
+{
+  return stopcondition(A,x,b);
+}

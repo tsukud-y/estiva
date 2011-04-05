@@ -13,6 +13,8 @@ int    estiva_matvec(double *alpha, double *x, double *beta, double *y);
 int    estiva_matvectrans(double *alpha, double *x, double *beta, double *y);
 int    estiva_psolveq(double *x, double *b, char *str, int L);
 int    estiva_psolvetransq(double *x, double *b, char *str, int L);
+int    estiva_psolve();
+int    estiva_psc98condition(double *x, double *b);
 
 #define daxpy_(n,alpha,x,c1,y,c2) estiva_daxpy_(n,alpha,x,c1,y,c2)
 #define dcopy_(n,b,c__1,r,c__2)   estiva_dcopy_(n,b,c__1,r,c__2)
@@ -22,5 +24,6 @@ int    estiva_psolvetransq(double *x, double *b, char *str, int L);
 #define getbreak_()               estiva_getbreak_()
 #define setAmx(A)                 estiva_setAmx(A)
 #define setATmx(AT)               estiva_setATmx(AT)
+#define psc98condition(x,b)       estiva_psc98condition(x,b)
 
 #endif
