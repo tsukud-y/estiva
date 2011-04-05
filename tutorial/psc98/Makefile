@@ -2,10 +2,12 @@ SOLVER = cg
 
 yosen: ;
 	(cd ../../src/lib/; make)
-	mpicc -I../../src/include main.c yosen.c  -L../../src/lib -lestiva -lm 
+	mpicc -I../../src/include main.c yosen.c  -L../../src/lib -lestiva -lm -lefence
+
 honsen: ;
 	(cd ../../src/lib/; make)
-	mpicc -I../../src/include main.c honsen.c  -L../../src/lib -lestiva -lm
+	mpicc -I../../src/include main.c honsen.c  -L../../src/lib -lestiva -lm -lefence
+
 0: ;
 	export PSC98=0; time ./a.out -solver $(SOLVER) --mpi -psc98 
 1: ;

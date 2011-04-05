@@ -43,13 +43,8 @@ int main(int argc, char **argv){
 	}
     }
   }
-  fprintmx(fopen("foo","w"),A);
-
-  if (!defop("--mpi"))
-    mpisolver(A,x,b);
-  else
-    solver(A,x,b);
+  solver(A,x,b);
 
   chkval(stdout,n,&x[1]);
-  sendcommand(999);
+  return 0;
 }
