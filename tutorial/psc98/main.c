@@ -12,6 +12,13 @@ static void fprintmx(FILE *fp,MX *A)
   fclose(fp);
 }
 
+static void fprintvec(FILE *fp, double *b)
+{
+  long i;
+  forall(0,i,dim1(b)) fprintf(fp,"%e\n",b[i]);
+  fclose(fp);
+}
+
 int main(int argc, char **argv){
   static MX *A;
   static int *JA;
@@ -43,6 +50,7 @@ int main(int argc, char **argv){
 	}
     }
   }
+  fprintvec(fopen("b","w"),b);
   solver(A,x,b);
 
   chkval(stdout,n,&x[1]);
