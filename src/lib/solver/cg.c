@@ -20,7 +20,7 @@ int estiva_cgsolver(void *A, double *x, double *b)
 
   setAmx(A);
   ldw = iter = n = dim1(b);
-  ary1(work,n*4);
+  ary1(work,n*4+1);
   setveclength(n);
   forall (0, i, n ) x[i] = b[i];
   ILUdecomp(A);
