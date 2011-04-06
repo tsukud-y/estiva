@@ -25,7 +25,7 @@ void *estiva_distmx(void *Apointer)
   A = Apointer;
   mx(A,1,1) = mx(A,1,1);
   n = A->m;
-  w = A->n;
+  w = A->w;
   ary1(AA,n+1);
   ary1(IA,n+1);
   dim1vec = n;

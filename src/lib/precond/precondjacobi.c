@@ -23,7 +23,7 @@ void estiva_precondjacobi(MX *A, double *x, double *D, double *b)
   for(k=0;k<step;k++) {
     for(i=0;i<n;i++) {
       x[i]=b[i];
-      for(j=0; j< A->n; j++) {
+      for(j=0; j< A->w; j++) {
 	J = A->IA[i][j];
 	if (J != 0) if ( J-1 != i) if(A->A[i][j] !=0.0) {
 	  x[i] -= A->A[i][j]*xo[J-1];

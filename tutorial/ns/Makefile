@@ -1,7 +1,7 @@
 SRC = ../../src
-
 SRCS = main.c A.c Rhs.c boundary_condition.c
 OBJS = $(SRCS:.c=.o)
+SOLVER = qmr
 
 .c.o: 
 	$(CC) -Wall -I${SRC}/include -c $< -o $@
@@ -11,7 +11,7 @@ all: $(OBJS)
 	$(CC) $(OBJS) -Wall -L${SRC}/lib -L/usr/local/lib -lestiva -lm -lefence
 
 run: all
-	./a.out -plotscale 0.001 -n 10 -v -solver cgs
+	./a.out -plotscale 0.001 -n 10 -v -solver $(SOLVER)
 	(cd anime; cat *.gnuplot | gnuplot)
 
 large: all

@@ -11,11 +11,11 @@ void estiva_initmx(MX **Ap, long i, long j){
   if(*Ap == NULL) ary1(*Ap,1); //*Ap = calloc(1,sizeof(MX));
   T = *Ap;
   T->m = i-1;
-  T->n = j-1;
+  T->w = j-1;
   T->I = 1;
   T->J = 1;
-  ary2(T->A, T->m, T->n);
-  ary2(T->IA,T->m, T->n);
+  ary2(T->A, T->m, T->w);
+  ary2(T->IA,T->m, T->w);
 }
 
 static double estiva_rmx(MX *T, long i, long j){
@@ -23,7 +23,7 @@ static double estiva_rmx(MX *T, long i, long j){
   register long   J,  *IAi, **IA, n;
   A  = T->A;
   IA = T->IA;
-  n  = T->n;
+  n  = T->w;
   IAi = IA[i-1];
   for(J=0; J<n; J++){
     if(IAi[J]==0) return       0.0;
@@ -37,7 +37,7 @@ static void estiva_wmx(MX *T, long i, long j, double a){
   register long  J, **IA, *IAi, IAiJ, n;
   A  = T->A;
   IA = T->IA;
-  n  = T->n;
+  n  = T->w;
   if ( a == rmx(T,i,j) ) return;
   IAi = IA[i-1];
   for(J=0; J<n; J++){

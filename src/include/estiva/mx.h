@@ -9,7 +9,7 @@ typedef struct {
 typedef struct{
   double **A;
   long   **IA;
-  long   m, n, I, J;
+  long   m, w, I, J;
   double a;
 } MX;
 

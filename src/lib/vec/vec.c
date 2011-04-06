@@ -80,7 +80,7 @@ double *estiva_psolvevec(void *Apointer, double *q)
 
   A = Apointer;
   n  = A->m;
-  An = A->n;
+  An = A->w;
 
   mx(A,1,1) = mx(A,1,1);
 
@@ -126,7 +126,7 @@ double *estiva_ILUdecomp(void *Apointer)
 
   A = Apointer;
 
-  An = A->n;
+  An = A->w;
   n  = A->m;
   
   ary1(d,n+1);

@@ -12,7 +12,7 @@ int estiva_fornonzeromx_loop(MX *A, long *Ip, long *Jp){
   long i, j;
 
   for (i = ii; i < A->m; i++, ii++, jj=0) 
-    for (j = jj; j< A->n; j++) 
+    for (j = jj; j< A->w; j++) 
       if (A->IA[i][j] != 0.0) {
 	*Ip = i+1;
 	*Jp = A->IA[i][j];
