@@ -27,6 +27,7 @@ void    estiva_slimupmx(MX **Ap, MX *A);
 void    estiva_fornonzeromx(MX *A);
 int     estiva_fornonzeromx_loop(MX *A, long *Ip, long *Jp);
 int     estiva_fprintmx(void *A, char *name);
+int     estiva_symcheckmx(void *Apointer);
 
 #define clearmx(A)                   estiva_clearmx(A)
 #define clonemx(AT,A)                estiva_clonemx(&AT,A)
@@ -41,6 +42,7 @@ int     estiva_fprintmx(void *A, char *name);
 #define slimupmx(As,A)               estiva_slimupmx(&As,A)
 #define fornonzeromx(A,i,j)						\
   for ( estiva_fornonzeromx(A);      estiva_fornonzeromx_loop(A,&(i),&(j));)
-#define fprintmx(A)  estiva_fprintmx(A,#A)
+#define fprintmx(A)                  estiva_fprintmx(A,#A)
+#define symcheckmx(A)                estiva_symcheckmx(A)
 
 #endif

@@ -18,6 +18,11 @@ int estiva_cgsolver(void *A, double *x, double *b)
   long n, ldw, iter, info, i;
   double resid = 1.0e-7;
 
+  if ( !symcheckmx(A) ) {
+    fprintf(stderr,"matrix is not symmetric\n");
+    return 1;
+  }
+
   setAmx(A);
   ldw = iter = n = dim1(b);
   ary1(work,n*4+1);

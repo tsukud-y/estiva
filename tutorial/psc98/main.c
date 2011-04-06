@@ -43,7 +43,6 @@ int main(int argc, char **argv){
 	}
       }
   }
-
   solver(A,x,b);
   chkval(stdout,n,&x[1]);
   return 0;
