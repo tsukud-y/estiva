@@ -11,7 +11,7 @@ void estiva_fornonzeromx(MX *A){
 int estiva_fornonzeromx_loop(MX *A, long *Ip, long *Jp){
   long i, j;
 
-  for (i = ii; i < A->m; i++, ii++, jj=0) 
+  for (i = ii; i < A->n; i++, ii++, jj=0) 
     for (j = jj; j< A->w; j++) 
       if (A->IA[i][j] != 0.0) {
 	*Ip = i+1;

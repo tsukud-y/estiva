@@ -64,7 +64,7 @@ double *estiva_matvecvec(void *Apointer, double alpha, double *p,
   A = Apointer;
   mx(A,1,1) = mx(A,1,1);
 
-  if ( A->m == dim1vec ) {
+  if ( A->n == dim1vec ) {
     matvecmx(A,&alpha,p+1,&beta,q+1);
   } else {
     matvecmx(A,&alpha,p,&beta,q);
@@ -79,7 +79,7 @@ double *estiva_psolvevec(void *Apointer, double *q)
   long   i, j, n, J, An;
 
   A = Apointer;
-  n  = A->m;
+  n  = A->n;
   An = A->w;
 
   mx(A,1,1) = mx(A,1,1);
@@ -127,7 +127,7 @@ double *estiva_ILUdecomp(void *Apointer)
   A = Apointer;
 
   An = A->w;
-  n  = A->m;
+  n  = A->n;
   
   ary1(d,n+1);
   ary1(DD,n+1);

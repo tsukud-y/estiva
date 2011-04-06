@@ -16,7 +16,7 @@ int estiva_cgssolver(void *Apointer, double *x, double *b)
   long   itr, n;
 
   A = Apointer;
-  n = A->m;
+  n = A->n;
   ILUdecomp(A);
 
   setveclength(n+1);

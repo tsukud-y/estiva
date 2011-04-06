@@ -98,7 +98,7 @@ double estiva_getbreak_(void)
 
 int estiva_psolve(double *x, double *b)
 {
-  setveclength(A->m);
+  setveclength(A->n);
   cpvec(b,x);
   psolvevec(A,x);
   return 0;
@@ -107,7 +107,7 @@ int estiva_psolve(double *x, double *b)
 static double psc98(MX *A, double *x, double *b)
 {
   static double *L;
-  ary1(L,A->m+1);
+  ary1(L,A->n+1);
   matvecvec(A,1.0,x,0.0,L);
   return Linf(addformula( L, '=', L, '-',1.0,b));
 }

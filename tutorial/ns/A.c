@@ -8,7 +8,7 @@ void estiva_nsA(MX **Ap, double *x, double *b, MX *K, MX *M, MX *Hx, MX *Hy, MX 
   static xyc *Z; static nde *N; static double *S;
 
   getZNS(Z,N,S);
-  m   = M->m;
+  m   = M->n;
   n   = dim1(Z);
   NUM = m*2+n;
   initmx(*Ap, NUM+1, w); A = *Ap;

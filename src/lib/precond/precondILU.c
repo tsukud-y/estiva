@@ -11,22 +11,22 @@ static void mx2CRS(MX *A, CRS *crs)
 
   mx(A,1,1) = mx(A,1,1);
 
-  for ( i = 1;  i <= A->m;  i++  )  
-    for (  j = 1;  j <= A->m;  j++  )
+  for ( i = 1;  i <= A->n;  i++  )  
+    for (  j = 1;  j <= A->n;  j++  )
       if ( mx(A,i,j) != 0.0 || i == j) n++;
 
-  crs->m = A->m;
+  crs->n = A->n;
   crs->n = n;
   ary1(crs->val, n+1);
   ary1(crs->col_ind, n+1);
-  ary1(crs->row_ptr, A->m + 2);
-  ary1(crs->diag_ptr, A->m + 1);
-  ary1(crs->pivots, A->m +1);
+  ary1(crs->row_ptr, A->n + 2);
+  ary1(crs->diag_ptr, A->n + 1);
+  ary1(crs->pivots, A->n +1);
 
   k = 1;
-  for ( i = 1;  i <= A->m;  i++  )  {
+  for ( i = 1;  i <= A->n;  i++  )  {
     crs->row_ptr[i] = k;
-    for (  j = 1;  j <= A->m;  j++  )  {
+    for (  j = 1;  j <= A->n;  j++  )  {
       if ( mx(A,i,j) != 0.0 || i == j) {
 	crs->val[k] = mx(A,i,j);
 	crs->col_ind[k] = j;
@@ -40,7 +40,7 @@ static void mx2CRS(MX *A, CRS *crs)
 
 
   /* Incomplete LU Decomposition */
-  n        = A->m;
+  n        = A->n;
   val      = crs->val;
   diag_ptr = crs->diag_ptr;
   col_ind  = crs->col_ind;
@@ -196,7 +196,7 @@ void estiva_ILU(CRS *dummypivots, MX *A)
 {
   long i;
   
-  for  (  i = 1;  i < A->m;  i++ ) if ( mx(A,i,i) == 0.0 ) mx(A,i,i) = 1.0;
+  for  (  i = 1;  i < A->n;  i++ ) if ( mx(A,i,i) == 0.0 ) mx(A,i,i) = 1.0;
   
   mx2CRS(A,dummypivots);
 

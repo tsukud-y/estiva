@@ -24,7 +24,7 @@ void *estiva_distmx(void *Apointer)
 
   A = Apointer;
   mx(A,1,1) = mx(A,1,1);
-  n = A->m;
+  n = A->n;
   w = A->w;
   ary1(AA,n+1);
   ary1(IA,n+1);
@@ -119,9 +119,9 @@ static void slave(int p)
       recvmx((void*)&A);
     }
     else if (command == 2 && A != NULL) {
-      ary1(x,A->m);
-      ary1(y,A->m);
-      setveclength(A->m);
+      ary1(x,A->n);
+      ary1(y,A->n);
+      setveclength(A->n);
       recvvec(x);
       matvecvec(A,1.0,x,0.0,y);
       returnvec(y);
@@ -161,7 +161,7 @@ double *estiva_matvecmpi(void *Apointer, double alpha, double *p,
   long i;
   A = Apointer;
 
-  forall (0,i,A->m-1) q[i] = alpha*p[i];
+  forall (0,i,A->n-1) q[i] = alpha*p[i];
   sendcommand(2);
   distvec(q);
   collectvec(q);

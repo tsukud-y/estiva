@@ -32,7 +32,7 @@ int estiva_bicgstabsolver(void *Apointer, double *x, double *b)
   
   A = Apointer;
   ILUdecomp(A);
-  n = ldw = iter = A->m;
+  n = ldw = iter = A->n;
   setveclength(n);
   x = &x[1];
   b = &b[1];

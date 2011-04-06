@@ -6,7 +6,7 @@ void estiva_nsRhs(double *b, MX *M, double *x)
   long   i, m;
   static double *bx, *by;
 
-  m = M->m;
+  m = M->n;
 
   mulmx(bx,M,x+1);
   mulmx(by,M,x+m+1);

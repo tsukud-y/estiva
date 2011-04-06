@@ -17,7 +17,7 @@ int estiva_pcgssolver(void *Apointer, double *xk, double *b)
   long   k, n;
 
   A = Apointer;
-  n = A->m;
+  n = A->n;
   setAmx(A);
   ILUdecomp(A);
 

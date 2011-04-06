@@ -20,7 +20,7 @@ int estiva_bicgsolver(void *Apointer, double *x, double *b)
 
   transmx(AT,A);
   ILUdecomp(A);
-  n = A->m;
+  n = A->n;
   setveclength(n+1);
   if( defop("-adjust") ) {
     setveclength(n);

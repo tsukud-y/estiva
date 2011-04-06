@@ -10,12 +10,12 @@ void estiva_initmx(MX **Ap, long i, long j){
   MX *T;
   if(*Ap == NULL) ary1(*Ap,1); //*Ap = calloc(1,sizeof(MX));
   T = *Ap;
-  T->m = i-1;
+  T->n = i-1;
   T->w = j-1;
   T->I = 1;
   T->J = 1;
-  ary2(T->A, T->m, T->w);
-  ary2(T->IA,T->m, T->w);
+  ary2(T->A, T->n, T->w);
+  ary2(T->IA,T->n, T->w);
 }
 
 static double estiva_rmx(MX *T, long i, long j){

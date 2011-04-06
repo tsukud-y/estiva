@@ -4,7 +4,7 @@
 #include <estiva/solver.h>
 
 void estiva_mulmx(double **tp, MX *A, double *x){
-  long i, j, J, m = A->m, n = A->w;
+  long i, j, J, m = A->n, n = A->w;
   double *t;
   
   ary1(*tp, m+1);

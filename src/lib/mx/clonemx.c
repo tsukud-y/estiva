@@ -7,11 +7,11 @@ void estiva_clonemx(MX **MT, MX *M)
 {
   long i, j, J;  
 
-  initmx((*MT), M->m+1, M->w+1);
+  initmx((*MT), M->n+1, M->w+1);
 
   mx(M,1,1) = mx(M,1,1);
 
-  for(i=1;i<= M->m;i++) for(j=0; j< M->w; j++) {
+  for(i=1;i<= M->n;i++) for(j=0; j< M->w; j++) {
       J = M->IA[i-1][j];
       if (J != 0) mx((*MT),i,J) = M->A[i-1][j];
   }

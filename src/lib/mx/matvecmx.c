@@ -6,7 +6,7 @@
 void estiva_matvecmx(MX *A, double *alpha, double *x, double *beta, double *y)
 {
   static double *t;
-  long i, n = A->m; 
+  long i, n = A->n; 
 
   mulmx(t,A,x);
   for(i=0;i<n;i++) t[i] *= *alpha;

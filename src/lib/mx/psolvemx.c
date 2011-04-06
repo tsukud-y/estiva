@@ -9,7 +9,7 @@
 void estiva_psolvemx(MX *A, CRS *pivot, MX *LU, double *D, double *x, double *b)
 {
   if (!strcmp(getop("-precond"),"none"))
-    precondnone(A->m,x,b); 
+    precondnone(A->n,x,b); 
   else if (!strcmp(getop("-precond"),"ILU"))
     precondILU(pivot,LU,x,b);
   else if (!strcmp(getop("-precond"),"scaling"))

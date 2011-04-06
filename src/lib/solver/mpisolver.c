@@ -17,7 +17,7 @@ int mpisolver(void *Apointer, double *xk, double *b)
   long   k, n;
 
   A = Apointer;
-  n = A->m;
+  n = A->n;
   ILUdecomp(A);
 
   sendcommand(1);
