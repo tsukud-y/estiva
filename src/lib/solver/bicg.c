@@ -56,7 +56,7 @@ int estiva_bicgsolver(void *Apointer, double *x, double *b)
     cpvec(rtld,ztld);
     psolvevec(AT,ztld);
     rho = dotvec(z, rtld);
-    if ( fabsl(rho) < 1.2e-31 ) break;
+    if ( fabs(rho) < 1.2e-31 ) break;
     if (itr == 1) {
       cpvec(z,p);
       cpvec(ztld,ptld);

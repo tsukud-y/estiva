@@ -111,7 +111,7 @@ double estiva_Linf(double *x)
   long i;
   
   forall (0, i, dim1vec) {
-    val = max(val,fabsl(x[i]));
+    val = max(val,fabs(x[i]));
   }
   return val;
 }

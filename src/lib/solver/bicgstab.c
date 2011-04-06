@@ -142,7 +142,7 @@ L10:
     if ( defop("-v") ) fprintf(stderr,"iter = %ld\n",*iter);
 
     rho = dotvec(rtld, r);
-    if (fabsl(rho) < rhotol) {
+    if (fabs(rho) < rhotol) {
 	goto L25;
     }
 
@@ -209,7 +209,7 @@ L10:
 	}
     }
 
-    if (fabsl(omega) < omegatol) {
+    if (fabs(omega) < omegatol) {
 	goto L25;
     } else {
 	rho1 = rho;
@@ -227,9 +227,9 @@ L25:
 
 /*     Set breakdown flag. */
 
-    if (fabsl(rho) < rhotol) {
+    if (fabs(rho) < rhotol) {
 	*info = -10;
-    } else if (fabsl(omega) < omegatol) {
+    } else if (fabs(omega) < omegatol) {
 	*info = -11;
     }
     return 0;

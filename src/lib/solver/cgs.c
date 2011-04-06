@@ -49,7 +49,7 @@ int estiva_cgssolver(void *Apointer, double *x, double *b)
 
   for (itr = 1; itr < n;  itr++) {
     rho = dotvec(rtld,r);
-    if (fabsl(rho) < 1.2e-31) break;
+    if (fabs(rho) < 1.2e-31) break;
     if ( itr == 1 ) {
       cpvec(r,u);
       cpvec(u,p);
