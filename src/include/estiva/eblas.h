@@ -15,6 +15,7 @@ int    estiva_psolveq(double *x, double *b, char *str, int L);
 int    estiva_psolvetransq(double *x, double *b, char *str, int L);
 int    estiva_psolve();
 int    estiva_psc98condition(double *x, double *b);
+double estiva_setpsc98Linf(double B);
 
 #define daxpy_(n,alpha,x,c1,y,c2) estiva_daxpy_(n,alpha,x,c1,y,c2)
 #define dcopy_(n,b,c__1,r,c__2)   estiva_dcopy_(n,b,c__1,r,c__2)
@@ -25,5 +26,6 @@ int    estiva_psc98condition(double *x, double *b);
 #define setAmx(A)                 estiva_setAmx(A)
 #define setATmx(AT)               estiva_setATmx(AT)
 #define psc98condition(x,b)       estiva_psc98condition(x,b)
+#define setpsc98Linf(B)           estiva_setpsc98Linf(B)
 
 #endif

@@ -7,6 +7,7 @@
 #include "estiva/solver.h"
 #include "estiva/std.h"
 #include "estiva/vec.h"
+#include "estiva/eblas.h"
 
 int estiva_pcgssolver(void *Apointer, double *xk, double *b)
 {
@@ -17,6 +18,7 @@ int estiva_pcgssolver(void *Apointer, double *xk, double *b)
 
   A = Apointer;
   n = A->m;
+  setAmx(A);
   ILUdecomp(A);
 
   setveclength(n+1);
@@ -68,8 +70,9 @@ int estiva_pcgssolver(void *Apointer, double *xk, double *b)
     }
     phase(5); {
       addformula( xk1_xk, '=', xk1,'-',1.0,xk);
-      if ( L2(xk1_xk)/L2(xk) < epsilon() ) {
-	if (stopcondition(A,xk1,b)) return success(k);
+      if ( L2(xk1_xk)/L2(xk) < epsilon() && psc98condition(xk1,b) ) {
+	  cpvec(xk1,xk);
+	  return success(k);
       }
     }
     phase(6); {

@@ -104,6 +104,38 @@ int estiva_psolve(double *x, double *b)
   return 0;
 }
 
+static double psc98(MX *A, double *x, double *b)
+{
+  static double *L;
+  ary1(L,A->m+1);
+  matvecvec(A,1.0,x,0.0,L);
+  return Linf(addformula( L, '=', L, '-',1.0,b));
+}
+
+static double B = 0.0;
+
+double estiva_setpsc98Linf(double Bvalue)
+{
+  B = Bvalue;
+  return B;
+}
+
+int estiva_stopcondition(void *Apointer, double *x, double *b)
+{
+  MX *A;
+  A = Apointer;
+
+  if ( B != 0.0 ) {
+    double norm;
+    norm = psc98(A,x,b);
+    if ( defop("-v") ) fprintf(stderr,"%e\n",norm);
+    if ( norm < B ) return 1;
+    else return 0;
+  }
+  return 1;
+}
+
+
 int estiva_psc98condition(double *x, double *b)
 {
   return stopcondition(A,x,b);

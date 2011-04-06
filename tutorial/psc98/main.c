@@ -5,6 +5,7 @@
 #include "estiva/solver.h"
 #include "estiva/std.h"
 #include "estiva/vec.h"
+#include "estiva/eblas.h"
 
 int genmat();
 
@@ -21,6 +22,7 @@ int main(int argc, char **argv){
 
   genmat(-1,JA,AA,&B);
   n = JA[0]; w = JA[2];
+  setpsc98Linf(B);
 
   if (defop("-v") ) fprintf(stderr,"n=%d, JA[1]=%d, w=%d B=%e\n",n,JA[1],w,B);
 

@@ -150,28 +150,6 @@ double *estiva_ILUdecomp(void *Apointer)
   return DD;
 }
 
-static double psc98(MX *A, double *x, double *b)
-{
-  static double *L;
-  ary1(L,A->m+1);
-  matvecvec(A,1.0,x,0.0,L);
-  return Linf(addformula( L, '=', L, '-',1.0,b));
-}
-
-int estiva_stopcondition(void *Apointer, double *x, double *b)
-{
-  MX *A;
-  A = Apointer;
-  if ( defop("-psc98") ) {
-    double norm;
-    norm = psc98(A,x,b);
-    if ( defop("-v") ) fprintf(stderr,"%e\n",norm);
-    if ( norm < 1.0e-5 ) return 1;
-    else return 0;
-  }       
-  return 1;
-}
-
 int estiva_success(long k)
 {
   if ( defop("-v") ) {
