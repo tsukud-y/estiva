@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "estiva/ary.h"
 #include "estiva/mx.h"
 #include "estiva/std.h"
@@ -107,8 +108,16 @@ int estiva_psolve(double *x, double *b)
 static double psc98(MX *A, double *x, double *b)
 {
   static double *L;
+  static long itr = 0;
+  long i;
   ary1(L,A->n+1);
   matvecvec(A,1.0,x,0.0,L);
+
+  if ( defop("-redview") ) {
+    forall(0,i,A->n) printf("%ld %ld %e\n",itr,i,fabs(b[i]-L[i]));
+    itr++;
+    printf("\n");
+  }
   return Linf(addformula( L, '=', L, '-',1.0,b));
 }
 

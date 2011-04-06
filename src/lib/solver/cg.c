@@ -16,7 +16,7 @@ int estiva_cgsolver(void *A, double *x, double *b)
 {
   static double *work;
   long n, ldw, iter, info, i;
-  double resid = 1.0e-7;
+  double resid = 33674.0;
 
   if ( !symcheckmx(A) ) {
     fprintf(stderr,"matrix is not symmetric\n");
