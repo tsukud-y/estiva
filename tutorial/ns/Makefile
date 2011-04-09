@@ -8,7 +8,7 @@ SOLVER = qmr
 
 all: $(OBJS)
 	(cd ../../src; make)
-	$(CC) $(OBJS) -Wall -L${SRC}/lib -L/usr/local/lib -lestiva -lm -lefence
+	$(CC) $(OBJS) -Wall -L${SRC}/lib -L/usr/local/lib -lestiva -lm 
 
 run: all
 	./a.out -plotscale 0.001 -n 10 -v -solver $(SOLVER)

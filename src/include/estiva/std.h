@@ -14,7 +14,6 @@ void *estiva_std_f2(long size, void *x);
 #define swap(a,b)     estiva_swap(&(a),&(b),sizeof(a),sizeof(b))
 #define   cp(a,b)     estiva_cp(&(a),&(b),sizeof(a),sizeof(b))
 #define    R(x,y)     estiva_std_R(x,y)
-#define    f(x)       estiva_std_f(x)
 #define Rdestroy(x)   estiva_std_Rdestroy(x)
 #define static_new(type,x)   Rnew(x,type)
 #define static_free(x)       Rdestroy(x)

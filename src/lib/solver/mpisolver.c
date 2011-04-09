@@ -9,7 +9,7 @@
 #include "estiva/vec.h"
 #include "estiva/solver.h"
 
-int mpisolver(void *Apointer, double *xk, double *b)
+int estiva_mpisolver(void *Apointer, double *xk, double *b)
 {
   static double *ek, *ek1, *hk1, *pk, *pk1, *q, *r0, *rk, *rk1, *w, *xk1, *xk1_xk;
   static MX *A;
