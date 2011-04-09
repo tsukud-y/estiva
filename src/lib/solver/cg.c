@@ -7,9 +7,11 @@
 #include "estiva/vec.h"
 #include "estiva/op.h"
 #include "estiva/eblas.h"
+#include "estiva/solver.h"
 #undef min
 #undef max
 
+double *estiva_matvecmpi2();
 int cg_();
 
 int estiva_cgsolver(void *A, double *x, double *b)
@@ -17,6 +19,9 @@ int estiva_cgsolver(void *A, double *x, double *b)
   static double *work;
   long n, ldw, iter, info, i;
   double resid = 1.0e-7;
+
+  estiva_commandmpi(1);
+  distmx(A);
 
   if ( !symcheckmx(A) ) {
     fprintf(stderr,"matrix is not symmetric\n");
@@ -29,7 +34,7 @@ int estiva_cgsolver(void *A, double *x, double *b)
   setveclength(n);
   forall (0, i, n ) x[i] = b[i];
   ILUdecomp(A);
-  cg_(&n,b+1,x+1,work,&ldw,&iter,&resid,estiva_matvec,estiva_psolve,&info);
+  cg_(&n,b+1,x+1,work,&ldw,&iter,&resid,estiva_matvecmpi2,estiva_psolve,&info);
   if (defop("-v")) fprintf(stderr, "cg iter = %ld\n",iter);
 
   return 0;
