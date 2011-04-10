@@ -17,6 +17,11 @@ void estiva_setveclength(long n)
   dim1vec = n-1;
 }
 
+long estiva_getveclength(void)
+{
+  return dim1vec+1;
+}
+
 double *estiva_cpvec(double *src, double *dst)
 {
   long i;
