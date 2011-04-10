@@ -18,6 +18,7 @@ void estiva_efence(int flag)
 }
 
 
+
 void estiva_distributemx(void *Apointer)
 {
   MX *A;
@@ -55,29 +56,26 @@ static void estiva_recievemx(MX **Apointer, int p)
   MPI_Bcast(&A->J, 1, MPI_LONG, 0, MPI_COMM_WORLD);
   MPI_Bcast(&A->a, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
+  mx(A,1,1) = mx(A,1,1);
+  
+  printf ("pe=%d, left=%ld, right=%ld \n",
+	  p,(p-1)*A->n/(estiva_MPI_np-1), p*A->n/(estiva_MPI_np-1));  
+
+  printf("A->n - 1 = %ld \n",A->n -1);
   forall (0, j, A->w-1) forall (0, i, A->n-1) { 
     if ((p-1)*A->n/(estiva_MPI_np-1)<=i && i<p*A->n/(estiva_MPI_np-1)) {
     } else {
-      mx(A,i+1,A->IA[i][j]) = 0.0;
+      A->A[i][j]  = 0.0;
+      A->IA[i][j] = 0;
     }
   }
-
-#if 0
-  if ( p == 2) {
-    printf("%d:A(1,1)=%f A(1,2)=%f A(1,3)=%f \n",p,mx(A,1,1),mx(A,1,2),mx(A,1,3));
-    printf("%d:A(2,1)=%f A(2,2)=%f A(2,3)=%f \n",p,mx(A,2,1),mx(A,2,2),mx(A,2,3));
-    printf("%d:A(3,1)=%f A(3,2)=%f A(3,3)=%f \n",p,mx(A,3,1),mx(A,3,2),mx(A,3,3));
-  }
-#endif
-
-
 }
 
 static void slaveserver(int p)
 {
   static MX *A;
   static double  alpha, *x, beta, *y;
-  long command;
+  long command, i;
 
   while(1){
     MPI_Bcast(&command, 1, MPI_LONG, 0, MPI_COMM_WORLD);
@@ -92,7 +90,13 @@ static void slaveserver(int p)
       MPI_Bcast(x,getveclength(),MPI_DOUBLE,0,MPI_COMM_WORLD);
       MPI_Bcast(&beta, 1,MPI_DOUBLE,0,MPI_COMM_WORLD);
       MPI_Bcast(y,getveclength(),MPI_DOUBLE,0,MPI_COMM_WORLD);
-      matvecvec(A,alpha,x,beta,y);
+      matvecmx(A,&alpha,x,&beta,y);
+      forall (0, i, A->n-1) { 
+	if ((p-1)*A->n/(estiva_MPI_np-1)<=i && i<p*A->n/(estiva_MPI_np-1)) {
+	} else {
+	  y[i] = 0.0;
+	}
+      }
       MPI_Reduce(y,NULL,getveclength(),MPI_DOUBLE, MPI_SUM,0,MPI_COMM_WORLD);
       break;
     default:
@@ -138,6 +142,7 @@ static long estiva_mpicommand(long command)
 static void estiva_matvecmpi(alpha,x,beta,y)
      double alpha, *x, beta, *y;
 {
+  long i;
   static double *tmp;
   ary1(tmp,getveclength());
   estiva_mpicommand(2);
@@ -151,10 +156,12 @@ static void estiva_matvecmpi(alpha,x,beta,y)
 int estiva_matvecmpi2(alpha,x,beta,y)
      double *alpha, *x, *beta, *y;
 {
-  if ( estiva_efenceflag || estiva_MPI_np <= 1)
+  if ( estiva_efenceflag || estiva_MPI_np <= 1){
     matvecvec(estiva_A,*alpha,x,*beta,y);
-  else
+  }
+  else {
     estiva_matvecmpi(*alpha,x,*beta,y);
+  }
   return 0;
 }
 

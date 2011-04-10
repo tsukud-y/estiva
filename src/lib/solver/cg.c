@@ -232,7 +232,7 @@ L10:
 /*        Perform Preconditioned Conjugate Gradient iteration. */
 
     ++(*iter);
-
+    printf("iter = %d \n", *iter);
 /*        Preconditioner Solve. */
 
     (*psolve)(&work[z * work_dim1 + 1], &work[r * work_dim1 + 1]);
@@ -271,6 +271,7 @@ L10:
     daxpy_(n, &d__1, &work[q * work_dim1 + 1], &c__1, &work[r * work_dim1 + 1]
 	    , &c__1);
     *resid = dnrm2_(n, &work[r * work_dim1 + 1], &c__1) / bnrm2;
+    printf("resid = %e \n",*resid);
     if (*resid <= tol && psc98condition(&x[1],&b[1])) {
 	goto L30;
     }

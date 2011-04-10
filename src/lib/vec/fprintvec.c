@@ -9,7 +9,7 @@ int estiva_fprintvec(double *b, char *name)
   long i;
   fp = fopen(name,"w");
   if ( fp == NULL ) return 1;
-  forall(0,i,dim1(b)) fprintf(fp,"%e\n",b[i]);
+  forall(0,i,getveclength()-1) fprintf(fp,"%e\n",b[i]);
   fclose(fp);
   return 0;
 }
