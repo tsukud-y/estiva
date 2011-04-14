@@ -1,3 +1,4 @@
+CC  = mpicc
 SRC = ../../src
 SRCS = main.c A.c Rhs.c boundary_condition.c
 OBJS = $(SRCS:.c=.o)

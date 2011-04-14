@@ -37,6 +37,7 @@ void estiva_xmesh(xyc *Z)
     delaunay(Z,N);
     pp = popen("gnuplot","w");
 
+#if 0
     for (e=1; e<=dim1(N); e++) {
       a = N[e].a, b = N[e].b, c = N[e].c;
       A = N[e].A, B = N[e].B, C = N[e].C;
@@ -49,6 +50,14 @@ void estiva_xmesh(xyc *Z)
       fprintf(pp,"set label \"%ld\" at %f , %f\n",C,(Z[a].x+Z[b].x)/2.0,(Z[a].y+Z[b].y)/2.0);
 
       fprintf(pp,"set label \"(%ld)\" at %f , %f\n",e,(Z[a].x+Z[b].x+Z[c].x)/3.0,(Z[a].y+Z[b].y+Z[c].y)/3.0);
+    }
+#endif
+    for (e=1; e<=dim1(N); e++) {
+      a = N[e].a, b = N[e].b, c = N[e].c;
+      A = N[e].A, B = N[e].B, C = N[e].C;
+      fprintf(pp,"set label \"%ld\" at %f , %f\n",a,Z[a].x,Z[a].y);
+      fprintf(pp,"set label \"%ld\" at %f , %f\n",b,Z[b].x,Z[b].y);
+      fprintf(pp,"set label \"%ld\" at %f , %f\n",c,Z[c].x,Z[c].y);
     }
 
     fprintf(pp,"plot '-' title \"\" with lines\n");
