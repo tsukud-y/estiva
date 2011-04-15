@@ -7,10 +7,10 @@
 
 static int eq(double a, double b)
 {
-  double eps = 0.00001, c;
+  double eps = 0.0009, c;
   c = a-b;
   if ( c < 0.0 ) c = -c;
-  if ( c < eps ) return 1;
+  if ( c <= eps ) return 1;
   return 0;
 }
 
@@ -31,9 +31,8 @@ void estiva_rectmesh(xyc **Zp, nde **Np)
   if ( defop("-n") ) h = 1.0/atof(getop("-n"));
   if ( defop("-h") ) h = atof(getop("-h"));
 
-  for ( i = 0, x = 0.0; i <= 1.0/h; i++, x += h)
-    for ( j = 0, y = 0.0; j <= 1.0/h; j++, y += h) {
-      
+  for ( i = 0, x = 0.0; i < 1.0/h+h/2.0; i++, x += h)
+    for ( j = 0, y = 0.0; j < 1.0/h+h/2.0; j++, y += h) {
       if ( x == 0.0 || eq(x,1.0) || y == 0.0 || eq(y,1.0) ) {
 	if ( eq(y,1.0) && x != 0.0 && !eq(x,1.0) )
 	  pushxyc(q,x,y,"north");
