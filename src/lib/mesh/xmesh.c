@@ -31,7 +31,7 @@ static void sleep_forever(void)
 void estiva_xmesh(xyc *Z)
 {
   if ( fork() == 0 ) {
-    long e, a, b, c, A, B, C;
+    long e, a, b, c;
     FILE *pp;
     static nde *N;
     delaunay(Z,N);

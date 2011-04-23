@@ -9,7 +9,7 @@ SOLVER = qmr
 
 all: $(OBJS)
 	(cd ../../src; make)
-	$(CC) $(OBJS) -g -Wall -L${SRC}/lib -L/usr/local/lib -lestiva -lm  -lefence -lmpich -lopa -lmpl -pthread
+	$(CC) $(OBJS) -g -Wall -L${SRC}/lib -L/usr/local/lib -L/opt/mpich2/lib -lestiva -lm  -lefence -lmpich -lopa -lmpl -pthread
 
 run: all
 	./a.out -plotscale 0.001 -n 10 -v -solver $(SOLVER)
