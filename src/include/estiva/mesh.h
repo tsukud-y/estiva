@@ -15,6 +15,7 @@ void   *estiva_np1(xyc *Z, nde *N);
 void    estiva_p2(xyc *Z, nde *N);
 void    estiva_plt(void *fp, xyc *Mid, xyc *Z, nde *N, double *u);
 void    estiva_pltp2(double *x, xyc * Z, nde *N);
+void    estiva_thinplt(double *x, xyc * Z, nde *N);
 void    estiva_pushxyc(void *qp, double x, double y, char *label);
 void    estiva_rectmesh(xyc **Zp, nde **Np);
 void    estiva_xmesh(xyc *Z);
@@ -36,6 +37,7 @@ int     estiva_forgammap2_loop(long *ip);
 #define p2(Z,N)                       estiva_p2(Z,N)
 #define plt(fp,Mid,Z,N,u)             estiva_plt(fp,Mid,Z,N,u)
 #define pltp2(x,Z,N)                  estiva_pltp2(x, Z, N)
+#define thinplt(x,Z,N)                estiva_thinplt(x, Z, N)
 #define pushxyc(q,x,y,label)          estiva_pushxyc(&(q),x,y,label)
 #define rectmesh(Z,N)                 estiva_rectmesh(&Z,&N)
 #define xmesh(Z)                      estiva_xmesh(Z)

@@ -26,17 +26,16 @@ int main(int argc, char **argv)
   TaylorHood_Hy(Hy,15);
 
   if ( defop("-kn") ) kn = atoi(getop("-kn"));
+
   for ( k = 1; k <= kn; k++ ) {
     TaylorHood_Ax(Ax,x,34);
     TaylorHood_Ay(Ay,x+m,34);
-    //printf("A\n");
     nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,tau,50);
     nsRhs(b,M,x);
     boundary_condition(A,b);
-    //printf("solver\n");
     solver(A,x,b);
-    pltp2(x,Z,N);
-    //printf("kn - k = %ld\n",kn-k);
+    //pltp2(x,Z,N);
+    estiva_thinplt(x,Z,N);
    }
   return 0;
 }

@@ -91,6 +91,7 @@ static void slaveserver(int p)
       MPI_Bcast(&beta, 1,MPI_DOUBLE,0,MPI_COMM_WORLD);
       MPI_Bcast(y,getveclength(),MPI_DOUBLE,0,MPI_COMM_WORLD);
       matvecmx(A,&alpha,x,&beta,y);
+      if ( A == NULL ) abort();
       forall (0, i, A->n-1) { 
 	if ((p-1)*A->n/(estiva_MPI_np-1)<=i && i<p*A->n/(estiva_MPI_np-1)) {
 	} else {
@@ -142,7 +143,6 @@ static long estiva_mpicommand(long command)
 static void estiva_matvecmpi(alpha,x,beta,y)
      double alpha, *x, beta, *y;
 {
-  long i;
   static double *tmp;
   ary1(tmp,getveclength());
   estiva_mpicommand(2);

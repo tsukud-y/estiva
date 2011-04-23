@@ -23,7 +23,7 @@ SRCS = ary/ary.c esolver/esolver.c esolver/maxesolver.c \
 	mx/zerofillrow.c mesh/forgammap1.c std/Rf.c mx/slimupmx.c \
 	vec/vec.c solver/matvecmpi.c solver/mpisolver.c solver/qmr.c \
 	eblas/eblas.c solver/cg.c mx/fprintmx.c vec/fprintvec.c \
-	mx/symcheckmx.c solver/matvecmpi2.c
+	mx/symcheckmx.c solver/matvecmpi2.c mesh/thinplt.c
 
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -I../include -I/usr/local/include -I/opt/mpich2/include
