@@ -1,23 +1,18 @@
 CC  = gcc
-SRC = ../../src
+CFLAGS = -g -Wall
+SRCDIR = ../../src
+INCLUDEDIR = -I$(SRCDIR)/include
+LIBDIR = -L$(SRCDIR)/lib -L/usr/local/lib -L/opt/mpich2/lib
 SRCS = main.c A.c Rhs.c boundary_condition.c
 OBJS = $(SRCS:.c=.o)
-SOLVER = qmr
+LIBS =  -lestiva -lm -lefence -lmpich -lopa -lmpl -pthread
 
 .c.o: 
-	$(CC) -g -Wall -I${SRC}/include -c $< -o $@
+	$(CC) -c $(CFLAGS) $(INCLUDEDIR) $< -o $@
 
 all: $(OBJS)
 	(cd ../../src; make)
-	$(CC) $(OBJS) -g -Wall -L${SRC}/lib -L/usr/local/lib -L/opt/mpich2/lib -lestiva -lm  -lefence -lmpich -lopa -lmpl -pthread
-
-run: all
-	./a.out -plotscale 0.001 -n 10 -v -solver $(SOLVER)
-	(cd anime; cat *.gnuplot | gnuplot)
-
-large: all
-	./a.out -plotscale 0.001 -kn 500 -n 50 
-	(cd anime; cat *.gnuplot | gnuplot)
+	$(CC)    $(CFLAGS) $(OBJS) $(LIBDIR) $(LIBS)
 
 clean: ;
 	rm -f ./a.out ./a.out.core $(OBJS)
