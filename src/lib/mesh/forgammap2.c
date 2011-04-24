@@ -6,7 +6,8 @@
 #include "estiva/std.h"
 #include "estiva/que.h"
 
-#define q static_bind(que*, x)
+//#define q static_bind(que*, x)
+static que *q;
 
 void estiva_forgammap2(long *x, xyc *Z, nde *N, char *label)
 {
