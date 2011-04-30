@@ -12,9 +12,13 @@
 
 void   estiva_boundary_condition(MX *A, double *b);
 void   estiva_nsRhs(double *b, MX *M, double *x);
-void   estiva_nsA(MX **Ap, double *x, double *b, MX *K, MX *M, MX *Hx, MX *Hy, MX *AX, MX *AY, double tau, long w );
+void   estiva_nsA(MX **Ap, double *x, double *b, MX *K, MX *M, MX *Hx, MX *Hy, MX *AX, MX *AY,  long w );
+double estiva_Re(void);
+double estiva_tau(void);
 
 #define boundary_condition(A,b)          estiva_boundary_condition(A,b)
 #define nsRhs(b,M,x)                     estiva_nsRhs(b,M,x)
-#define nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,tau,w) estiva_nsA(&A,x,b,K,M,Hx,Hy,Ax,Ay,tau,w)
+#define nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,w) estiva_nsA(&A,x,b,K,M,Hx,Hy,Ax,Ay,w)
+#define Re()                             estiva_Re()
+#define tau()                            estiva_tau()
 #endif

@@ -6,7 +6,6 @@ int main(int argc, char **argv)
   static xyc *Z; static nde *N; 
   static MX *A, *K, *M, *Hx, *Hy, *Ax, *Ay; static double *x, *b;
   long   k, kn = 100, m, n, NUM;
-  double tau = 0.001;
 
   initop(argc,argv);
   rectmesh(Z,N);
@@ -30,7 +29,7 @@ int main(int argc, char **argv)
   for ( k = 1; k <= kn; k++ ) {
     TaylorHood_Ax(Ax,x,34);
     TaylorHood_Ay(Ay,x+m,34);
-    nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,tau,50);
+    nsA(A,x,b,K,M,Hx,Hy,Ax,Ay,50);
     nsRhs(b,M,x);
     boundary_condition(A,b);
     solver(A,x,b);

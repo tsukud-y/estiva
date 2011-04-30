@@ -2,10 +2,10 @@
 
 void estiva_boundary_condition(MX *A, double *b)
 {
-  static double velocity = 1000.0;
+  static double velocity = 1.0;
   long i, NUM, m, n;
   static xyc *Z; static nde *N; static double *S;
-
+  
   getZNS(Z,N,S);
   m = dimp2(N); n = dim1(Z); NUM = m*2+n;
 
@@ -46,7 +46,7 @@ void estiva_boundary_condition(MX *A, double *b)
     b[i+m]        = 0.0;
   }
 
-  if ( defop("-velocity") ) velocity = atof(getop("-velocity"));
+  //if ( defop("-velocity") ) velocity = atof(getop("-velocity"));
 
   forgammap2(i,"north",Z,N) {
     zerofillrow(A,i);

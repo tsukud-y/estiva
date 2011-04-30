@@ -3,7 +3,7 @@ CFLAGS = -g -Wall
 SRCDIR = ../../src
 INCLUDEDIR = -I$(SRCDIR)/include
 LIBDIR = -L$(SRCDIR)/lib -L/usr/local/lib -L/opt/mpich2/lib
-SRCS = main.c A.c Rhs.c boundary_condition.c
+SRCS = main.c A.c Rhs.c boundary_condition.c Re.c
 OBJS = $(SRCS:.c=.o)
 LIBS =  -lestiva -lm -lefence -lmpich -lopa -lmpl -pthread
 
