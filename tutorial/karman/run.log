@@ -1,0 +1,1 @@
+./a.out -v -plotscale 1.0 -xmesh -tau 0.02 -kn 50000 -Re 250

@@ -1,0 +1,3 @@
+#!/bin/sh
+./a.out -v $*
+(cd anime; cat *.gnuplot | gnuplot)
