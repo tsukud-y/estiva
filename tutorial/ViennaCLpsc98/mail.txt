@@ -1,0 +1,109 @@
+Hi. ViennaCL members.
+
+My report is PSC98 on ViennaCL.
+
+PSC98  was Parallel Software Contest 1998 in Japan.
+
+------------------------------------------------------------------------------
+
+Program is consist of two sources.
+
+main.cpp
+http://ortonville.dip.jp/estiva/tutorial/ViennaCLpsc98/main.cpp
+
+yosen.c
+https://web.kudpc.kyoto-u.ac.jp/doc/HPC-WG/PSC98/yosen.c.html
+
+You have to edit yosen.c to strip HTML tags.
+
+------------------------------------------------------------------------------
+Build:
+
+$ cc -c yosen.c
+$ c++ main.cpp yosen.o -lOpenCL -lm
+
+------------------------------------------------------------------------------
+Test run:
+
+$ ./a.out
+Problem NO : 0
+|b - Ax|_inf = 3.97654e-07  (OK)
+
+------------------------------------------------------------------------------
+Let's try time count.
+
+Problem 1
+$ export PSC98=1; time ./a.out
+Problem NO : 1
+|b - Ax|_inf = 5.37507e-07  (OK)
+
+real0m4.457s
+user0m2.603s
+sys0m1.927s
+
+Problem 2
+$ export PSC98=2; time ./a.out
+Problem NO : 2
+|b - Ax|_inf = 3.79989e-07  (OK)
+
+real0m4.703s
+user0m2.590s
+sys0m2.223s
+
+Problem 3
+$ export PSC98=3; time ./a.out
+Problem NO : 3
+|b - Ax|_inf = 3.77792e-07  (OK)
+
+real0m11.755s
+user0m7.530s
+sys0m4.246s
+
+Problem 4
+$ export PSC98=4; time ./a.out
+Problem NO : 4
+|b - Ax|_inf = 5.76954e-07  (OK)
+
+real0m30.466s
+user0m15.479s
+sys0m15.582s
+
+Problem 5
+$ export PSC98=5; time ./a.out
+Problem NO : 5
+|b - Ax|_inf = 6.6869e-07  (OK)
+
+real0m4.833s
+user0m3.960s
+sys0m1.960s
+
+------------------------------------------------------------------------------
+Compare with other Computing Environment:
+
+Prize  Prob1    Prob2    Prob3    Prob4    Prob5   Total  Environment
+1.     4.433    4.125    9.875    5.355    1.020   24.808 Enterprise10000(Sun)
+2.     5.375    4.457   11.755   30.466    4.843   56.896 ViennaCL(*)
+3.    15.138   15.722   30.634   17.465    0.575   79.534 Cenju-3(NEC)
+4.    22.210   23.606   35.887   25.288    2.334  109.325 AP3000(FUJITSU)
+5.    26.110   28.399   34.728   30.618    2.487  122.342 SR2201(HITACHI)
+
+------------------------------------------------------------------------------
+My ViennaCL Computing Environment:
+GPU:    NVIDIA Geforce GTS450
+CPU:    PhenomIIx6 3.2GHz
+Memory: 8G bytes
+OS:     Linux version 2.6.39-ARCH
+
+------------------------------------------------------------------------------
+My comment:
+
+This report's  solver is without preconditioning.
+If preconditionig is used, I will be able to get better performance.
+I think so.
+
+Please advice on this point.
+
+Thank you.
+
+--
+TSUKUDA Yoshio@Japan

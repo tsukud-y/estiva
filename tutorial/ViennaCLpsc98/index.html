@@ -1,0 +1,120 @@
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP" />
+
+<title> PSC98 on ViennaCL</title>
+</head>
+<body>
+
+ViennaCLでPSC98に挑戦
+<p>
+<hr>
+まずはViennaCLのインストール:
+<p>
+<a href="http://sourceforge.net/projects/viennacl/">ダウンロード</a>
+<p>
+展開
+<pre>
+$ gzip -cd ViennaCL-1.1.2.tar.gz | tar xvpf -
+</pre>
+<p>
+インストール
+<pre>
+$ cd ViennaCL-1.1.2
+# mv viennacl /usr/include
+</pre>
+<hr>
+
+以下の2つのファイルをダウンロード
+<p>
+<a href="main.cpp">main.cpp</a><p>
+<a href="https://web.kudpc.kyoto-u.ac.jp/doc/HPC-WG/PSC98/yosen.c.html">yosen.c</a><p>
+yosen.cは、適当に加工する必要がある。
+というのは、htmlのタグを取り除いて、純粋なCのソースファイルにする必要がある。
+<hr>
+コンパイル
+<pre>
+$ cc -c yosen.c
+$ c++ main.cpp yosen.o -lOpenCL -lm
+</pre>
+<hr>
+テストラン
+<pre>
+$ ./a.out
+Problem NO : 0
+|b - Ax|_inf = 3.97654e-07  (OK)
+</pre>
+<hr>
+時間を計測してみよう
+<p>
+<pre>
+予選問題 1
+$ export PSC98=1; time ./a.out
+Problem NO : 1
+|b - Ax|_inf = 5.37507e-07  (OK)
+
+real0m4.457s
+user0m2.603s
+sys0m1.927s
+
+予選問題2
+$ export PSC98=2; time ./a.out
+Problem NO : 2
+|b - Ax|_inf = 3.79989e-07  (OK)
+
+real0m4.703s
+user0m2.590s
+sys0m2.223s
+
+予選問題3
+$ export PSC98=3; time ./a.out
+Problem NO : 3
+|b - Ax|_inf = 3.77792e-07  (OK)
+
+real0m11.755s
+user0m7.530s
+sys0m4.246s
+
+予選問題4
+$ export PSC98=4; time ./a.out
+Problem NO : 4
+|b - Ax|_inf = 5.76954e-07  (OK)
+
+real0m30.466s
+user0m15.479s
+sys0m15.582s
+
+予選問題5
+$ export PSC98=5; time ./a.out
+Problem NO : 5
+|b - Ax|_inf = 6.6869e-07  (OK)
+
+real0m4.833s
+user0m3.960s
+sys0m1.960s
+
+
+</pre>
+<hr>
+他と比べると、
+<pre>
+順位   問題1    問題2    問題3    問題4    問題5    合計      環境
+1.     4.433    4.125    9.875    5.355    1.020   24.808 Enterprise10000
+2.     5.375    4.457   11.755   30.466    4.843   56.896 ViennaCL(*)
+3.    15.138   15.722   30.634   17.465    0.575   79.534 Cenju-3
+4.    22.210   23.606   35.887   25.288    2.334  109.325 AP3000
+5.    26.110   28.399   34.728   30.618    2.487  122.342 SR2201
+</pre>
+
+<hr>
+今回の環境
+<pre>
+GPU:    NVIDIA Geforce GTS450
+CPU:    PhenomIIx6 3.2GHz
+Memory: 8G bytes
+OS:     Linux version 2.6.39-ARCH
+</pre>
+
+</body>
+</html>
