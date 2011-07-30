@@ -13,6 +13,8 @@
 #include <viennacl/compressed_matrix.hpp>
 #include <viennacl/linalg/cg.hpp>
 #include <viennacl/linalg/compressed_matrix_operations.hpp>
+#include <viennacl/linalg/row_scaling.hpp>
+#include <viennacl/linalg/jacobi_precond.hpp>
 
 
 
@@ -66,8 +68,6 @@ int main(int argc, char **argv){
 
 
 
-
-  using viennacl::linalg::ilut_precond;
   using viennacl::compressed_matrix;
 
   typedef compressed_matrix<double>  SparseMatrix;
@@ -75,9 +75,25 @@ int main(int argc, char **argv){
   //ilut_precond<SparseMatrix> vcl_ilut(vcl_sparse_matrix, viennacl::linalg::ilut_tag());
 
 
+  using viennacl::linalg::ilut_precond;
+  using viennacl::linalg::jacobi_precond;
+  using viennacl::linalg::row_scaling;
+
+#if 0
+  ilut_precond< SparseMatrix > vcl_ilut(vcl_sparse_matrix,
+					viennacl::linalg::ilut_tag(8,1e-3));
+
+
+  row_scaling< SparseMatrix > vcl_row_scaling(vcl_sparse_matrix,
+					      viennacl::linalg::row_scaling_tag(2));
+#endif
+
+  jacobi_precond< SparseMatrix > vcl_jacobi(vcl_sparse_matrix,
+					    viennacl::linalg::jacobi_tag());
+
 
   vcl_result = viennacl::linalg::solve(vcl_sparse_matrix,vcl_vec,
-				       custom_cg);
+				       custom_cg, vcl_jacobi);
 
 
   copy(vcl_result.begin(), vcl_result.end(), stl_vec.begin());
