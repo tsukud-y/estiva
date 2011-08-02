@@ -57,6 +57,7 @@ int main(int argc, char **argv){
 	}
       }
   }
+  printf("Set up finished.\n");
   viennacl::compressed_matrix<double> vcl_sparse_matrix(n,1);
   viennacl::vector<double> vcl_vec(n);
   viennacl::vector<double> vcl_result(n);

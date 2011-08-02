@@ -1,6 +1,6 @@
 a.out: main.cpp
 	cc -c yosen.c
-	c++ main.cpp yosen.o -lOpenCL -lm
+	c++ main.cpp -DNDEBUG -O3 yosen.o -lOpenCL -lm
 
 run: a.out
 	export PSC98=1; time ./a.out
@@ -11,7 +11,7 @@ run: a.out
 
 honsen: main.cpp
 	cc -c honsen.c
-	c++ main.cpp honsen.o -lOpenCL -lm -o honsen
+	c++ main.cpp honsen.o -DNDEBUG -O3 -lOpenCL -lm -o honsen
 
 honsenrun: honsen
 	export PSC98=1; time ./honsen
