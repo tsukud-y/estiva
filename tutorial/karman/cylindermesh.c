@@ -27,12 +27,16 @@ void cylindermesh(xyc **Zp, nde **Np)
   double theta, r;
   double T = 32.0;
   long i, j;
-  
+
+
   initq(q);
+
 
   h = 0.125;
   if ( defop("-n") ) h = 1.0/atof(getop("-n"));
   if ( defop("-h") ) h = atof(getop("-h"));
+
+
 
 #define fortheta(theta,T)					\
   for ( theta = 0.0; theta <  2.0*M_PI-(1.0*M_PI)/T; theta += (2.0*M_PI)/T)
@@ -51,6 +55,7 @@ void cylindermesh(xyc **Zp, nde **Np)
       if (-7.41 < x && x < 7.41 && -7.41 < y && y < 7.41) 
 	pushxyc(q, x, y, NULL);
     }  
+
   
   pushxyc(q, -7.5,  7.5, "zero");
   pushxyc(q, -7.5, -7.5, "zero");
@@ -80,9 +85,10 @@ void cylindermesh(xyc **Zp, nde **Np)
   
   pushxyc(q, 22.0,7.0,NULL);
 #endif
-  
+
   genmesh(q,Z,N);
+
   p2(Z,N);
-  
+
   *Zp = Z; *Np = N;
 }

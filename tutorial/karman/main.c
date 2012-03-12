@@ -7,13 +7,21 @@ int main(int argc, char **argv)
   static MX *A, *K, *M, *Hx, *Hy, *Ax, *Ay; static double *x, *b;
   long   k, kn = 100, m, n, NUM;
 
+
   initop(argc,argv);
   cylindermesh(&Z,&N);
-  fprintmesh(stdout,Z,N);
+  //fprintmesh(stdout,Z,N);
+  //printf("p3\n");sleep(10);printf("finish\n");exit(0);
+
+
 
   m   = dimp2(N); 
   n   = dim1(Z); 
   NUM = m*2 + n;
+  
+  printf("NUM = %ld\n",NUM);
+
+
 
   ary1(x,NUM+1); 
   ary1(b,NUM+1);
@@ -39,7 +47,7 @@ int main(int argc, char **argv)
     printf("hello1\n");
     solver(A,x,b);
     printf("hello\n");
-    pltp2(x,Z,N);
+    //pltp2(x,Z,N);
     //estiva_thinplt(x,Z,N);
    }
   return 0;

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+PID=`ps aux | grep a.out | grep -v grep |awk '{print $2}'`
+
+
+freeze  b.out $PID
+
+./b.out

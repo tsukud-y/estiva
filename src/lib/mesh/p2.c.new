@@ -34,13 +34,33 @@ void estiva_p2(xyc *Z, nde *N)
       m = -m;
 
   n=dim1(Z)+1;
+
   for(i=1;i<=e;i++){
-    foreach(m,&N[i].A,&N[i].B,&N[i].C)
-      if(m<=0){
-        foreach(u,&N[-m].A,&N[-m].B,&N[-m].C) if(u== -i) u=n;
-        m=n++;
-      }
+
+    m=N[i].A;
+    if(m<=0){
+      u=N[-m].A; if(u== -i) N[-m].A=n;
+      u=N[-m].B; if(u== -i) N[-m].B=n;
+      u=N[-m].C; if(u== -i) N[-m].C=n;
+      m=n++;
+    }
+    m=N[i].B;
+    if(m<=0){
+      u=N[-m].A; if(u== -i) N[-m].A=n;
+      u=N[-m].B; if(u== -i) N[-m].B=n;
+      u=N[-m].C; if(u== -i) N[-m].C=n;
+      m=n++;
+    }
+    m= N[i].C;
+    if(m<=0){
+      u=N[-m].A; if(u== -i) N[-m].A=n;
+      u=N[-m].B; if(u== -i) N[-m].B=n;
+      u=N[-m].C; if(u== -i) N[-m].C=n;
+      m=n++;
+    }
   }
+
+
   
   if ( defop("-xmeshp2") ) if ( fork() == 0 ) {
     long i;
@@ -86,6 +106,7 @@ void estiva_p2(xyc *Z, nde *N)
     pclose(pp);
     exit(0);
   }
+
 }
 
 
