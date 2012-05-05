@@ -19,7 +19,7 @@ static int estiva_forFILE(FILE *fp)
 { 
   if( !feof(fp) ){
     S0 = fgetline(fp);
-      if(feof(fp)){ary1(S0,0); return 0;}
+    if(feof(fp)){/* ary1(S0,0) */; return 0;}
   }
   S1[0] = '\0';
   S2[0] = '\0';
