@@ -13,3 +13,4 @@ src/bin/xmsh/xmsh
 src/bin/xyc2msh/xyc2msh
 src/bin/gnuplot2gif/gnuplot2gif
 src/lib/libestiva.a
+estivaplus/lib/libestivaplus.a

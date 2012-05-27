@@ -8,6 +8,7 @@
 typedef struct{ int a,b,c,A,B,C;} nde;
 typedef struct{ double x, y; char *label;} xyc;
 typedef struct{double **A;long **IA;long n,w,I,J;double a;} MX;
+typedef struct { void *elem; void *next;} que;
 
 typedef std::vector< std::map<unsigned int, double> > Matrix;
 typedef std::vector<double> Vector;
@@ -32,7 +33,8 @@ void   BoundaryCondition(Matrix &Am, Vector &bv);
 void   Solver(Matrix &A, Vector &x, Vector &b);
 void   MatrixClear(Matrix &A);
 void   MatrixDisp(Matrix &A);
-
+void   estiva_putnode(double x, double y, char *label);
+void   GenerateMesh(void);
 
 extern "C" {
   int     estiva_initop(int*,char***);
@@ -71,6 +73,16 @@ extern "C" {
   int     estiva_forgammap2_loop(long *ip);
   void    estiva_zerofillrow(MX *A, long i);
   void    estiva_fprintmesh(FILE *, xyc *, nde *);
+  void  estiva_enq(  que  *q, void   *e, size_t n);
+  void  estiva_initq(que **q);
+  void *estiva_lup(  que  *q, void **s2, size_t n);
+  void  estiva_push( que **q, void   *e, size_t n);
+  void *estiva_pop(  que **q, void   *e, size_t n);
+  void  estiva_forq(que *q, void **e);
+  int   estiva_forq_loop(void **e);
+  void  estiva_pushxyc(void *qp, double x, double y, char *label);
+  void  estiva_genmesh(void *qp, xyc **Zp, nde **Np);
+  void  estiva_p2(xyc *Z, nde *N);
 }
 
 #define forMatrixNonzero(a)                                             \
@@ -101,3 +113,14 @@ extern "C" {
 #define mx(A,i,j)                  (*estiva_mx(A,i,j))
 #define zerofillrow(A,i)             estiva_zerofillrow(A,i)
 #define fprintmesh(fp,Z,N)  estiva_fprintmesh(fp,Z,N)
+#define enq(q,e)      estiva_enq(   q, (void*)&e, sizeof(e))
+#define initq(q)      estiva_initq(&q)
+#define lup(q,e)      estiva_lup(   q, (void*)&e, sizeof(e))
+#define pop(q,e)      estiva_pop(  &q, (void*)&e, sizeof(e))
+#define push(q,e)     estiva_push( &q, (void*)&e, sizeof(e))
+#define pushxyc(q,x,y,label)          estiva_pushxyc(&(q),x,y,(char*)label)
+#define genmesh(q,Z,N)                estiva_genmesh(&(q),&(Z),&(N))
+#define p2(Z,N)                       estiva_p2(Z,N)
+#define putnode(x,y,label) estiva_putnode(x,y,(char*)label)
+#define forq(q,e)                                                       \
+  for( estiva_forq(q,(void*)&e); estiva_forq_loop((void*)&e);)
