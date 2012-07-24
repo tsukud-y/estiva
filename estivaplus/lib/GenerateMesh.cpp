@@ -14,6 +14,8 @@ void estiva_putnode(double x, double y, char *label)
   pushxyc(q,x,y,label);
 }
 
+typedef struct { char *key; double val;} element;
+
 void GenerateMesh(void)
 {
   genmesh(q,Z_easymesh,N_easymesh);
