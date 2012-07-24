@@ -14,6 +14,8 @@ typedef std::vector< std::map<unsigned int, double> > Matrix;
 typedef std::vector<double> Vector;
 extern  std::map<unsigned int, double>::iterator estiva_aiterator;
 
+
+
 void   PlotP2(Vector &xv);
 void   Matrix2mx(Matrix &a, MX **Ap);
 void   Vector2ary(std::vector<double> &bv, double *b);
@@ -35,6 +37,9 @@ void   MatrixClear(Matrix &A);
 void   MatrixDisp(Matrix &A);
 void   estiva_putnode(double x, double y, char *label);
 void   GenerateMesh(void);
+void   Putnode(double x, double y, std::string label);
+void   GenMesh(void);
+void PoiseuilleMesh(double h, double W, double H);
 
 extern "C" {
   int     estiva_initop(int*,char***);
