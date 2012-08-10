@@ -20,7 +20,7 @@ static void cramer3(double *px,double *py,double *pz,
 
 
 
-int incircle(int p,int e2,vector<Xyc>&Z,vector<Nde>&N)
+int incircleDelta(int p,int e2,vector<Xyc>&Z,vector<Nde>&N)
 { double a, b, c, x,y,x0,y0,x1,y1,x2,y2;
 
   x=Z[p].x; y=Z[p].y;
@@ -35,5 +35,5 @@ int incircle(int p,int e2,vector<Xyc>&Z,vector<Nde>&N)
           x0*x0 + y0*y0,
           x1*x1 + y1*y1, 
           x2*x2 + y2*y2);
-  return distance2(x0,y0,a/2.0,b/2.0)-distance2(x,y,a/2.0,b/2.0)>0.0? 1:0;
+  return distance2(x0,y0,a/2.0,b/2.0)-distance2(x,y,a/2.0,b/2.0)>=0.0? 1:0;
 }
