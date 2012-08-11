@@ -6,7 +6,7 @@
 
 void DelaunayAlgo(vector<Xyc>&Z,vector<Nde>&N)
 {
-  for (long i = 1 ; i <Z.size()-3; i++) {
+  for (long i = 1 ; i <(long)Z.size()-3; i++) {
     stack<long> st;
     long e0,e1,e2;
 

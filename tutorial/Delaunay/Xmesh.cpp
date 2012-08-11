@@ -6,7 +6,7 @@ void Xmesh(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
 
   fprintf(fp,"unset label\n");
 
-  for (e=1; e<N.size(); e++) {
+  for (e=1; e<(long)N.size(); e++) {
     a = N[e].a, b = N[e].b, c = N[e].c;
     fprintf(fp,"set label \"%ld%s\" at %f , %f\n",
 	    a,Z[a].label.c_str(),Z[a].x,Z[a].y);
@@ -18,9 +18,10 @@ void Xmesh(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
 	    e,(Z[a].x+Z[b].x+Z[c].x)/3.0,(Z[a].y+Z[b].y+Z[c].y)/3.0);
   }
 
-  long i;
+
 
 #if 0
+  long i
   for (i = 0; i<Z.size(); i++){
     fprintf(fp,"set label \"%s\" at %f , %f\n",
 	    Z[i].label.c_str(),Z[i].x,Z[i].y);
@@ -30,7 +31,7 @@ void Xmesh(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
   fprintf(fp,"plot '-' title \"\" with lines\n");
 
 
-  for(e=1;e<N.size();e++){
+  for(e=1;e<(long)N.size();e++){
     a = N[e].a, b = N[e].b, c = N[e].c;
     fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
     fprintf(fp,"%f %f\n",Z[b].x,Z[b].y);

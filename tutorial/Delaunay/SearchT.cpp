@@ -22,7 +22,7 @@ long SearchT(vector<Xyc>&Z, vector<Nde>&N, long i)
     x = Z[i].x, y = Z[i].y;
 
 
-    for(e=1;e<N.size();e++){
+    for(e=1;e<(long)N.size();e++){
       long a,b,c; double x0,y0,x1,y1,x2,y2;
       a = N[e].a; b = N[e].b; c = N[e].c;
       x0 = Z[a].x; x1 = Z[b].x; x2 = Z[c].x;

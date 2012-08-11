@@ -18,7 +18,7 @@ long SearchBy2P(long a, long b, vector<Nde>&N)
 {
   long i;
 
-  for ( i = 1; i<N.size(); i++) 
+  for ( i = 1; i<(long)N.size(); i++) 
     if ( N[i].a == a || N[i].b == a || N[i].c == a )
       if ( N[i].a == b || N[i].b == b || N[i].c == b )
 	break;
@@ -28,7 +28,7 @@ long SearchBy2P(long a, long b, vector<Nde>&N)
 
 void SwapT(long e, long i, vector<Nde>&N)
 {
-  long a, b, c, x, y, z, t;
+  long a,  c, x, z, t;
 
   while ( N[e].a == N[i].a || N[e].a == N[i].b || N[e].a == N[i].c ) {
     t =N[e].c; N[e].c = N[e].b; N[e].b = N[e].a; N[e].a = t;
@@ -38,8 +38,8 @@ void SwapT(long e, long i, vector<Nde>&N)
     t =N[i].c; N[i].c = N[i].b; N[i].b = N[i].a; N[i].a = t;
   }
 
-  a=N[e].a; b=N[e].b; c=N[e].c;
-  x=N[i].a; y=N[i].b; z=N[i].c;
+  a=N[e].a; c=N[e].c;
+  x=N[i].a; z=N[i].c;
 
   N[e].a = a; N[e].b= x; N[e].c= c;
   N[i].a = x; N[i].b= a; N[i].c= z;
@@ -47,7 +47,8 @@ void SwapT(long e, long i, vector<Nde>&N)
 
 void VanishBT(vector<Xyc>&Z,vector<Nde>&N)
 {
-  for (long  i = 1; i< N.size(); i++ ){
+
+  for (long  i = 1; i< (long)N.size(); i++ ){
     
     if ( Z[N[i].a].label!=""&&Z[N[i].b].label!=""&&Z[N[i].c].label!= "") {
       Xyc abv, bcv, cav;
