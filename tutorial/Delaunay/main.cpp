@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <algorithm>
 
-
 int main(int argc, char ** argv)
 {
   vector<Xyc> Z; vector<Nde> N;  
@@ -31,6 +30,7 @@ int main(int argc, char ** argv)
   VanishBT(Z,N);
   SortTri(Z,N);
   GenRelation(Z,N);
+  Normalization(Z,N);
 
   Putmesh(Z,N);
   Xmesh(pp,Z,N);
