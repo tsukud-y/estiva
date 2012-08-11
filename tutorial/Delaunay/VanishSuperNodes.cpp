@@ -29,8 +29,17 @@ void VanishSuperNodes(vector<Xyc>&Z,vector<Nde>&N)
 
   for ( j=N.size(); i+1<j; i++)
     N.pop_back();
-
+  
   for ( i = 0; i<(long)N.size(); i++)
     N[i].A = N[i].B = N[i].C = 0;
+
+
+
+
+  i = N.size()-1;
+  if ( N[i].a == 0 && N[i].b == 0 && N[i].c == 0) {
+    //printf( "hello %ld %ld %ld %ld \n",i,N[i].a,N[i].b,N[i].c);
+    N.pop_back();
+  }
 }
 
