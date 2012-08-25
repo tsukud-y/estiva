@@ -11,7 +11,7 @@ double Xmax(vector<Xyc>&Z);
 double Ymin(vector<Xyc>&Z);
 double Ymax(vector<Xyc>&Z);
 
-void fputMesh(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
+void FPutMesh(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
 void XMesh(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
 long SearchT(vector<Xyc>&Z, vector<Nde>&N, long i);
 void GenSuperNodes(vector<Xyc>&Z, vector<Nde>&N);

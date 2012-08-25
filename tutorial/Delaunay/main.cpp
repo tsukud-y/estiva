@@ -20,7 +20,7 @@ int main(int argc, char ** argv)
 
   GenMesh(Z,N);
 
-  fputMesh(stdout,Z,N);
+  FPutMesh(stdout,Z,N);
 
   FILE *pp = popen("gnuplot","w");
   XMesh(pp,Z,N);
