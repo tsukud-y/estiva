@@ -23,7 +23,7 @@ static void pltmsh(FILE *fp, vector<Xyc>&Z,vector<Nde>&N)
 
 }
 
-void XmeshP2(FILE *pp, vector<Xyc>&Z,vector<Nde>&N) {
+void XMeshP2(FILE *pp, vector<Xyc>&Z,vector<Nde>&N) {
 if ( fork() == 0 ) {
     long i;
 

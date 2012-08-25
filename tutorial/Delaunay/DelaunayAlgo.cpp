@@ -22,7 +22,7 @@ void DelaunayAlgo(vector<Xyc>&Z,vector<Nde>&N)
     st.push(e0);
   
     while(!st.empty()){
-      //Xmesh(pp,Z,N);
+      if ( defop("-XMeshAnime") ) XMesh(pp,Z,N);
 
 
       for ( e1 =0; e1 == 0; ) { e1=st.top(); st.pop();}

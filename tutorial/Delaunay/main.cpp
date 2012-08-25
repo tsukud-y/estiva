@@ -19,10 +19,11 @@ int main(int argc, char ** argv)
       }
 
   GenMesh(Z,N);
-  Putmesh(Z,N);
+
+  fputMesh(stdout,Z,N);
 
   FILE *pp = popen("gnuplot","w");
-  Xmesh(pp,Z,N);
+  XMesh(pp,Z,N);
   sleep(300);
 }
 
