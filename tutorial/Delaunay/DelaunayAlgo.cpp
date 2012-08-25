@@ -9,6 +9,8 @@ void DelaunayAlgo(vector<Xyc>&Z,vector<Nde>&N)
   for (long i = 1 ; i <(long)Z.size()-3; i++) {
     stack<long> st;
     long e0,e1,e2;
+    static FILE *pp=NULL;
+    if (pp == NULL) pp = popen("gnuplot","w");
 
     e0 = SearchT(Z,N,i);
     SplitT(i,e0,N);
@@ -20,6 +22,8 @@ void DelaunayAlgo(vector<Xyc>&Z,vector<Nde>&N)
     st.push(e0);
   
     while(!st.empty()){
+      //Xmesh(pp,Z,N);
+
 
       for ( e1 =0; e1 == 0; ) { e1=st.top(); st.pop();}
 

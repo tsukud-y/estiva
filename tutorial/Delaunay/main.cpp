@@ -19,16 +19,6 @@ long max(vector<Nde>&N)
   return max;
 }
 
-extern "C" {
-int     estiva_foreach(int fsize,void *f0,...);
-void   *estiva_foreachend();
-
-}
-#define foreach(i,...)                                                 \
-  while(estiva_foreach(sizeof(i), &(i), __VA_ARGS__, estiva_foreachend()))
-
-
-
 void Polynomial2(vector<Xyc>&Z, vector<Nde>&N)
 {
   long i, m, n;
@@ -39,41 +29,55 @@ void Polynomial2(vector<Xyc>&Z, vector<Nde>&N)
     N[i].C *= -1;
   }
   n = max(N)+1;
-  
 
   long u;
   for(i=1;i<(long)N.size();i++){
-    foreach(m,&N[i].A,&N[i].B,&N[i].C)
-      if(m<=0){
-        foreach(u,&N[-m].A,&N[-m].B,&N[-m].C) if(u== -i) u=n;
-        m=n++;
-      }
-  }
-#if 0
-  for ( i = 1; i<(long)N.size(); i++) {
+
     m = N[i].A;
-    if(m<=0) {
-      if (N[-m].A == -i) N[-m].A = n;
-      if (N[-m].B == -i) N[-m].B = n;
-      if (N[-m].B == -i) N[-m].C = n;
-      N[i].A = n++;
+    if(m<=0){ 
+      u = N[-m].A;
+      if ( u == -i ) u = n;
+      N[-m].A = u;
+      u = N[-m].B;
+      if ( u == -i ) u = n;
+      N[-m].B = u;
+      u = N[-m].C;
+      if ( u == -i ) u = n;
+      N[-m].C = u;
+      m = n++;
     }
+    N[i].A = m;
+
     m = N[i].B;
-    if(m<=0) {
-      if (N[-m].A == -i) N[-m].A = n;
-      if (N[-m].B == -i) N[-m].B = n;
-      if (N[-m].B == -i) N[-m].C = n;
-      N[i].B = n++;
+    if(m<=0){ 
+      u = N[-m].A;
+      if ( u == -i ) u = n;
+      N[-m].A = u;
+      u = N[-m].B;
+      if ( u == -i ) u = n;
+      N[-m].B = u;
+      u = N[-m].C;
+      if ( u == -i ) u = n;
+      N[-m].C = u;
+      m = n++;
     }
+    N[i].B = m;
+
     m = N[i].C;
-    if(m<=0) {
-      if (N[-m].A == -i) N[-m].A = n;
-      if (N[-m].B == -i) N[-m].B = n;
-      if (N[-m].B == -i) N[-m].C = n;
-      N[i].C = n++;
+    if(m<=0){ 
+      u = N[-m].A;
+      if ( u == -i ) u = n;
+      N[-m].A = u;
+      u = N[-m].B;
+      if ( u == -i ) u = n;
+      N[-m].B = u;
+      u = N[-m].C;
+      if ( u == -i ) u = n;
+      N[-m].C = u;
+      m = n++;
     }
+    N[i].C = m;
   }
-#endif 
 }
 
 
@@ -92,8 +96,6 @@ static void pltmsh(FILE *fp, vector<Xyc>&Z,vector<Nde>&N)
 
 
 }
-
-
 
 void xmeshp2(vector<Xyc>&Z,vector<Nde>&N) {
 if ( fork() == 0 ) {
@@ -174,9 +176,11 @@ int main(int argc, char ** argv)
   Normalization(Z,N);
   Polynomial2(Z,N);
 
-   Putmesh(Z,N);
-   xmeshp2(Z,N);
+  Putmesh(Z,N);
+  //xmeshp2(Z,N);
+
   Xmesh(pp,Z,N);
+
   sleep(300);
 }
 
