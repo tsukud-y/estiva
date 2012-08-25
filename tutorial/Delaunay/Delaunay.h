@@ -25,5 +25,8 @@ void VanishBT(vector<Xyc>&Z,vector<Nde>&N);
 void SortTri(vector<Xyc> Z, vector<Nde>& N);
 void GenRelation(vector<Xyc> Z, vector<Nde>&N);
 void Normalization(vector<Xyc>&Z,vector<Nde>&N);
+void Polynomial2(vector<Xyc>&Z, vector<Nde>&N);
+void GenMesh(vector<Xyc>&Z, vector<Nde>&N);
+void XmeshP2(FILE *pp,vector<Xyc>&Z, vector<Nde>&N);
 
 #define distance2(x0,y0,x1,y1) ((x1-x0)*(x1-x0)+(y1-y0)*(y1-y0))

@@ -1,6 +1,10 @@
 #include "Delaunay.h"                                                                                
 void Xmesh(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
 {
+  if ( defop("-XmeshP2") ) {
+    XmeshP2(fp,Z,N);
+    return;
+  }
 
   long e, a, b, c;
 

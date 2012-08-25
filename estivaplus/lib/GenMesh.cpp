@@ -56,7 +56,7 @@ void PushXyc(void)
   }
 }
 
-void GenMesh(void){
+void GenMeshP(void){
   
   SortMesh();
   //PutXyc();

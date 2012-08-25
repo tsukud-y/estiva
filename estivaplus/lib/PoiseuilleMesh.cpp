@@ -21,5 +21,5 @@ void PoiseuilleMesh(double h, double W, double H)
   Putnode(h/2,h/2,"");
   Putnode(W-h/2,H-h/2,"");
 
-  GenMesh();
+  GenMeshP();
 }

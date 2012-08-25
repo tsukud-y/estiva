@@ -38,7 +38,7 @@ void   MatrixDisp(Matrix &A);
 void   estiva_putnode(double x, double y, char *label);
 void   GenerateMesh(void);
 void   Putnode(double x, double y, std::string label);
-void   GenMesh(void);
+void   GenMeshP(void);
 void PoiseuilleMesh(double h, double W, double H);
 
 extern "C" {
