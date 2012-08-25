@@ -1,8 +1,8 @@
-#include "Delaunay.h"                                                                                
-void XMesh(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
+#include "Mesh.h"                                                                                
+void Mesh::X(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
 {
   if ( defop("-XMeshP2") ) {
-    XMeshP2(fp,Z,N);
+    Mesh::XMeshP2(fp,Z,N);
     return;
   }
 

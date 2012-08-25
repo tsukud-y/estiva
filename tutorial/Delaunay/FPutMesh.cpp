@@ -1,6 +1,6 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 
-void FPutMesh(FILE *fp,vector<Xyc> &Z, vector<Nde> &N)
+void Mesh::FPut(FILE *fp,vector<Xyc> &Z, vector<Nde> &N)
 {
   fprintf(fp,"<xyc>\n");
   for (unsigned long i=1; i<Z.size(); i++)

@@ -1,6 +1,6 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 
-void VanishSuperNodes(vector<Xyc>&Z,vector<Nde>&N)
+void Mesh::VanishSuperNodes(vector<Xyc>&Z,vector<Nde>&N)
 {
   long e, n=Z.size()-4;
 

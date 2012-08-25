@@ -1,4 +1,4 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 #include <unistd.h>
 
 int main(int argc, char ** argv)
@@ -18,12 +18,11 @@ int main(int argc, char ** argv)
 	Z.push_back(z);
       }
 
-  GenMesh(Z,N);
+  Mesh::Gen(Z,N);
 
-  FPutMesh(stdout,Z,N);
+  Mesh::FPut(stdout,Z,N);
 
   FILE *pp = popen("gnuplot","w");
-  XMesh(pp,Z,N);
+  Mesh::X(pp,Z,N);
   sleep(300);
 }
-

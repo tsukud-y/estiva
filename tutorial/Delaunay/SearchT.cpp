@@ -1,4 +1,4 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 
 static double fplane(double x, double y, double z,
                      double x0,double y0,double z0,
@@ -14,7 +14,7 @@ static double fplane(double x, double y, double z,
 }
 
 
-long SearchT(vector<Xyc>&Z, vector<Nde>&N, long i)
+long Mesh::SearchT(vector<Xyc>&Z, vector<Nde>&N, long i)
 {
   {
     int e;

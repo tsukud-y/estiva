@@ -1,4 +1,7 @@
-#include "Delaunay.h"
+#include "Mesh.h"
+
+#define distance2(x0,y0,x1,y1) ((x1-x0)*(x1-x0)+(y1-y0)*(y1-y0))
+
 
 static void rotate_right(int i,vector<Nde>&N)
 { int a,b,c,A,B,C;
@@ -13,7 +16,7 @@ static void rotate_left(int i,vector<Nde>&N)
 
 
 
- int degeneracy(int e1,int e2,vector<Xyc>&Z, vector<Nde>&N)
+int Mesh::degeneracy(int e1,int e2,vector<Xyc>&Z, vector<Nde>&N)
 { int a, d, W, Y; double x1,y1,x2,y2,x3,y3,x4,y4;
 
   if(N[e1].B == e2) rotate_left(e1,N); if(N[e1].C == e2) rotate_right(e1,N);

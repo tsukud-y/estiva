@@ -1,6 +1,6 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 
-double Xmax(vector<Xyc> &Z)
+double Mesh::Xmax(vector<Xyc> &Z)
 {
   unsigned long i;
   double xmax;

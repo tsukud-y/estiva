@@ -1,4 +1,4 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 #undef push
 #undef pop
 #include <stack>
@@ -14,7 +14,7 @@ long min3(long a, long b, long c)
   return c;
 }
 
-void Normalization(vector<Xyc>&Z,vector<Nde>&N)
+void Mesh::Normalization(vector<Xyc>&Z,vector<Nde>&N)
 {
   long min, a, b, c, A, B, C, t, i;
   

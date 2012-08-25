@@ -1,6 +1,6 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 
-double Ymin(vector<Xyc> &Z)
+double Mesh::Ymin(vector<Xyc> &Z)
 {
   unsigned long i;
   double ymin;

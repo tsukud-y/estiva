@@ -1,4 +1,4 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 #undef push
 #undef pop
 #include <stack>
@@ -27,7 +27,7 @@ public:
   }
 };
 
-void SortTri(vector<Xyc> Z, vector<Nde>& N)
+void Mesh::SortTri(vector<Xyc> Z, vector<Nde>& N)
 {
   Zv = Z;
   sort(N.begin()+1,N.end(),LessInt());

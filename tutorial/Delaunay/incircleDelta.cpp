@@ -1,4 +1,7 @@
-#include "Delaunay.h"
+#include "Mesh.h"
+
+#define distance2(x0,y0,x1,y1) ((x1-x0)*(x1-x0)+(y1-y0)*(y1-y0))
+
 
 #define sarrus(a11,a12,a13,a21,a22,a23,a31,a32,a33) \
   ((a11)*(a22)*(a33)+(a21)*(a32)*(a13)+(a31)*(a12)*(a23)\
@@ -20,7 +23,7 @@ static void cramer3(double *px,double *py,double *pz,
 
 
 
-int incircleDelta(int p,int e2,vector<Xyc>&Z,vector<Nde>&N)
+int Mesh::incircleDelta(int p,int e2,vector<Xyc>&Z,vector<Nde>&N)
 { double a, b, c, x,y,x0,y0,x1,y1,x2,y2;
 
   x=Z[p].x; y=Z[p].y;

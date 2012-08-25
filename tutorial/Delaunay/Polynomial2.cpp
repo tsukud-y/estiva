@@ -1,4 +1,4 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 #undef push
 #undef pop
 #include <stack>
@@ -18,7 +18,7 @@ long max(vector<Nde>&N)
   return max;
 }
 
-void Polynomial2(vector<Xyc>&Z, vector<Nde>&N)
+void Mesh::Polynomial2(vector<Xyc>&Z, vector<Nde>&N)
 {
   long i, m, n;
 

@@ -1,6 +1,6 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 
-double Xmin(vector<Xyc> &Z)
+double Mesh::Xmin(vector<Xyc> &Z)
 {
   unsigned long i;
   double xmin;

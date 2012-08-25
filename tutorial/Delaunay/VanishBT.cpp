@@ -1,4 +1,4 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 #undef push
 #undef pop
 #include <stack>
@@ -45,7 +45,7 @@ void SwapT(long e, long i, vector<Nde>&N)
   N[i].a = x; N[i].b= a; N[i].c= z;
 }
 
-void VanishBT(vector<Xyc>&Z,vector<Nde>&N)
+void Mesh::VanishBT(vector<Xyc>&Z,vector<Nde>&N)
 {
 
   for (long  i = 1; i< (long)N.size(); i++ ){
@@ -66,9 +66,9 @@ void VanishBT(vector<Xyc>&Z,vector<Nde>&N)
       if (isR(bcv,cav)) {
 	e = SearchBy2P(N[i].a,N[i].b,N);
       }//C
-      if (incircleDelta(N[e].a,i,Z,N)&&
-	  incircleDelta(N[e].b,i,Z,N)&&
-	  incircleDelta(N[e].c,i,Z,N)) SwapT(e,i,N);
+      if (Mesh::incircleDelta(N[e].a,i,Z,N)&&
+	  Mesh::incircleDelta(N[e].b,i,Z,N)&&
+	  Mesh::incircleDelta(N[e].c,i,Z,N)) SwapT(e,i,N);
     }
   }
 }

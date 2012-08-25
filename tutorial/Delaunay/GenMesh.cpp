@@ -1,4 +1,4 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 #undef push
 #undef pop
 #include <stack>
@@ -6,14 +6,14 @@
 #include <unistd.h>
 #include <algorithm>
 
-void GenMesh(vector<Xyc> &Z, vector<Nde> &N)
+void Mesh::Gen(vector<Xyc> &Z, vector<Nde> &N)
 {
-  GenSuperNodes(Z,N);
-  DelaunayAlgo(Z,N);
-  VanishSuperNodes(Z,N);
-  VanishBT(Z,N);
-  SortTri(Z,N);
-  GenRelation(Z,N);
-  Normalization(Z,N);
-  Polynomial2(Z,N);
+  Mesh::GenSuperNodes(Z,N);
+  Mesh::DelaunayAlgo(Z,N);
+  Mesh::VanishSuperNodes(Z,N);
+  Mesh::VanishBT(Z,N);
+  Mesh::SortTri(Z,N);
+  Mesh::GenRelation(Z,N);
+  Mesh::Normalization(Z,N);
+  Mesh::Polynomial2(Z,N);
 }

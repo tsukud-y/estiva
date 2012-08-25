@@ -1,4 +1,4 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 #undef push
 #undef pop
 #include <stack>
@@ -28,7 +28,7 @@ long FindPair(vector<Nde>&N, long e, long a)
   return 0;
 }
 
-void GenRelation(vector<Xyc> Z, vector<Nde>&N)
+void Mesh::GenRelation(vector<Xyc> Z, vector<Nde>&N)
 {
   long i;
   

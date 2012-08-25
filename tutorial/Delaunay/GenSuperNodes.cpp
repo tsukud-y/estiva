@@ -1,7 +1,7 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 #include <cmath>
 
-void GenSuperNodes(vector<Xyc>&Z, vector<Nde>&N) {  
+void Mesh::GenSuperNodes(vector<Xyc>&Z, vector<Nde>&N) {  
   Xyc z;
   z.x=0.0, z.y=0.0, z.label="super_node"; Z[0] = z;
   z.x=0.0, z.y=0.0, z.label="super_node"; Z.push_back(z);
@@ -10,10 +10,10 @@ void GenSuperNodes(vector<Xyc>&Z, vector<Nde>&N) {
 
   unsigned long n = Z.size();
 
-  Z[n-3].x=Xmin(Z), Z[n-3].y=Ymax(Z);  Z[n-2].x=Xmax(Z), Z[n-2].y=Ymax(Z);
-  Z[  0].x=Xmin(Z), Z[  0].y=Ymin(Z);  Z[n-1].x=Xmax(Z), Z[n-1].y=Ymin(Z);
+  Z[n-3].x=Mesh::Xmin(Z), Z[n-3].y=Mesh::Ymax(Z);  Z[n-2].x=Mesh::Xmax(Z), Z[n-2].y=Mesh::Ymax(Z);
+  Z[  0].x=Mesh::Xmin(Z), Z[  0].y=Mesh::Ymin(Z);  Z[n-1].x=Mesh::Xmax(Z), Z[n-1].y=Mesh::Ymin(Z);
 
-  double length = sqrt( pow(Xmax(Z)-Xmin(Z),2) + pow(Ymax(Z)-Ymin(Z),2))/2;
+  double length = sqrt( pow(Mesh::Xmax(Z)-Mesh::Xmin(Z),2) + pow(Mesh::Ymax(Z)-Mesh::Ymin(Z),2))/2;
 
   Z[n-3].x-=length, Z[n-3].y+=length;  Z[n-2].x+=length, Z[n-2].y+=length;
   Z[  0].x-=length, Z[  0].y-=length;  Z[n-1].x+=length, Z[n-1].y-=length;

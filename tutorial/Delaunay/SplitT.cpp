@@ -1,6 +1,6 @@
-#include "Delaunay.h"
+#include "Mesh.h"
 
-void SplitT(long i, long e0, vector<Nde>&N)
+void Mesh::SplitT(long i, long e0, vector<Nde>&N)
 {
   long e1, e2;
   e1 = N.size();
