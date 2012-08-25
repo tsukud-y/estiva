@@ -1,8 +1,8 @@
 #include "Mesh.h"                                                                                
 void Mesh::X(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
 {
-  if ( defop("-XMeshP2") ) {
-    Mesh::XMeshP2(fp,Z,N);
+  if ( defop("-XP2") ) {
+    Mesh::XP2(fp,Z,N);
     return;
   }
 
@@ -22,18 +22,7 @@ void Mesh::X(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
 	    e,(Z[a].x+Z[b].x+Z[c].x)/3.0,(Z[a].y+Z[b].y+Z[c].y)/3.0);
   }
 
-
-
-#if 0
-  long i
-  for (i = 0; i<Z.size(); i++){
-    fprintf(fp,"set label \"%s\" at %f , %f\n",
-	    Z[i].label.c_str(),Z[i].x,Z[i].y);
-  }
-#endif
-
   fprintf(fp,"plot '-' title \"\" with lines\n");
-
 
   for(e=1;e<(long)N.size();e++){
     a = N[e].a, b = N[e].b, c = N[e].c;
@@ -45,5 +34,4 @@ void Mesh::X(FILE *fp, vector<Xyc> &Z, vector<Nde> &N)
   }
   fprintf(fp,"e\n");
   fflush(fp);
-
 }

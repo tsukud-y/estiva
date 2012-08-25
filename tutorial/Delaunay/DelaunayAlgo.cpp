@@ -2,15 +2,16 @@
 #undef push
 #undef pop
 #include <stack>
-
+#include <unistd.h>
 
 void Mesh::DelaunayAlgo(vector<Xyc>&Z,vector<Nde>&N)
 {
+  FILE *pp = NULL; 
+  if ( defop("-XMeshAnime") ) pp = popen("gnuplot","w");
+
   for (long i = 1 ; i <(long)Z.size()-3; i++) {
     stack<long> st;
     long e0,e1,e2;
-    static FILE *pp=NULL;
-    if (pp == NULL) pp = popen("gnuplot","w");
 
     e0 = Mesh::SearchT(Z,N,i);
     Mesh::SplitT(i,e0,N);
@@ -22,8 +23,7 @@ void Mesh::DelaunayAlgo(vector<Xyc>&Z,vector<Nde>&N)
     st.push(e0);
   
     while(!st.empty()){
-      if ( defop("-XMeshAnime") ) Mesh::X(pp,Z,N);
-
+      if ( pp != NULL ) Mesh::X(pp,Z,N);
 
       for ( e1 =0; e1 == 0; ) { e1=st.top(); st.pop();}
 
@@ -35,6 +35,10 @@ void Mesh::DelaunayAlgo(vector<Xyc>&Z,vector<Nde>&N)
 	if(Mesh::incircle(i,e2,Z,N))
 	  if(!Mesh::degeneracy(e1,e2,Z,N)){ st.push(e1); st.push(e2); }
     }
+  }
+  if ( pp != NULL && fork() == 0 ) {
+    sleep(300);
+    pclose(pp);
   }
 }
 

@@ -6,10 +6,10 @@ void Mesh::SplitT(long i, long e0, vector<Nde>&N)
   e1 = N.size();
   e2 = N.size()+1;
 
-  Nde nde;
+  Nde nd;
 
-  N.push_back(nde);
-  N.push_back(nde);
+  N.push_back(nd);
+  N.push_back(nd);
 
 
   long a,b,c,A,B,C;

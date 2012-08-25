@@ -1,5 +1,7 @@
 #include <iostream>
+#include <cmath>
 #include <estivaplus.h>
+
 
 using namespace std;
 
@@ -25,10 +27,9 @@ class Mesh {
   static double Ymin(vector<Xyc>&Z);
   static double Ymax(vector<Xyc>&Z);
   static int incircleDelta(int p,int e2,vector<Xyc>&Z,vector<Nde>&N);
-  static void XMeshP2(FILE *pp,vector<Xyc>&Z, vector<Nde>&N);
+  static void XP2(FILE *pp,vector<Xyc>&Z, vector<Nde>&N);
  public:
   static void Gen(vector<Xyc>&Z, vector<Nde>&N);
   static void FPut(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
   static void X(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
 };
-
