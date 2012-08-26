@@ -1,20 +1,16 @@
 #include "Mesh.h"
 
-#define distance2(x0,y0,x1,y1) ((x1-x0)*(x1-x0)+(y1-y0)*(y1-y0))
-
-
 static void rotate_right(int i,vector<Nde>&N)
 { int a,b,c,A,B,C;
   a=N[i].a; b=N[i].b; c=N[i].c; A=N[i].A; B=N[i].B; C=N[i].C;
   N[i].a=c; N[i].b=a; N[i].c=b; N[i].A=C; N[i].B=A; N[i].C=B;
 }
+
 static void rotate_left(int i,vector<Nde>&N)
 { int a,b,c,A,B,C;
   a=N[i].a; b=N[i].b; c=N[i].c; A=N[i].A; B=N[i].B; C=N[i].C;
   N[i].a=b; N[i].b=c; N[i].c=a; N[i].A=B; N[i].B=C; N[i].C=A;
 }
-
-
 
 int Mesh::degeneracy(int e1,int e2,vector<Xyc>&Z, vector<Nde>&N)
 { int a, d, W, Y; double x1,y1,x2,y2,x3,y3,x4,y4;

@@ -33,3 +33,14 @@ class Mesh {
   static void FPut(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
   static void X(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
 };
+
+
+double distance2(double x0, double y0, double x1, double y1);
+double sarrus(double a11,double a12,double a13,
+	      double a21,double a22,double a23,
+	      double a31,double a32,double a33);
+void cramer3(double *px,double *py,double *pz,
+	     double a11,double a12,double a13,
+	     double a21,double a22,double a23,
+	     double a31,double a32,double a33,
+	     double b1, double b2, double b3 );
