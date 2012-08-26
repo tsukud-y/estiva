@@ -3,8 +3,9 @@
 void Mesh::FPut(FILE *fp,vector<Xyc> &Z, vector<Nde> &N)
 {
   fprintf(fp,"<xyc>\n");
-  for (unsigned long i=1; i<Z.size(); i++)
+  for (unsigned long i=1; i<Z.size(); i++){
     fprintf(fp,"%f %f %s\n",Z[i].x,Z[i].y,Z[i].label.c_str());
+  }
   
   fprintf(fp,"<nde>\n");
   for (unsigned long i=1; i<N.size(); i++)

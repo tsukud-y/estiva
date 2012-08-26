@@ -1,3 +1,6 @@
+#ifndef _estivaplus_h
+#define _estivaplus_h
+
 #define NDEBUG
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,8 +16,6 @@ typedef struct { void *elem; void *next;} que;
 typedef std::vector< std::map<unsigned int, double> > Matrix;
 typedef std::vector<double> Vector;
 extern  std::map<unsigned int, double>::iterator estiva_aiterator;
-
-
 
 void   PlotP2(Vector &xv);
 void   Matrix2mx(Matrix &a, MX **Ap);
@@ -129,3 +130,5 @@ extern "C" {
 #define putnode(x,y,label) estiva_putnode(x,y,(char*)label)
 #define forq(q,e)                                                       \
   for( estiva_forq(q,(void*)&e); estiva_forq_loop((void*)&e);)
+
+#endif

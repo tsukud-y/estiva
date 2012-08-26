@@ -1,3 +1,6 @@
+#ifndef _estivaplus_Mesh_h
+#define _estivaplus_Mesh_h
+
 #include <iostream>
 #include <cmath>
 #include <algorithm>
@@ -33,6 +36,8 @@ class Mesh {
   static void Gen(vector<Xyc>&Z, vector<Nde>&N);
   static void FPut(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
   static void X(FILE *fp, vector<Xyc>&Z, vector<Nde>&N);
+  static void Rect(vector<Xyc>&Z, vector<Nde>&N);
+  static void Gnuplot(vector<Xyc>&Z, vector<Nde>&N);
 };
 
 double distance2(double x0, double y0, double x1, double y1);
@@ -44,3 +49,5 @@ void cramer3(double *px,double *py,double *pz,
 	     double a21,double a22,double a23,
 	     double a31,double a32,double a33,
 	     double b1, double b2, double b3 );
+
+#endif
