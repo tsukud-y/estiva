@@ -1,9 +1,7 @@
-#include "Mesh.h"
+#include "estivaplus/Mesh.h"
 #undef push
 #undef pop
 #include <stack>
-#include <cmath>
-#include <unistd.h>
 
 static int isR(Xyc a,Xyc b)
 {
@@ -13,8 +11,7 @@ static int isR(Xyc a,Xyc b)
   return 0;
 }
 
-
-long SearchBy2P(long a, long b, vector<Nde>&N)
+static long SearchBy2P(long a, long b, vector<Nde>&N)
 {
   long i;
 
@@ -25,8 +22,7 @@ long SearchBy2P(long a, long b, vector<Nde>&N)
   return i;
 }
 
-
-void SwapT(long e, long i, vector<Nde>&N)
+static void SwapT(long e, long i, vector<Nde>&N)
 {
   long a,  c, x, z, t;
 

@@ -1,13 +1,6 @@
-#include "Mesh.h"
-#undef push
-#undef pop
-#include <stack>
-#include <cmath>
-#include <unistd.h>
-#include <algorithm>
+#include "estivaplus/Mesh.h"
 
-
-long max(vector<Nde>&N)
+static long max(vector<Nde>&N)
 {
   long i,max=0;
   for ( i = 1; i<(long)N.size(); i++){
@@ -78,4 +71,3 @@ void Mesh::Polynomial2(vector<Xyc>&Z, vector<Nde>&N)
     N[i].C = m;
   }
 }
-

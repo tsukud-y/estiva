@@ -1,10 +1,4 @@
-#include "Mesh.h"
-#undef push
-#undef pop
-#include <stack>
-#include <cmath>
-#include <unistd.h>
-#include <algorithm>
+#include "estivaplus/Mesh.h"
 
 void Mesh::Gen(vector<Xyc> &Z, vector<Nde> &N)
 {

@@ -1,13 +1,6 @@
-#include "Mesh.h"
-#undef push
-#undef pop
-#include <stack>
-#include <cmath>
-#include <unistd.h>
-#include <algorithm>
+#include "estivaplus/Mesh.h"
 
-
-long min3(long a, long b, long c)
+static long min3(long a, long b, long c)
 {
   if ( a < b && a < c ) return a;
   if ( b < a && b < c ) return b;
@@ -31,5 +24,3 @@ void Mesh::Normalization(vector<Xyc>&Z,vector<Nde>&N)
     N[i].a = a; N[i].b = b; N[i].c = c; N[i].A = A; N[i].B = B; N[i].C = C;
   }
 }
-
-

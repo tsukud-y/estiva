@@ -1,5 +1,4 @@
-#include "Mesh.h"
-#include <unistd.h>
+#include "estivaplus/Mesh.h"
 
 int main(int argc, char ** argv)
 {
@@ -23,6 +22,8 @@ int main(int argc, char ** argv)
   Mesh::FPut(stdout,Z,N);
 
   FILE *pp = popen("gnuplot","w");
-  Mesh::X(pp,Z,N);
-  sleep(300);
+  if ( fork() == 0 ){
+    Mesh::X(pp,Z,N);
+    sleep(300);
+  }
 }

@@ -1,9 +1,8 @@
-#include "Mesh.h"
+#include "estivaplus/Mesh.h"
 
 void Mesh::VanishSuperNodes(vector<Xyc>&Z,vector<Nde>&N)
 {
   long e, n=Z.size()-4;
-
 
   for ( e = 1; e<(long)N.size(); e++) 
     if (N[e].a == 0 || N[e].b == 0 || N[e].c == 0 ||
@@ -33,12 +32,8 @@ void Mesh::VanishSuperNodes(vector<Xyc>&Z,vector<Nde>&N)
   for ( i = 0; i<(long)N.size(); i++)
     N[i].A = N[i].B = N[i].C = 0;
 
-
-
-
   i = N.size()-1;
   if ( N[i].a == 0 && N[i].b == 0 && N[i].c == 0) {
-    //printf( "hello %ld %ld %ld %ld \n",i,N[i].a,N[i].b,N[i].c);
     N.pop_back();
   }
 }

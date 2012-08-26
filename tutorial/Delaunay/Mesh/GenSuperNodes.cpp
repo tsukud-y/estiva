@@ -1,4 +1,4 @@
-#include "Mesh.h"
+#include "estivaplus/Mesh.h"
 
 void Mesh::GenSuperNodes(vector<Xyc>&Z, vector<Nde>&N) {  
   Xyc z;

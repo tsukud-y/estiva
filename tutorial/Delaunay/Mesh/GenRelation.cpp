@@ -1,16 +1,8 @@
-#include "Mesh.h"
-#undef push
-#undef pop
-#include <stack>
-#include <cmath>
-#include <unistd.h>
-#include <algorithm>
+#include "estivaplus/Mesh.h"
 
-
-long FindPair(vector<Nde>&N, long e, long a)
+static long FindPair(vector<Nde>&N, long e, long a)
 {
   long i, b, c, t, ea, eb, ec;
-
 
   ea = N[e].a; eb= N[e].b; ec=N[e].c;
   while( a != ea ) {
@@ -28,7 +20,7 @@ long FindPair(vector<Nde>&N, long e, long a)
   return 0;
 }
 
-void Mesh::GenRelation(vector<Xyc> Z, vector<Nde>&N)
+void Mesh::GenRelation(vector<Xyc> &Z, vector<Nde>&N)
 {
   long i;
   
@@ -40,4 +32,3 @@ void Mesh::GenRelation(vector<Xyc> Z, vector<Nde>&N)
     N[i].C = FindPair(N,i,c);
   }
 }
-

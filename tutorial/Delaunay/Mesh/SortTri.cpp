@@ -1,12 +1,4 @@
-#include "Mesh.h"
-#undef push
-#undef pop
-#include <stack>
-#include <cmath>
-#include <unistd.h>
-#include <algorithm>
-
-using namespace std;
+#include "estivaplus/Mesh.h"
 
 static vector<Xyc> Zv;
 
@@ -27,7 +19,7 @@ public:
   }
 };
 
-void Mesh::SortTri(vector<Xyc> Z, vector<Nde>& N)
+void Mesh::SortTri(vector<Xyc> &Z, vector<Nde>& N)
 {
   Zv = Z;
   sort(N.begin()+1,N.end(),LessInt());

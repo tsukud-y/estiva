@@ -1,12 +1,4 @@
-#include "Mesh.h"
-#undef push
-#undef pop
-#include <stack>
-#include <cmath>
-#include <unistd.h>
-#include <algorithm>
-
-
+#include "estivaplus/Mesh.h"
 
 static void pltmsh(FILE *fp, vector<Xyc>&Z,vector<Nde>&N)
 {
@@ -19,8 +11,6 @@ static void pltmsh(FILE *fp, vector<Xyc>&Z,vector<Nde>&N)
     fprintf(fp,"%f %f\n",Z[a].x,Z[a].y);
     fprintf(fp,"\n\n");
   }
-
-
 }
 
 void Mesh::XP2(FILE *pp, vector<Xyc>&Z,vector<Nde>&N) {
@@ -65,4 +55,3 @@ if ( fork() == 0 ) {
     fflush(pp);
   }
 }
-
